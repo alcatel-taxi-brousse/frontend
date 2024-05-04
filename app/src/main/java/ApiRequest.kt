@@ -1,10 +1,10 @@
 import android.content.Context
-import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import java.lang.ref.WeakReference
+import java.util.Properties
 
 class ApiRequest private constructor(context: Context) {
     private val contextRef: WeakReference<Context> = WeakReference(context)
@@ -12,8 +12,13 @@ class ApiRequest private constructor(context: Context) {
     private var apiUrl: String
 
     init {
-        println("ApiRequest created")
-        apiUrl = "[IP]"
+        val properties = Properties()
+        val assetManager = context.assets
+        val inputStream = assetManager.open("settings.properties")
+        properties.load(inputStream)
+        apiUrl = properties.getProperty("api.url")
+        inputStream.close()
+
         requestQueue = Volley.newRequestQueue(contextRef.get())
     }
 
@@ -38,7 +43,7 @@ class ApiRequest private constructor(context: Context) {
         onError: (String) -> Unit
     ) {
         val stringRequest = object : StringRequest(
-            Method.GET, "$apiUrl/login",
+            Method.POST, "$apiUrl/login",
             Response.Listener { response ->
                 onResponse(response)
             },
