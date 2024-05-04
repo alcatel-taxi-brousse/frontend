@@ -1,5 +1,6 @@
 package com.alcatelcnamisi1.taxibrousse
 
+import ApiRequest
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -7,6 +8,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.android.volley.Request
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
+
 
 class LoginActivity : AppCompatActivity() {
 
@@ -37,7 +42,10 @@ class LoginActivity : AppCompatActivity() {
         val login = editTextLogin?.text.toString()
         val password = editTextPassword?.text.toString()
 
-        println("Login: $login")
-        println("Password: $password")
+        ApiRequest.getInstance(null).login(login, password, { response ->
+            println("Response: $response")
+        }, { error ->
+            println("Error: $error")
+        })
     }
 }

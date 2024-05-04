@@ -1,5 +1,6 @@
 package com.alcatelcnamisi1.taxibrousse
 
+import ApiRequest
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -17,6 +18,8 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        ApiRequest.getInstance(this)
 
         // Login page
         val intent = Intent(this, LoginActivity::class.java)
