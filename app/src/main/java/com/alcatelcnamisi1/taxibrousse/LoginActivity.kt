@@ -1,6 +1,7 @@
 package com.alcatelcnamisi1.taxibrousse
 
 import ApiRequest
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -47,5 +48,9 @@ class LoginActivity : AppCompatActivity() {
         }, { error ->
             println("Error: $error")
         })
+
+        val intent = Intent(this, HomeActivity::class.java)
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
     }
 }
