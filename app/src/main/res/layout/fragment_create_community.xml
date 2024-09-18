@@ -16,13 +16,6 @@
         android:hint="CommunityName" />
 
     <EditText
-        android:id="@+id/editTextOwner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Owner" />
-
-    <EditText
         android:id="@+id/editTextDestination"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

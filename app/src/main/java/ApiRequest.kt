@@ -63,7 +63,6 @@ class ApiRequest private constructor(context: Context) {
 
     public fun createCommunity(
         communityName: String,
-        owner: String,
         destination: String,
         description: String,
         visibility: String,
@@ -80,7 +79,6 @@ class ApiRequest private constructor(context: Context) {
             }) {
             override fun getParams(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params["owner"] = owner
                 params["communityName"] = communityName
                 params["destination"] = destination
                 params["description"] = description

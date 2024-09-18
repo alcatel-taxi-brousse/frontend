@@ -13,7 +13,6 @@ private const val ARG_PARAM2 = "param2"
 
 class CreateCommunityFragment : Fragment() {
     private var editTextCommunityName: EditText? = null
-    private var editTextOwner: EditText? = null
     private var editTextDestination: EditText? = null
     private var editTextDescription: EditText? = null
     private var editTextVisibility: EditText? = null
@@ -35,7 +34,6 @@ class CreateCommunityFragment : Fragment() {
 
         // Initialize your views here
         editTextCommunityName = view.findViewById(R.id.editTextCommunityName)
-        editTextOwner = view.findViewById(R.id.editTextOwner)
         editTextDestination = view.findViewById(R.id.editTextDestination)
         editTextDescription = view.findViewById(R.id.editTextDescription)
         editTextVisibility = view.findViewById(R.id.editTextVisibility)
@@ -61,12 +59,11 @@ class CreateCommunityFragment : Fragment() {
 
     private fun createCommunity() {
         val communityName = editTextCommunityName?.text.toString()
-        val owner = editTextOwner?.text.toString()
         val destination = editTextDestination?.text.toString()
         val description = editTextDescription?.text.toString()
         val visibility = editTextVisibility?.text.toString()
 
-        ApiRequest.getInstance(null).createCommunity(communityName, owner, destination, description, visibility, { response ->
+        ApiRequest.getInstance(null).createCommunity(communityName, destination, description, visibility, { response ->
             println("Response: $response")
         }, { error ->
             println("Error: $error")
