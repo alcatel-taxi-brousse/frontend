@@ -60,4 +60,32 @@ class ApiRequest private constructor(context: Context) {
 
         requestQueue.add(stringRequest)
     }
+
+    public fun createCommunity(
+        communityName: String,
+        destination: String,
+        description: String,
+        visibility: String,
+        onResponse: (String) -> Unit,
+        onError: (String) -> Unit
+    ){
+        val stringRequest = object : StringRequest(
+            Method.POST, "$apiUrl/CreateCommunity",
+            Response.Listener { response ->
+                onResponse(response)
+            },
+            Response.ErrorListener { error ->
+                onError("${error.message}")
+            }) {
+            override fun getParams(): Map<String, String> {
+                val params = HashMap<String, String>()
+                params["communityName"] = communityName
+                params["destination"] = destination
+                params["description"] = description
+                params["visibility"] = visibility
+                return params
+            }
+        }
+        requestQueue.add(stringRequest)
+    }
 }
