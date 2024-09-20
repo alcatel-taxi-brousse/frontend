@@ -17,6 +17,7 @@ class CreateCommunityFragment : Fragment() {
     private var editTextDescription: EditText? = null
     private var editTextVisibility: EditText? = null
     private var buttonCreateCommunity: Button? = null
+    private var buttonCloseCreateCommunity: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,9 +39,14 @@ class CreateCommunityFragment : Fragment() {
         editTextDescription = view.findViewById(R.id.editTextDescription)
         editTextVisibility = view.findViewById(R.id.editTextVisibility)
         buttonCreateCommunity = view.findViewById(R.id.ButtonCreateCommunity)
+        buttonCloseCreateCommunity = view.findViewById(R.id.ButtonCloseCreateCommunity)
 
         buttonCreateCommunity?.setOnClickListener {
             createCommunity()
+        }
+
+        buttonCloseCreateCommunity?.setOnClickListener {
+            closeCreateCommunity()
         }
 
         return view
@@ -68,5 +74,9 @@ class CreateCommunityFragment : Fragment() {
         }, { error ->
             println("Error: $error")
         })
+    }
+
+    private fun closeCreateCommunity(){
+        activity?.supportFragmentManager?.popBackStack()
     }
 }
