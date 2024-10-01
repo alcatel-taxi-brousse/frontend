@@ -88,4 +88,23 @@ class ApiRequest private constructor(context: Context) {
         }
         requestQueue.add(stringRequest)
     }
+
+    public fun getCommunities(
+        onResponse: (String) -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val urlWithParams = "$apiUrl/getCommunities"
+
+        val stringRequest = object : StringRequest(
+            Method.GET, urlWithParams,
+            Response.Listener { response ->
+                onResponse(response)
+            },
+            Response.ErrorListener { error ->
+                onError("${error.message}")
+            }
+        ){}
+        requestQueue.add(stringRequest)
+    }
 }
+
