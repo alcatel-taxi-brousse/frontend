@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@android:color/white">>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/editTextDeparture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Départ"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/editTextArrival"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Arrivée"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/editTextDateTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Date et heure de départ"
+            android:focusable="false"
+            android:clickable="true" />
+
+        <CheckBox
+            android:id="@+id/checkBoxRecurrent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trajet récurrent" />
+
+        <TextView
+            android:text="Places : "
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </TextView>
+
+        <Spinner
+            android:id="@+id/spinnerSeats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/editTextCarModel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Modèle du véhicule"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/editTextDescription"
+            android:layout_width="match_parent"
+            android:layout_height="129dp"
+            android:hint="Description"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/buttonProposeRide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Proposer le trajet" />
+
+    </LinearLayout>
+
+</ScrollView>
