@@ -18,6 +18,7 @@ class ProposeRideFragment : Fragment() {
     private var editTextArrival: EditText? = null
     private var editTextDateTime: EditText? = null
     private var checkBoxRecurrent: CheckBox? = null
+    private var spinnerRecurrence: Spinner? = null
     private var spinnerSeats: Spinner? = null
     private var editTextCarModel: EditText? = null
     private var editTextDescription: EditText? = null
@@ -34,6 +35,7 @@ class ProposeRideFragment : Fragment() {
         editTextArrival = view.findViewById(R.id.editTextArrival)
         editTextDateTime = view.findViewById(R.id.editTextDateTime)
         checkBoxRecurrent = view.findViewById(R.id.checkBoxRecurrent)
+        spinnerRecurrence = view.findViewById(R.id.spinnerRecurrence)
         spinnerSeats = view.findViewById(R.id.spinnerSeats)
         editTextCarModel = view.findViewById(R.id.editTextCarModel)
         editTextDescription = view.findViewById(R.id.editTextDescription)
@@ -47,6 +49,20 @@ class ProposeRideFragment : Fragment() {
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, seatOptions)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerSeats?.adapter = adapter
+
+        val recurrenceOptions = arrayOf("Journalier", "Hebdomadaire", "Mensuel")
+        val recurrenceAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, recurrenceOptions)
+        recurrenceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerRecurrence?.adapter = recurrenceAdapter
+
+        checkBoxRecurrent?.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                spinnerRecurrence?.visibility = View.VISIBLE
+            } else {
+                spinnerRecurrence?.visibility = View.GONE
+            }
+        }
+
 
         buttonProposeRide?.setOnClickListener {
             proposeRide()
@@ -84,7 +100,12 @@ class ProposeRideFragment : Fragment() {
         val carModel = editTextCarModel?.text.toString()
         val description = editTextDescription?.text.toString()
 
-        /* Use ApiRequest or other logic to send the ride proposal to the server
+        val recurrence = if (isRecurrent) spinnerRecurrence?.selectedItem.toString() else "Non récurrent"
+
+        
+        println("Trajet proposé : $departure -> $arrival, Date/Heure: $dateTime, Récurrent: $recurrence, Places: $seats, Véhicule: $carModel, Description: $description")
+
+        /* Api méthode proposeRide() a créer
         ApiRequest.getInstance(null).proposeRide(
             departure, arrival, dateTime, isRecurrent, seats, carModel, description,
             { response -> println("Response: $response") },
