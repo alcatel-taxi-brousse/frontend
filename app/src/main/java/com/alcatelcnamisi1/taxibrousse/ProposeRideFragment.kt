@@ -1,8 +1,11 @@
 package com.alcatelcnamisi1.taxibrousse
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +13,6 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.zip.Deflater
 
 class ProposeRideFragment : Fragment() {
 
@@ -45,28 +47,25 @@ class ProposeRideFragment : Fragment() {
             showDateTimePicker()
         }
 
-        val seatOptions = arrayOf("1", "2", "3", "4", "5", "6", "7+")
+        val seatOptions = arrayOf("Veuillez selectionner une valeur", "1", "2", "3", "4", "5", "6", "7+")
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, seatOptions)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerSeats?.adapter = adapter
 
-        val recurrenceOptions = arrayOf("Journalier", "Hebdomadaire", "Mensuel")
+        val recurrenceOptions = arrayOf("Veuillez selectionner une valeur", "Journalier", "Hebdomadaire", "Mensuel")
         val recurrenceAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, recurrenceOptions)
         recurrenceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerRecurrence?.adapter = recurrenceAdapter
 
         checkBoxRecurrent?.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                spinnerRecurrence?.visibility = View.VISIBLE
-            } else {
-                spinnerRecurrence?.visibility = View.GONE
-            }
+            spinnerRecurrence?.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
-
 
         buttonProposeRide?.setOnClickListener {
             proposeRide()
         }
+
+        fieldListeners()
 
         return view
     }
@@ -91,28 +90,124 @@ class ProposeRideFragment : Fragment() {
         }, currentYear, currentMonth, currentDay).show()
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun proposeRide() {
-        val departure = editTextDeparture?.text.toString()
-        val arrival = editTextArrival?.text.toString()
-        val dateTime = calendar.time
-        val isRecurrent = checkBoxRecurrent?.isChecked ?: false
-        val seats = spinnerSeats?.selectedItem.toString()
-        val carModel = editTextCarModel?.text.toString()
-        val description = editTextDescription?.text.toString()
 
+        val departure = editTextDeparture?.text.toString().trim()
+        val arrival = editTextArrival?.text.toString().trim()
+        val carModel = editTextCarModel?.text.toString().trim()
+        val seats = spinnerSeats?.selectedItem.toString().trim()
+        val dateTime = editTextDateTime?.text.toString().trim()
+
+        if (!fieldsValidation(departure, arrival, carModel, seats, dateTime)) {
+            Toast.makeText(requireContext(), "Veuillez remplir les champs obligatoires.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val description = editTextDescription?.text.toString()
+        val isRecurrent = checkBoxRecurrent?.isChecked ?: false
         val recurrence = if (isRecurrent) spinnerRecurrence?.selectedItem.toString() else "Non récurrent"
 
-        
-        println("Trajet proposé : $departure -> $arrival, Date/Heure: $dateTime, Récurrent: $recurrence, Places: $seats, Véhicule: $carModel, Description: $description")
+        ApiRequest.getInstance(requireContext()).proposeRide(
+            departure, arrival, calendar.time, isRecurrent, recurrence, seats, carModel, description,
+            { response ->
+                Toast.makeText(requireContext(), "Trajet proposé avec succès !", Toast.LENGTH_SHORT).show()
+                parentFragmentManager.beginTransaction().remove(this).commit()
+            },
+            { error ->
+                Toast.makeText(requireContext(), "Erreur lors de la proposition du trajet : $error", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
 
-        /* Api méthode proposeRide() a créer
-        ApiRequest.getInstance(null).proposeRide(
-            departure, arrival, dateTime, isRecurrent, seats, carModel, description,
-            { response -> println("Response: $response") },
-            { error -> println("Error: $error") }
-        )*/
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun fieldsValidation(departure: String, arrival: String, carModel: String, seats: String, dateTime: String): Boolean {
+        var isValid = true
 
-        val fragmentManager = parentFragmentManager
-        fragmentManager.beginTransaction().remove(this).commit()
+        if (departure.isEmpty()) {
+            editTextDeparture?.background = resources.getDrawable(R.drawable.error_background, null)
+            isValid = false
+        }
+
+        if (arrival.isEmpty()) {
+            editTextArrival?.background = resources.getDrawable(R.drawable.error_background, null)
+            isValid = false
+        }
+
+        if (carModel.isEmpty()) {
+            editTextCarModel?.background = resources.getDrawable(R.drawable.error_background, null)
+            isValid = false
+        }
+
+        if (seats == "Veuillez selectionner une valeur") {
+            val errorTextView = spinnerSeats?.selectedView as? TextView
+            errorTextView?.setTextColor(resources.getColor(R.color.red))
+            isValid = false
+        }
+
+        if (dateTime.isEmpty()) {
+            editTextDateTime?.background = resources.getDrawable(R.drawable.error_background, null)
+            isValid = false
+        }
+
+        return isValid
+    }
+
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun fieldListeners() {
+        editTextDeparture?.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (!s.isNullOrEmpty()) {
+                    editTextDeparture?.background = resources.getDrawable(android.R.drawable.edit_text, null)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+        editTextArrival?.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (!s.isNullOrEmpty()) {
+                    editTextArrival?.background = resources.getDrawable(android.R.drawable.edit_text, null)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+        editTextCarModel?.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (!s.isNullOrEmpty()) {
+                    editTextCarModel?.background = resources.getDrawable(android.R.drawable.edit_text, null)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+        editTextDateTime?.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (!s.isNullOrEmpty()) {
+                    editTextDateTime?.background = resources.getDrawable(android.R.drawable.edit_text, null)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+        spinnerSeats?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (position != 0) {
+                    (view as? TextView)?.setTextColor(resources.getColor(R.color.black))
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
     }
 }

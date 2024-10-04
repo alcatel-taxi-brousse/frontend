@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="@android:color/white">>
+    android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,21 +14,21 @@
             android:id="@+id/editTextDeparture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Départ"
+            android:hint="@string/departure_box_hint"
             android:inputType="text" />
 
         <EditText
             android:id="@+id/editTextArrival"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Arrivée"
+            android:hint="@string/destination_box_hint"
             android:inputType="text" />
 
         <EditText
             android:id="@+id/editTextDateTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Date et heure de départ"
+            android:hint="@string/departure_time_hint"
             android:focusable="false"
             android:clickable="true" />
 
@@ -36,7 +36,7 @@
             android:id="@+id/checkBoxRecurrent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Trajet récurrent" />
+            android:text="@string/recurring_ride" />
         <Spinner
             android:id="@+id/spinnerRecurrence"
             android:layout_width="match_parent"
@@ -44,7 +44,7 @@
             android:visibility="gone" />
 
         <TextView
-            android:text="Places : "
+            android:text="@string/places"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </TextView>
@@ -53,26 +53,32 @@
             android:id="@+id/spinnerSeats"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/spinnerSeatsError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_red_light"
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/editTextCarModel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Modèle du véhicule"
+            android:hint="@string/vehicle_hint"
             android:inputType="text" />
 
         <EditText
             android:id="@+id/editTextDescription"
             android:layout_width="match_parent"
             android:layout_height="129dp"
-            android:hint="Description"
+            android:hint="@string/description_hint"
             android:inputType="text" />
 
         <Button
             android:id="@+id/buttonProposeRide"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Proposer le trajet" />
+            android:text="@string/ride_validation" />
 
     </LinearLayout>
 
