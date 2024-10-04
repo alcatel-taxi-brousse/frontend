@@ -3,7 +3,6 @@ package com.alcatelcnamisi1.taxibrousse
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -14,7 +13,6 @@ import androidx.fragment.app.FragmentTransaction
 class HomeActivity : AppCompatActivity() {
 
     private var buttonCreateCommunity: Button? = null
-    private var buttonViewCommunities: Button? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -26,7 +24,6 @@ class HomeActivity : AppCompatActivity() {
         }
 
         buttonCreateCommunity = findViewById<Button>(R.id.buttonCreateCommunity)
-        buttonViewCommunities = findViewById<Button>(R.id.buttonViewCommunities)
 
         buttonCreateCommunity?.setOnClickListener{
             print("button create Community clicked");
@@ -39,12 +36,12 @@ class HomeActivity : AppCompatActivity() {
             fragmentTransaction.addToBackStack(null)
             fragmentTransaction.commit()
         }
-        buttonViewCommunities?.setOnClickListener {
-            print("button view Communities clicked")
-
-            val intent = Intent(this, ViewCommunitiesActivity::class.java)
-            startActivity(intent)
-        }
-
+        val fragment = ViewCommunitiesFragment()
+        val fragmentManager: FragmentManager = supportFragmentManager
+        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.frameLayoutFragmentContainer, fragment)
+        fragmentTransaction.commit()
     }
+
+
 }

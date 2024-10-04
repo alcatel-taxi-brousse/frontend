@@ -22,7 +22,7 @@
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewCommunitiesActivity"
+            android:name=".ViewCommunitiesFragment"
             android:exported="false"/>
         <activity
             android:name=".MainActivity"

@@ -93,6 +93,31 @@ class ApiRequest private constructor(context: Context) {
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
     ) {
+
+        val mockResponse = """
+        [
+            {
+                "name": "Community A",
+                "destination": "Destination A",
+                "description": "This is the first community.",
+                "visibility": "Public"
+            },
+            {
+                "name": "Community B",
+                "destination": "Destination B",
+                "description": "This is the second community.",
+                "visibility": "Private"
+            },
+            {
+                "name": "Community C",
+                "destination": "Destination C",
+                "description": "This is the third community.",
+                "visibility": "Public"
+            }
+        ]
+    """
+
+        onResponse(mockResponse)/*
         val urlWithParams = "$apiUrl/getCommunities"
 
         val stringRequest = object : StringRequest(
@@ -103,8 +128,8 @@ class ApiRequest private constructor(context: Context) {
             Response.ErrorListener { error ->
                 onError("${error.message}")
             }
-        ){}
-        requestQueue.add(stringRequest)
+        ){}*/
+       // requestQueue.add(stringRequest)
     }
 }
 

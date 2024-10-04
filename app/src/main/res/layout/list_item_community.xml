@@ -5,29 +5,32 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/textViewCommunityName"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Community Name"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textViewCommunityName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/community_name"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewCommunityNumCarpooler"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="numero"
+            android:textSize="12sp"
+            android:layout_marginStart="4dp"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textViewCommunityDestination"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Destination" />
-
-    <TextView
-        android:id="@+id/textViewCommunityDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Description" />
-
-    <TextView
-        android:id="@+id/textViewCommunityVisibility"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Visibility" />
+        android:text="@string/destination" />
 </LinearLayout>
