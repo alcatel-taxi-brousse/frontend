@@ -3,7 +3,6 @@ package com.alcatelcnamisi1.taxibrousse
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -37,5 +36,12 @@ class HomeActivity : AppCompatActivity() {
             fragmentTransaction.addToBackStack(null)
             fragmentTransaction.commit()
         }
+        val fragment = ViewCommunitiesFragment()
+        val fragmentManager: FragmentManager = supportFragmentManager
+        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.frameLayoutFragmentContainer, fragment)
+        fragmentTransaction.commit()
     }
+
+
 }

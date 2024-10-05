@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -7,25 +8,34 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
+    <FrameLayout
+        android:id="@+id/frameLayoutFragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="0dp"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintBottom_toTopOf="@id/buttonCreateCommunity"
+        />
+
+
     <Button
+        android:id="@+id/buttonCreateCommunity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create_community"
-        android:id="@+id/buttonCreateCommunity"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frameLayoutFragmentContainer"
+        app:layout_constraintBottom_toTopOf="@id/frameLayoutCreateCommunity"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="0dp" />
 
     <FrameLayout
         android:id="@+id/frameLayoutCreateCommunity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/buttonCreateCommunity"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
