@@ -39,16 +39,23 @@ class HomeActivity : AppCompatActivity() {
             fragmentTransaction.commit()
         }
 
+
         buttonProposeRide = findViewById(R.id.buttonProposeRide)
         buttonProposeRide?.setOnClickListener {
             print("button Propose Ride clicked");
             val fragment = ProposeRideFragment()
-            val fragmentManager = supportFragmentManager
-            val fragmentTransaction = fragmentManager.beginTransaction()
+            val fragmentManager: FragmentManager = supportFragmentManager
+            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
             fragmentTransaction.replace(R.id.frameLayoutCreateCommunity, fragment)
             fragmentTransaction.addToBackStack(null)
             fragmentTransaction.commit()
         }
 
+
+        val fragment = ViewCommunitiesFragment()
+        val fragmentManager: FragmentManager = supportFragmentManager
+        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.frameLayoutFragmentContainer, fragment)
+        fragmentTransaction.commit()
     }
 }

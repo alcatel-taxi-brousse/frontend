@@ -8,6 +8,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="create_community">Create community</string>
     <string name="plus" />
+    <string name="view_communities">View communities</string>
+    <string name="community_name">Community Name</string>
+    <string name="destination">Destination</string>
     <string name="propose_ride">Propose ride</string>
     <string name="destination_box_hint">Arrivée</string>
     <string name="departure_box_hint">Départ</string>
