@@ -4,6 +4,9 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import java.lang.ref.WeakReference
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.Properties
 
 class ApiRequest private constructor(context: Context) {
@@ -89,6 +92,47 @@ class ApiRequest private constructor(context: Context) {
         requestQueue.add(stringRequest)
     }
 
+    fun proposeRide(
+        departure: String,
+        arrival: String,
+        dateTime: Date,
+        isRecurrent: Boolean,
+        recurrence: String,
+        seats: String,
+        carModel: String,
+        description: String,
+        onResponse: (String) -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val formattedDateTime = dateFormat.format(dateTime)
+
+        val stringRequest = object : StringRequest(
+            Method.POST, "$apiUrl/ProposeRide",
+            Response.Listener { response ->
+                onResponse(response)
+            },
+            Response.ErrorListener { error ->
+                onError("${error.message}")
+            }) {
+            override fun getParams(): Map<String, String> {
+                val params = HashMap<String, String>()
+                params["departure"] = departure
+                params["arrival"] = arrival
+                params["dateTime"] = formattedDateTime
+                params["isRecurrent"] = isRecurrent.toString()
+                params["recurrence"] = recurrence
+                params["seats"] = seats
+                params["carModel"] = carModel
+                params["description"] = description
+                return params
+            }
+        }
+
+        requestQueue.add(stringRequest)
+    }
+
+
     public fun getCommunities(
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
@@ -132,4 +176,3 @@ class ApiRequest private constructor(context: Context) {
        // requestQueue.add(stringRequest)
     }
 }
-

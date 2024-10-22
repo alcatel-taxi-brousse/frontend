@@ -11,4 +11,13 @@
     <string name="view_communities">View communities</string>
     <string name="community_name">Community Name</string>
     <string name="destination">Destination</string>
+    <string name="propose_ride">Propose ride</string>
+    <string name="destination_box_hint">Arrivée</string>
+    <string name="departure_box_hint">Départ</string>
+    <string name="departure_time_hint">Date et heure de départ</string>
+    <string name="recurring_ride">Trajet récurrent</string>
+    <string name="places">Places :</string>
+    <string name="vehicle_hint">Modèle du véhicule</string>
+    <string name="description_hint">Description</string>
+    <string name="ride_validation">Proposer le trajet</string>
 </resources>
