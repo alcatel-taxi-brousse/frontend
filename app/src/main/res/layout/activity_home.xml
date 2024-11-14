@@ -8,43 +8,40 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
+    <!-- Conteneur pour le fragment ViewCommunitiesFragment -->
     <FrameLayout
-        android:id="@+id/frameLayoutFragmentContainer"
+        android:id="@+id/frameLayoutCommunitiesContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="0dp"
-        app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintBottom_toTopOf="@id/buttonCreateCommunity"
-        />
-
+        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintBottom_toTopOf="@id/buttonCreateCommunity" />
 
     <Button
         android:id="@+id/buttonCreateCommunity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create_community"
-        app:layout_constraintTop_toBottomOf="@id/frameLayoutFragmentContainer"
-        app:layout_constraintBottom_toTopOf="@id/frameLayoutCreateCommunity"
+        app:layout_constraintTop_toBottomOf="@id/frameLayoutCommunitiesContainer"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="0dp" />
+        app:layout_constraintRight_toRightOf="parent" />
 
     <Button
+        android:id="@+id/buttonProposeRide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/propose_ride"
-        android:id="@+id/buttonProposeRide"
         app:layout_constraintTop_toBottomOf="@id/buttonCreateCommunity"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent" />
 
+    <!-- Conteneur pour le fragment ViewRidesFragment -->
     <FrameLayout
-        android:id="@+id/frameLayoutCreateCommunity"
+        android:id="@+id/frameLayoutRidesContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/buttonCreateCommunity"
+        app:layout_constraintTop_toBottomOf="@id/buttonProposeRide"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHeight_percent="0.4" />
+        app:layout_constraintHeight_percent="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

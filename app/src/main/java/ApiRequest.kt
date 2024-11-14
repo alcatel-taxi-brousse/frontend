@@ -5,6 +5,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.Properties
@@ -175,4 +176,57 @@ class ApiRequest private constructor(context: Context) {
         ){}*/
        // requestQueue.add(stringRequest)
     }
+
+    fun getRides(
+        onResponse: (String) -> Unit,
+        onError: (String) -> Unit
+    ) {
+
+        // Formater les dates des trajets fictifs
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+        val dummyRidesJson = """
+        [
+            {
+                "departure": "Paris",
+                "arrival": "Lyon",
+                "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 1) }.time)}",
+                "seatsAvailable": "3",
+                "recurrence": "Hebdomadaire"
+            },
+            {
+                "departure": "Marseille",
+                "arrival": "Nice",
+                "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 2) }.time)}",
+                "seatsAvailable": "2",
+                "recurrence": "Journalier"
+            },
+            {
+                "departure": "Toulouse",
+                "arrival": "Bordeaux",
+                "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 3) }.time)}",
+                "seatsAvailable": "4",
+                "recurrence": "Hebdomadaire"
+            }
+        ]
+    """
+
+
+        onResponse(dummyRidesJson)
+        /*
+        val urlWithParams = "$apiUrl/getRides"
+
+        val stringRequest = object : StringRequest(
+            Method.GET, urlWithParams,
+            Response.Listener { response ->
+                onResponse(response)
+            },
+            Response.ErrorListener { error ->
+                onError("${error.message}")
+            }
+        ) {}
+
+        requestQueue.add(stringRequest)*/
+    }
+
+
 }
