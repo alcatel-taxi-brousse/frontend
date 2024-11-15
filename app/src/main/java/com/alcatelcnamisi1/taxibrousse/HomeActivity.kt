@@ -15,6 +15,7 @@ class HomeActivity : AppCompatActivity() {
 
     private var buttonCreateCommunity: Button? = null
     private var buttonProposeRide: Button? = null
+    private var buttonJoinRide: Button? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -50,6 +51,26 @@ class HomeActivity : AppCompatActivity() {
             fragmentTransaction.addToBackStack(null)
             fragmentTransaction.commit()
         }
+
+
+        buttonJoinRide = findViewById(R.id.buttonJoinRide)
+        buttonJoinRide?.setOnClickListener {
+            print("button Join Ride clicked");
+            val fragment = JoinRideFragment()
+            fragment.arguments = Bundle().apply {
+                putString("destination", "Prison")
+                putString("date", "2024-11-11")
+                putInt("seats_taken", 2)
+                putInt("seats_total", 5)
+            }
+            val fragmentManager: FragmentManager = supportFragmentManager
+            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+            fragmentTransaction.replace(R.id.frameLayoutCreateCommunity, fragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+        }
+
+
 
 
         val fragment = ViewCommunitiesFragment()
