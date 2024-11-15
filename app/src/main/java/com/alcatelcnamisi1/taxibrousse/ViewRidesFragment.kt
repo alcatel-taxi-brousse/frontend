@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import org.json.JSONArray
 import org.json.JSONException
 import java.text.SimpleDateFormat
@@ -20,6 +23,7 @@ import java.util.*
 class ViewRidesFragment : Fragment() {
 
     private lateinit var linearLayout: LinearLayout
+    private var buttonJoinRide: Button? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -117,6 +121,24 @@ class ViewRidesFragment : Fragment() {
                     textSeeDescription.text = "Hide ride description"
                     descriptionTextView.visibility = View.VISIBLE
                 }
+            }
+
+            buttonJoinRide = rideView.findViewById(R.id.buttonJoinRide)
+            buttonJoinRide?.setOnClickListener {
+                print("button Join Ride clicked")
+                val fragment = JoinRideFragment()
+                fragment.arguments = Bundle().apply {
+                    putString("departure", ride["departure"])
+                    putString("date", ride["date"])
+                    putInt("seats_taken", 0)
+                    ride["seatsAvailable"]?.let { it1 -> putInt("seats_total", it1.toInt()) }
+                }
+
+                val fragmentManager: FragmentManager = parentFragmentManager
+                val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+                fragmentTransaction.replace(R.id.frameLayoutRidesContainer, fragment)
+                fragmentTransaction.addToBackStack(null)
+                fragmentTransaction.commit()
             }
 
             linearLayout.addView(rideView)

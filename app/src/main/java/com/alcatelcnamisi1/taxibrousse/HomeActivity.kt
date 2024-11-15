@@ -1,7 +1,10 @@
 package com.alcatelcnamisi1.taxibrousse
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -11,6 +14,7 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var buttonCreateCommunity: Button
     private lateinit var buttonProposeRide: Button
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +31,6 @@ class HomeActivity : AppCompatActivity() {
             openFragment(ProposeRideFragment(), R.id.frameLayoutCommunitiesContainer)
         }
 
-        // Charger ViewCommunitiesFragment et ViewRidesFragment au démarrage
         if (savedInstanceState == null) {
             openFragment(ViewCommunitiesFragment(), R.id.frameLayoutCommunitiesContainer)
             openFragment(ViewRidesFragment(), R.id.frameLayoutRidesContainer)

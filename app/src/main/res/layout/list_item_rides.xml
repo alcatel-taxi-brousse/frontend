@@ -53,6 +53,13 @@
             android:text="Description"
             android:visibility="gone"/>
 
+            <Button
+            android:id="@+id/buttonJoinRide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/join_ride"
+            />
+
         <TextView
             android:id="@+id/textViewRecurrence"
             android:layout_width="match_parent"
