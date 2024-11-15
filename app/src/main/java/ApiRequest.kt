@@ -186,21 +186,54 @@ class ApiRequest private constructor(context: Context) {
         [
             {
                 "departure": "Paris",
+                "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, -1) }.time)}",
+                "seatsAvailable": "1",
+                "recurrence": "Weekly",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed leo diam, auctor non faucibus quis, accumsan eu nunc. Quisque sed eleifend quam, a dignissim nunc. Phasellus laoreet lacus in augue rhoncus, quis euismod arcu sollicitudin. Aenean sed nunc nec leo placerat gravida id et ex. Integer lectus massa, feugiat sed hendrerit eu, ultricies consectetur ipsum. Pellentesque dictum, lacus molestie pretium fermentum, est erat viverra velit, sed placerat nisl libero ullamcorper ex. Nullam eu quam mi. Cras at tortor sagittis, vehicula ante nec, congue velit. Duis id justo eu velit rutrum feugiat at vitae sem. Proin interdum felis eget ex venenatis sodales. Suspendisse sagittis nibh at dolor ultrices commodo. Curabitur facilisis eros nec nunc vulputate gravida."
+            },
+            {
+                "departure": "Paris",
                 "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 1) }.time)}",
                 "seatsAvailable": "3",
-                "recurrence": "Hebdomadaire"
+                "recurrence": "Weekly",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed leo diam, auctor non faucibus quis, accumsan eu nunc. Quisque sed eleifend quam, a dignissim nunc. Phasellus laoreet lacus in augue rhoncus, quis euismod arcu sollicitudin. Aenean sed nunc nec leo placerat gravida id et ex. Integer lectus massa, feugiat sed hendrerit eu, ultricies consectetur ipsum. Pellentesque dictum, lacus molestie pretium fermentum, est erat viverra velit, sed placerat nisl libero ullamcorper ex. Nullam eu quam mi. Cras at tortor sagittis, vehicula ante nec, congue velit. Duis id justo eu velit rutrum feugiat at vitae sem. Proin interdum felis eget ex venenatis sodales. Suspendisse sagittis nibh at dolor ultrices commodo. Curabitur facilisis eros nec nunc vulputate gravida."
+
             },
             {
                 "departure": "Marseille",
                 "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 2) }.time)}",
                 "seatsAvailable": "2",
-                "recurrence": "Journalier"
+                "recurrence": "Daily",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed leo diam, auctor non faucibus quis, accumsan eu nunc. Quisque sed eleifend quam, a dignissim nunc. Phasellus laoreet lacus in augue rhoncus, quis euismod arcu sollicitudin. Aenean sed nunc nec leo placerat gravida id et ex. Integer lectus massa, feugiat sed hendrerit eu, ultricies consectetur ipsum. Pellentesque dictum, lacus molestie pretium fermentum, est erat viverra velit, sed placerat nisl libero ullamcorper ex. Nullam eu quam mi. Cras at tortor sagittis, vehicula ante nec, congue velit. Duis id justo eu velit rutrum feugiat at vitae sem. Proin interdum felis eget ex venenatis sodales. Suspendisse sagittis nibh at dolor ultrices commodo. Curabitur facilisis eros nec nunc vulputate gravida."
+
             },
             {
                 "departure": "Toulouse",
                 "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 3) }.time)}",
                 "seatsAvailable": "4",
-                "recurrence": "Hebdomadaire"
+                "recurrence": "Weekly",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed leo diam, auctor non faucibus quis, accumsan eu nunc. Quisque sed eleifend quam, a dignissim nunc. Phasellus laoreet lacus in augue rhoncus, quis euismod arcu sollicitudin. Aenean sed nunc nec leo placerat gravida id et ex. Integer lectus massa, feugiat sed hendrerit eu, ultricies consectetur ipsum. Pellentesque dictum, lacus molestie pretium fermentum, est erat viverra velit, sed placerat nisl libero ullamcorper ex. Nullam eu quam mi. Cras at tortor sagittis, vehicula ante nec, congue velit. Duis id justo eu velit rutrum feugiat at vitae sem. Proin interdum felis eget ex venenatis sodales. Suspendisse sagittis nibh at dolor ultrices commodo. Curabitur facilisis eros nec nunc vulputate gravida."
+            },
+            {
+                "departure": "Strasbourg",
+                "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 3) }.time)}",
+                "seatsAvailable": "1",
+                "recurrence": "Monthly",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed leo diam, auctor non faucibus quis, accumsan eu nunc. Quisque sed eleifend quam, a dignissim nunc. Phasellus laoreet lacus in augue rhoncus, quis euismod arcu sollicitudin. Aenean sed nunc nec leo placerat gravida id et ex. Integer lectus massa, feugiat sed hendrerit eu, ultricies consectetur ipsum. Pellentesque dictum, lacus molestie pretium fermentum, est erat viverra velit, sed placerat nisl libero ullamcorper ex. Nullam eu quam mi. Cras at tortor sagittis, vehicula ante nec, congue velit. Duis id justo eu velit rutrum feugiat at vitae sem. Proin interdum felis eget ex venenatis sodales. Suspendisse sagittis nibh at dolor ultrices commodo. Curabitur facilisis eros nec nunc vulputate gravida."
+            },
+            {
+                "departure": "Tours",
+                "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 3) }.time)}",
+                "seatsAvailable": "0",
+                "recurrence": "Daily",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed leo diam, auctor non faucibus quis, accumsan eu nunc. Quisque sed eleifend quam, a dignissim nunc. Phasellus laoreet lacus in augue rhoncus, quis euismod arcu sollicitudin. Aenean sed nunc nec leo placerat gravida id et ex. Integer lectus massa, feugiat sed hendrerit eu, ultricies consectetur ipsum. Pellentesque dictum, lacus molestie pretium fermentum, est erat viverra velit, sed placerat nisl libero ullamcorper ex. Nullam eu quam mi. Cras at tortor sagittis, vehicula ante nec, congue velit. Duis id justo eu velit rutrum feugiat at vitae sem. Proin interdum felis eget ex venenatis sodales. Suspendisse sagittis nibh at dolor ultrices commodo. Curabitur facilisis eros nec nunc vulputate gravida."
+            },
+            {
+                "departure": "Rennes",
+                "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 3) }.time)}",
+                "seatsAvailable": "3",
+                "recurrence": "Daily",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed leo diam, auctor non faucibus quis, accumsan eu nunc. Quisque sed eleifend quam, a dignissim nunc. Phasellus laoreet lacus in augue rhoncus, quis euismod arcu sollicitudin. Aenean sed nunc nec leo placerat gravida id et ex. Integer lectus massa, feugiat sed hendrerit eu, ultricies consectetur ipsum. Pellentesque dictum, lacus molestie pretium fermentum, est erat viverra velit, sed placerat nisl libero ullamcorper ex. Nullam eu quam mi. Cras at tortor sagittis, vehicula ante nec, congue velit. Duis id justo eu velit rutrum feugiat at vitae sem. Proin interdum felis eget ex venenatis sodales. Suspendisse sagittis nibh at dolor ultrices commodo. Curabitur facilisis eros nec nunc vulputate gravida."
             }
         ]
     """
