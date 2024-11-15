@@ -119,7 +119,6 @@ class ApiRequest private constructor(context: Context) {
             override fun getParams(): Map<String, String> {
                 val params = HashMap<String, String>()
                 params["departure"] = departure
-                params["arrival"] = arrival
                 params["dateTime"] = formattedDateTime
                 params["isRecurrent"] = isRecurrent.toString()
                 params["recurrence"] = recurrence
@@ -182,27 +181,23 @@ class ApiRequest private constructor(context: Context) {
         onError: (String) -> Unit
     ) {
 
-        // Formater les dates des trajets fictifs
         val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
         val dummyRidesJson = """
         [
             {
                 "departure": "Paris",
-                "arrival": "Lyon",
                 "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 1) }.time)}",
                 "seatsAvailable": "3",
                 "recurrence": "Hebdomadaire"
             },
             {
                 "departure": "Marseille",
-                "arrival": "Nice",
                 "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 2) }.time)}",
                 "seatsAvailable": "2",
                 "recurrence": "Journalier"
             },
             {
                 "departure": "Toulouse",
-                "arrival": "Bordeaux",
                 "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 3) }.time)}",
                 "seatsAvailable": "4",
                 "recurrence": "Hebdomadaire"

@@ -54,7 +54,6 @@ class ViewRidesFragment : Fragment() {
             val rideJson = jsonArray.getJSONObject(i)
             val rideMap = mapOf(
                 "departure" to rideJson.getString("departure"),
-                "arrival" to rideJson.getString("arrival"),
                 "date" to rideJson.getString("date"),
                 "seatsAvailable" to rideJson.getString("seatsAvailable"),
                 "recurrence" to rideJson.getString("recurrence")
@@ -71,13 +70,11 @@ class ViewRidesFragment : Fragment() {
                 .inflate(R.layout.list_item_rides, linearLayout, false)
 
             val departureTextView: TextView = rideView.findViewById(R.id.textViewDeparture)
-            val arrivalTextView: TextView = rideView.findViewById(R.id.textViewArrival)
             val dateTextView: TextView = rideView.findViewById(R.id.textViewDate)
             val seatsTextView: TextView = rideView.findViewById(R.id.textViewSeatsAvailable)
             val recurrenceTextView: TextView = rideView.findViewById((R.id.textViewRecurrence))
 
             departureTextView.text = ride["departure"]
-            arrivalTextView.text = ride["arrival"]
             dateTextView.text = ride["date"]
             seatsTextView.text = "${ride["seatsAvailable"]} places disponibles"
             recurrenceTextView.text = ride["recurrence"]

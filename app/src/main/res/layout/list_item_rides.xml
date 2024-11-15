@@ -19,14 +19,6 @@
         android:text="Departure" />
 
     <TextView
-        android:id="@+id/textViewArrival"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="14sp"
-        android:text="Arrival" />
-
-    <TextView
         android:id="@+id/textViewDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
