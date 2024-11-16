@@ -16,14 +16,12 @@ import androidx.fragment.app.FragmentTransaction
 import org.json.JSONArray
 import org.json.JSONException
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Locale
 import java.util.*
 
 class ViewRidesFragment : Fragment() {
 
     private lateinit var linearLayout: LinearLayout
-    private var buttonJoinRide: Button? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -91,40 +89,32 @@ class ViewRidesFragment : Fragment() {
             val textUnavailable: TextView = rideView.findViewById(R.id.textViewUnavailable)
             val textFull: TextView = rideView.findViewById(R.id.textViewFull)
             val textSeeDescription: TextView = rideView.findViewById(R.id.textViewSeeDescription)
+            val buttonJoinRide: Button = rideView.findViewById(R.id.buttonJoinRide)
 
 
             departureTextView.text = "Departure : ${ride["departure"]}"
             dateTextView.text = ride["date"]
-            seatsTextView.text = "${ride["seatsAvailable"]} seats available"
+            seatsTextView.text = "${ride["seatsAvailable"]} seat(s) available"
             recurrenceTextView.text = ride["recurrence"]
             descriptionTextView.text = ride["description"]
-
-            if (ride["seatsAvailable"] == "0") {
-                overlayUnavailable.visibility = View.VISIBLE
-                textFull.visibility = View.VISIBLE
-            }
+            buttonJoinRide.isClickable = true
 
             val rideDate = dateFormat.parse(ride["date"] ?: "")
             val currentDate = Date()
-            if (rideDate != null && rideDate.before(currentDate)) {
+            if (ride["seatsAvailable"] == "0" || (rideDate != null && rideDate.before(currentDate))) {
                 overlayUnavailable.visibility = View.VISIBLE
-                textUnavailable.visibility = View.VISIBLE
-            }
+                buttonJoinRide.isClickable = false
+                buttonJoinRide.isEnabled = false
 
-            val cardViewRide: CardView = rideView.findViewById(R.id.cardViewRide)
-            cardViewRide.setOnClickListener {
-                if(descriptionTextView.visibility == View.VISIBLE) {
-                    textSeeDescription.text = "See ride description"
-                    descriptionTextView.visibility = View.GONE
-                }
-                else{
-                    textSeeDescription.text = "Hide ride description"
-                    descriptionTextView.visibility = View.VISIBLE
+                if (ride["seatsAvailable"] == "0") {
+                    textFull.visibility = View.VISIBLE
+                } else if (rideDate != null && rideDate.before(currentDate)) {
+                    textUnavailable.visibility = View.VISIBLE
                 }
             }
 
-            buttonJoinRide = rideView.findViewById(R.id.buttonJoinRide)
-            buttonJoinRide?.setOnClickListener {
+
+            buttonJoinRide.setOnClickListener {
                 print("button Join Ride clicked")
                 val fragment = JoinRideFragment()
                 fragment.arguments = Bundle().apply {
@@ -139,6 +129,18 @@ class ViewRidesFragment : Fragment() {
                 fragmentTransaction.replace(R.id.frameLayoutRidesContainer, fragment)
                 fragmentTransaction.addToBackStack(null)
                 fragmentTransaction.commit()
+            }
+
+            val cardViewRide: CardView = rideView.findViewById(R.id.cardViewRide)
+            cardViewRide.setOnClickListener {
+                if(descriptionTextView.visibility == View.VISIBLE) {
+                    textSeeDescription.text = "See ride description"
+                    descriptionTextView.visibility = View.GONE
+                }
+                else{
+                    textSeeDescription.text = "Hide ride description"
+                    descriptionTextView.visibility = View.VISIBLE
+                }
             }
 
             linearLayout.addView(rideView)
