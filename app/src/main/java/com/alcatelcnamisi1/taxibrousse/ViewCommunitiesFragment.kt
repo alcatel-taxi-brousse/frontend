@@ -1,5 +1,6 @@
 package com.alcatelcnamisi1.taxibrousse
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -69,18 +70,28 @@ class ViewCommunitiesFragment : Fragment() {
 
     private fun displayCommunities(communities: List<HashMap<String, String>>) {
         for (community in communities) {
-
             val communityView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.list_item_community, linearLayout, false)
 
             val nameTextView: TextView = communityView.findViewById(R.id.textViewCommunityName)
             val destinationTextView: TextView = communityView.findViewById(R.id.textViewCommunityDestination)
+            val arrowButton: TextView = communityView.findViewById(R.id.buttonArrow)
 
             nameTextView.text = community["name"]
             destinationTextView.text = community["destination"]
 
+            arrowButton.setOnClickListener {
+                val communityName = community["name"]
+                val destination = community["destination"]
+
+                val intent = Intent(requireContext(), CommunityDetailsActivity::class.java)
+                intent.putExtra("communityName", communityName)
+                intent.putExtra("destination", destination)
+                startActivity(intent)
+            }
 
             linearLayout.addView(communityView)
         }
     }
+
 }
