@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentTransaction
 class HomeActivity : AppCompatActivity() {
 
     private var buttonCreateCommunity: Button? = null
-    private var buttonProposeRide: Button? = null
+   // private var buttonProposeRide: Button? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -38,20 +38,6 @@ class HomeActivity : AppCompatActivity() {
             fragmentTransaction.addToBackStack(null)
             fragmentTransaction.commit()
         }
-
-
-        buttonProposeRide = findViewById(R.id.buttonProposeRide)
-        buttonProposeRide?.setOnClickListener {
-            print("button Propose Ride clicked");
-            val fragment = ProposeRideFragment()
-            val fragmentManager: FragmentManager = supportFragmentManager
-            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.frameLayoutCreateCommunity, fragment)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
-        }
-
-
         val fragment = ViewCommunitiesFragment()
         val fragmentManager: FragmentManager = supportFragmentManager
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
