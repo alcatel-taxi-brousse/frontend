@@ -3,6 +3,7 @@ package com.alcatelcnamisi1.taxibrousse
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.button.MaterialButton
@@ -28,14 +29,23 @@ class CommunityDetailsActivity : AppCompatActivity() {
         textViewDestination.text = destination
 
         buttonProposeRide.setOnClickListener {
-            openProposeRideFragment()
+            openFragment(ProposeRideFragment(), R.id.frameLayoutRidesContainer)
         }
+        openFragment(ViewRidesFragment(), R.id.frameLayoutRidesContainer)
     }
 
     private fun openProposeRideFragment() {
         val fragment = ProposeRideFragment()
         val fragmentTransaction: FragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frameLayoutFragmentContainer, fragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+    }
+
+    private fun openFragment(fragment: Fragment, containerId: Int) {
+        val fragmentManager: FragmentManager = supportFragmentManager
+        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(containerId, fragment)
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }

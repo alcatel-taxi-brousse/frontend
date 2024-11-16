@@ -15,9 +15,7 @@ import androidx.fragment.app.FragmentTransaction
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var buttonCreateCommunity: Button
-    //private lateinit var buttonProposeRide: Button
-
-
+   // private var buttonProposeRide: Button? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -35,7 +33,7 @@ class HomeActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             openFragment(ViewCommunitiesFragment(), R.id.frameLayoutCommunitiesContainer)
-            openFragment(ViewRidesFragment(), R.id.frameLayoutRidesContainer)
+            //openFragment(ViewRidesFragment(), R.id.frameLayoutRidesContainer)
         }
     }
 
