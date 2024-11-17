@@ -29,17 +29,16 @@ class CommunityDetailsActivity : AppCompatActivity() {
         textViewDestination.text = destination
 
         buttonProposeRide.setOnClickListener {
-            openFragment(ProposeRideFragment(), R.id.frameLayoutRidesContainer)
+            println("button Propose Ride clicked")
+            val fragment = ProposeRideFragment()
+            fragment.arguments = Bundle().apply {
+                println("Passing destination: $destination") // Pour vérifier si la destination est présente
+                putString("arrival", destination)
+            }
+            openFragment(fragment, R.id.frameLayoutRidesContainer)
         }
-        openFragment(ViewRidesFragment(), R.id.frameLayoutRidesContainer)
-    }
 
-    private fun openProposeRideFragment() {
-        val fragment = ProposeRideFragment()
-        val fragmentTransaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.frameLayoutFragmentContainer, fragment)
-        fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()
+        openFragment(ViewRidesFragment(), R.id.frameLayoutRidesContainer)
     }
 
     private fun openFragment(fragment: Fragment, containerId: Int) {

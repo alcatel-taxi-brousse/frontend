@@ -13,52 +13,71 @@
 
         <TextView
             android:id="@+id/textViewDeparture"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
             android:textStyle="bold"
             android:textSize="16sp"
             android:text="Departure" />
 
-        <TextView
-            android:id="@+id/textViewDate"
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="16sp"
-            android:text="Date" />
+            android:orientation="vertical"
+            >
+            <TextView
+                android:id="@+id/textViewDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="16sp"
+                android:text="Date" />
 
-        <TextView
-            android:id="@+id/textViewSeatsAvailable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textSize="14sp"
-            android:text="Seats Available" />
+            <TextView
+                android:id="@+id/textViewSeatsAvailable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@android:color/holo_blue_dark"
+                android:textSize="14sp"
+                android:text="Seats Available" />
 
-        <TextView
-            android:id="@+id/textViewSeeDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="14sp"
-            android:text="See ride description"
-            />
-        <TextView
-            android:id="@+id/textViewDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            android:text="Description"
-            android:visibility="gone"/>
+            <TextView
+                android:id="@+id/textViewSeeDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="14sp"
+                android:text="See ride description"
+                />
 
-            <Button
+            <TextView
+                android:id="@+id/textViewDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:text="Description"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <Button
             android:id="@+id/buttonJoinRide"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/join_ride"
-            />
+            android:layout_weight="1"
+            android:layout_marginStart="75dp"
+            android:text="@string/join_ride" />
+    </LinearLayout>
+
 
         <TextView
             android:id="@+id/textViewRecurrence"
