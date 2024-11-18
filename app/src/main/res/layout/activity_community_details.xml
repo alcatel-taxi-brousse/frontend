@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
-
     <TextView
         android:id="@+id/textViewCommunityName"
         android:layout_width="match_parent"
@@ -33,5 +32,14 @@
         android:layout_height="wrap_content"
         android:text="@string/propose_ride"
         android:layout_marginTop="16dp" />
+  <Button
+        android:id="@+id/buttonBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/retour"
+        android:textSize="18sp"
+        android:background="@android:color/transparent"
+        android:padding="8dp"
+        android:textColor="@color/black" />
 
-</LinearLayout>
+        </LinearLayout>

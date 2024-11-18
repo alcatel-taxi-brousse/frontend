@@ -1,5 +1,6 @@
 package com.alcatelcnamisi1.taxibrousse
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,7 @@ class CommunityDetailsActivity : AppCompatActivity() {
     private lateinit var textViewCommunityName: TextView
     private lateinit var textViewDestination: TextView
     private lateinit var buttonProposeRide: MaterialButton
+    private lateinit var buttonBack: MaterialButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +22,7 @@ class CommunityDetailsActivity : AppCompatActivity() {
         textViewCommunityName = findViewById(R.id.textViewCommunityName)
         textViewDestination = findViewById(R.id.textViewDestination)
         buttonProposeRide = findViewById(R.id.buttonProposeRide)
+        buttonBack = findViewById(R.id.buttonBack)
 
         val communityName = intent.getStringExtra("communityName")
         val destination = intent.getStringExtra("destination")
@@ -27,8 +30,13 @@ class CommunityDetailsActivity : AppCompatActivity() {
         textViewCommunityName.text = communityName
         textViewDestination.text = destination
 
+
         buttonProposeRide.setOnClickListener {
             openProposeRideFragment()
+        }
+
+        buttonBack.setOnClickListener {
+            navigateBackToHome()
         }
     }
 
@@ -38,5 +46,11 @@ class CommunityDetailsActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.frameLayoutFragmentContainer, fragment)
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
+    }
+    private fun navigateBackToHome() {
+        val intent = Intent(this, HomeActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish() // Optional to clear the current activity
     }
 }
