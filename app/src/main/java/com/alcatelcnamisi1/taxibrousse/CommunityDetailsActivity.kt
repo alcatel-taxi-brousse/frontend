@@ -2,6 +2,7 @@ package com.alcatelcnamisi1.taxibrousse
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
@@ -12,8 +13,8 @@ class CommunityDetailsActivity : AppCompatActivity() {
 
     private lateinit var textViewCommunityName: TextView
     private lateinit var textViewDestination: TextView
-    private lateinit var buttonProposeRide: MaterialButton
-    private lateinit var buttonBack: MaterialButton
+    private lateinit var buttonProposeRide: ImageButton
+    private lateinit var buttonBack: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -13,8 +14,7 @@ import androidx.fragment.app.FragmentTransaction
 
 class HomeActivity : AppCompatActivity() {
 
-    private var buttonCreateCommunity: Button? = null
-   // private var buttonProposeRide: Button? = null
+    private var buttonCreateCommunity: ImageButton? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -25,9 +25,9 @@ class HomeActivity : AppCompatActivity() {
             insets
         }
 
-        buttonCreateCommunity = findViewById<Button>(R.id.buttonCreateCommunity)
+       buttonCreateCommunity = findViewById<ImageButton>(R.id.buttonCreateCommunity)
 
-        buttonCreateCommunity?.setOnClickListener{
+       buttonCreateCommunity?.setOnClickListener{
             print("button create Community clicked");
 
             val fragment = CreateCommunityFragment();

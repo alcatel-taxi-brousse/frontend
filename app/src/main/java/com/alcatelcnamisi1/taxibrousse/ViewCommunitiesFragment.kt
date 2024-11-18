@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -75,7 +76,7 @@ class ViewCommunitiesFragment : Fragment() {
 
             val nameTextView: TextView = communityView.findViewById(R.id.textViewCommunityName)
             val destinationTextView: TextView = communityView.findViewById(R.id.textViewCommunityDestination)
-            val arrowButton: TextView = communityView.findViewById(R.id.buttonArrow)
+            val arrowButton: ImageButton = communityView.findViewById(R.id.buttonArrow)
 
             nameTextView.text = community["name"]
             destinationTextView.text = community["destination"]
