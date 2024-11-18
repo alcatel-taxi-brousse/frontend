@@ -74,8 +74,9 @@ class ViewRidesFragment : Fragment() {
     }
 
     private fun displayRides(rides: List<Map<String, String>>) {
+        val reversedRides = rides.asReversed()
 
-        for (ride in rides) {
+        for (ride in reversedRides) {
             val rideView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.list_item_rides, linearLayout, false)
 
@@ -147,7 +148,7 @@ class ViewRidesFragment : Fragment() {
         }
 
         linearLayout.post {
-            (linearLayout.parent as ScrollView).fullScroll(View.FOCUS_DOWN)
+            (linearLayout.parent as ScrollView)
         }
     }
 

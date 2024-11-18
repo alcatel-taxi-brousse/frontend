@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -14,16 +15,24 @@ import androidx.fragment.app.FragmentTransaction
 
 class HomeActivity : AppCompatActivity() {
 
-    private lateinit var buttonCreateCommunity: Button
-   // private var buttonProposeRide: Button? = null
+    private var buttonCreateCommunity: ImageButton? = null
+    //private var buttonJoinRide: Button? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_home)
+        //a supp
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+        //a supp
 
         buttonCreateCommunity = findViewById(R.id.buttonCreateCommunity)
         //buttonProposeRide = findViewById(R.id.buttonProposeRide)
 
-        buttonCreateCommunity.setOnClickListener {
+        buttonCreateCommunity?.setOnClickListener {
             openFragment(CreateCommunityFragment(), R.id.frameLayoutCommunitiesContainer)
         }
 
@@ -36,6 +45,7 @@ class HomeActivity : AppCompatActivity() {
             //openFragment(ViewRidesFragment(), R.id.frameLayoutRidesContainer)
         }
     }
+
 
     private fun openFragment(fragment: Fragment, containerId: Int) {
         val fragmentManager: FragmentManager = supportFragmentManager
