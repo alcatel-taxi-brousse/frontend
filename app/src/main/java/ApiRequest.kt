@@ -46,7 +46,7 @@ class ApiRequest private constructor(context: Context) {
         onError: (String) -> Unit
     ) {
         val stringRequest = object : StringRequest(
-            Method.POST, "$apiUrl/login",
+            Method.POST, "$apiUrl/auth",
             Response.Listener { response ->
                 onResponse(response)
             },
@@ -55,7 +55,7 @@ class ApiRequest private constructor(context: Context) {
             }) {
             override fun getParams(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params["login"] = login
+                params["email"] = login
                 params["password"] = password
                 return params
             }
@@ -154,6 +154,12 @@ class ApiRequest private constructor(context: Context) {
             },
             {
                 "name": "Community C",
+                "destination": "Destination C",
+                "description": "This is the third community.",
+                "visibility": "Public"
+            },
+            {
+                "name": "Community D",
                 "destination": "Destination C",
                 "description": "This is the third community.",
                 "visibility": "Public"
