@@ -9,6 +9,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.ale.infra.list.ArrayItemList
+import com.ale.infra.manager.room.CreateRoomBody
+import com.ale.infra.manager.room.Room
+import com.ale.infra.rest.listeners.RainbowError
+import com.ale.rainbowsdk.Connection
+import com.ale.rainbowsdk.RainbowSdk
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -41,6 +47,8 @@ class LoginActivity : AppCompatActivity() {
         buttonLogin?.setOnClickListener {
             login()
         }
+
+
     }
 
     private fun login() {
@@ -52,12 +60,24 @@ class LoginActivity : AppCompatActivity() {
 
             val token = JSONObject(response).getString("token")
             println("Token extrait : $token")
+            RainbowSdk().connection().signInWithToken(
+                token = token,
+                host = "sandbox.openrainbow.com",
+                listener = object : Connection.ISignInListener {
+                    override fun onSignInSucceeded() {
+                        super.onSignInSucceeded()
+                        println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+                    }
 
-            val sharedPreferences: SharedPreferences =
-                this.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-            val editor = sharedPreferences.edit()
-            editor.putString("auth_token", token)
-            editor.apply()
+                    override fun onSignInFailed(
+                        errorCode: Connection.ErrorCode,
+                        error: RainbowError<Unit>
+                    ) {
+                        super.onSignInFailed(errorCode, error)
+                        println("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
+                    }
+                }
+            )
 
         }, { error ->
             println("Error: $error")
