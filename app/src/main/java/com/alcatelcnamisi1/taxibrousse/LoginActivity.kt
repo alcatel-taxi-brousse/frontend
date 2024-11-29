@@ -78,11 +78,6 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             )
-            val sharedPreferences: SharedPreferences =
-                this.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-            val editor = sharedPreferences.edit()
-            editor.putString("auth_token", token)
-            editor.apply()
 
         }, { error ->
             println("Error: $error")
