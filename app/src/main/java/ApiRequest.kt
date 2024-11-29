@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.Properties
+import android.content.SharedPreferences
 
 class ApiRequest private constructor(context: Context) {
     private val contextRef: WeakReference<Context> = WeakReference(context)
@@ -73,7 +74,7 @@ class ApiRequest private constructor(context: Context) {
         onError: (String) -> Unit
     ){
         val stringRequest = object : StringRequest(
-            Method.POST, "$apiUrl/CreateCommunity",
+            Method.POST, "$apiUrl/bubbles",
             Response.Listener { response ->
                 onResponse(response)
             },
@@ -82,11 +83,27 @@ class ApiRequest private constructor(context: Context) {
             }) {
             override fun getParams(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params["communityName"] = communityName
-                params["destination"] = destination
+                params["name"] = communityName
+                //params["destination"] = destination
                 params["description"] = description
-                params["visibility"] = visibility
+                //params["visibility"] = visibility
+                //params["withHistory"] = "false"
+
+                println("Params envoyés : $params")
                 return params
+            }
+
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+
+                val context = contextRef.get()
+                val sharedPreferences = context?.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+                val token = sharedPreferences?.getString("auth_token", "") ?: ""
+                println("token finded : $token")
+                headers["Authorization"] = "Bearer $token"
+
+                println("Headers envoyés : $headers")
+                return headers
             }
         }
         requestQueue.add(stringRequest)
