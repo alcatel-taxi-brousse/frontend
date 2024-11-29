@@ -47,25 +47,7 @@ class LoginActivity : AppCompatActivity() {
         buttonLogin?.setOnClickListener {
             login()
         }
-        val ttoken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3VudFJlbmV3ZWQiOjAsIm1heFRva2VuUmVuZXciOjcsInVzZXIiOnsiaWQiOiI2NjQ3NTI5OGM3NjU5MGVkYzAwNTZlMDkiLCJsb2dpbkVtYWlsIjoibWVocmhhcmRAY2ZhaS1mb3JtYXRpb24uZnIifSwiZW52aXJvbm1lbnQiOnsiZW52aXJvbm1lbnROYW1lIjoib2ZmaWNpYWwiLCJlbnZpcm9ubWVudEFwaVVybCI6Imh0dHBzOi8vc2FuZGJveC5vcGVucmFpbmJvdy5jb20ifSwiYXBwIjp7ImlkIjoiYzcyMTljMzA3NGM2MTFlZmE2NjYxYjBiYjljOTAzNzAiLCJuYW1lIjoiTWFlbCBzYW5kYm94In0sImlhdCI6MTczMjg4NzQ2MSwiZXhwIjoxNzM0MTgzNDYxfQ.Kl80uoyBrNS2PjuMkaz5dsdiNSjiij2gHMfQVamIPCUXpU1lTp3ruJEFjktobcL19GArLFF_-CMfJ1NTNV1wp1wXSC_EKdAenJFYRea3yMYkJk_ijxfYRiZCGGrsKVOnFw75dQYZA5y1Hbprd6gmI88i59VkB-0enluAztjwDxKWUlrN2iue1pgWW4eWSd_vufd95EhGtWG2FFC3pXuZodrvoZlK23wLSVVhDobPN7M4UGWNAi6S3BjUqeuYfuGi8HLWy8YEa-ganA_1JrcdmQXHAxjhGLe_AHzEE66NrT0EJWWY9nc5rmXBVOzoP3Dffi4Fl2gOcbYP9W7qnm-0YA"
-        RainbowSdk().connection().signInWithToken(
-            token = ttoken,
-            host = "sandbox.openrainbow.com",
-            listener = object : Connection.ISignInListener {
-                override fun onSignInSucceeded() {
-                    super.onSignInSucceeded()
-                    println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-                }
 
-                override fun onSignInFailed(
-                    errorCode: Connection.ErrorCode,
-                    error: RainbowError<Unit>
-                ) {
-                    super.onSignInFailed(errorCode, error)
-                    println("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
-                }
-            }
-        )
 
     }
 
@@ -78,7 +60,24 @@ class LoginActivity : AppCompatActivity() {
 
             val token = JSONObject(response).getString("token")
             println("Token extrait : $token")
+            RainbowSdk().connection().signInWithToken(
+                token = token,
+                host = "sandbox.openrainbow.com",
+                listener = object : Connection.ISignInListener {
+                    override fun onSignInSucceeded() {
+                        super.onSignInSucceeded()
+                        println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+                    }
 
+                    override fun onSignInFailed(
+                        errorCode: Connection.ErrorCode,
+                        error: RainbowError<Unit>
+                    ) {
+                        super.onSignInFailed(errorCode, error)
+                        println("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
+                    }
+                }
+            )
             val sharedPreferences: SharedPreferences =
                 this.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
             val editor = sharedPreferences.edit()
