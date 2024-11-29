@@ -16,8 +16,7 @@ class ApiRequest private constructor(context: Context) {
     private val contextRef: WeakReference<Context> = WeakReference(context)
     private var requestQueue: RequestQueue
     private var apiUrl: String
-    private lateinit var token: String
-
+    private var token: String = ""
 
     init {
         val properties = Properties()
