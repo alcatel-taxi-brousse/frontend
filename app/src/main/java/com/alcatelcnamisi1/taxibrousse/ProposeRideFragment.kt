@@ -14,10 +14,14 @@ import androidx.fragment.app.Fragment
 import java.text.SimpleDateFormat
 import java.util.*
 
+private const val ARG_PARAM1 = "arrival"
+
 class ProposeRideFragment : Fragment() {
 
+
     private var editTextDeparture: EditText? = null
-    private var editTextArrival: EditText? = null
+    private var arrival: String? = null
+    private var textViewArrival: TextView? = null
     private var editTextDateTime: EditText? = null
     private var checkBoxRecurrent: CheckBox? = null
     private var spinnerRecurrence: Spinner? = null
@@ -27,14 +31,25 @@ class ProposeRideFragment : Fragment() {
     private var buttonProposeRide: Button? = null
     private var calendar: Calendar = Calendar.getInstance()
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            arrival = it.getString(ARG_PARAM1)
+            println("Received arrival: $arrival")
+        }
+    }
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
+
     ): View? {
+
         val view = inflater.inflate(R.layout.fragment_propose_ride, container, false)
 
         editTextDeparture = view.findViewById(R.id.editTextDeparture)
-        editTextArrival = view.findViewById(R.id.editTextArrival)
+        textViewArrival = view.findViewById(R.id.textArrival)
         editTextDateTime = view.findViewById(R.id.editTextDateTime)
         checkBoxRecurrent = view.findViewById(R.id.checkBoxRecurrent)
         spinnerRecurrence = view.findViewById(R.id.spinnerRecurrence)
@@ -46,6 +61,8 @@ class ProposeRideFragment : Fragment() {
         editTextDateTime?.setOnClickListener {
             showDateTimePicker()
         }
+
+        textViewArrival?.text = arrival ?: "No destination provided"
 
         val seatOptions = arrayOf("Veuillez selectionner une valeur", "1", "2", "3", "4", "5", "6", "7+")
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, seatOptions)
@@ -94,7 +111,7 @@ class ProposeRideFragment : Fragment() {
     private fun proposeRide() {
 
         val departure = editTextDeparture?.text.toString().trim()
-        val arrival = editTextArrival?.text.toString().trim()
+        val arrival = textViewArrival?.text.toString().trim()
         val carModel = editTextCarModel?.text.toString().trim()
         val seats = spinnerSeats?.selectedItem.toString().trim()
         val dateTime = editTextDateTime?.text.toString().trim()
@@ -129,11 +146,6 @@ class ProposeRideFragment : Fragment() {
             isValid = false
         }
 
-        if (arrival.isEmpty()) {
-            editTextArrival?.background = resources.getDrawable(R.drawable.error_background, null)
-            isValid = false
-        }
-
         if (carModel.isEmpty()) {
             editTextCarModel?.background = resources.getDrawable(R.drawable.error_background, null)
             isValid = false
@@ -160,17 +172,6 @@ class ProposeRideFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 if (!s.isNullOrEmpty()) {
                     editTextDeparture?.background = resources.getDrawable(android.R.drawable.edit_text, null)
-                }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
-
-        editTextArrival?.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                if (!s.isNullOrEmpty()) {
-                    editTextArrival?.background = resources.getDrawable(android.R.drawable.edit_text, null)
                 }
             }
 

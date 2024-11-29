@@ -26,8 +26,9 @@ class JoinRideFragment : Fragment() {
     private var destination: String? = null
     private var date: String? = null
     private var seatsTaken: Int? = null
-    private var seatsTotal: Int? = null
+    private var seatsAvailable: Int? = null
     private var seatsToTake: Int = 1
+    private var seatsUpdated: Int? = null
 
     private var textViewDestination: TextView? = null
     private var textViewDate: TextView? = null
@@ -41,8 +42,13 @@ class JoinRideFragment : Fragment() {
 
     fun updateButtonsDisable() {
         buttonSub?.isEnabled = seatsToTake > 0
-        buttonAdd?.isEnabled = seatsToTake < (seatsTotal!! - seatsTaken!!)
+        buttonAdd?.isEnabled = seatsToTake < (seatsAvailable!! - seatsTaken!!)
         buttonJoinRide?.isEnabled = seatsToTake > 0
+    }
+
+    fun updateAvailableSeats() {
+        seatsUpdated = (seatsAvailable!! - seatsToTake)
+        textViewSeatCountTotal?.text = seatsUpdated.toString() + " place(s) still available"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +57,7 @@ class JoinRideFragment : Fragment() {
             destination = it.getString(ARG_PARAM1)
             date = it.getString(ARG_PARAM2)
             seatsTaken = it.getInt(ARG_PARAM3)
-            seatsTotal = it.getInt(ARG_PARAM4)
+            seatsAvailable = it.getInt(ARG_PARAM4)
         }
     }
 
@@ -79,17 +85,19 @@ class JoinRideFragment : Fragment() {
 
         textViewDestination?.text = destination
         textViewDate?.text = date
-        textViewSeatCountTotal?.text = seatsTaken.toString() + "/" + seatsTotal.toString()
+        updateAvailableSeats()
         textViewSeatsCount?.text = seatsToTake.toString()
 
         buttonSub?.setOnClickListener {
             seatsToTake--
+            updateAvailableSeats()
             textViewSeatsCount?.text = seatsToTake.toString()
             updateButtonsDisable()
         }
 
         buttonAdd?.setOnClickListener {
             seatsToTake++
+            updateAvailableSeats()
             textViewSeatsCount?.text = seatsToTake.toString()
             updateButtonsDisable()
         }

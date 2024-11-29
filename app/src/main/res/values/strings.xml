@@ -20,6 +20,9 @@
     <string name="vehicle_hint">Modèle du véhicule</string>
     <string name="description_hint">Description</string>
     <string name="ride_validation">Proposer le trajet</string>
+    <string name="retour"><![CDATA[<]]></string>
+    <string name="buttonarrow">buttonArrow</string>
+    <string name="numero">numero</string>
     <string name="substract">-</string>
     <string name="add">+</string>
     <string name="_0">0</string>
