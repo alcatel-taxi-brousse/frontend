@@ -6,77 +6,55 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import org.json.JSONObject
 
 class HomeActivity : AppCompatActivity() {
 
-    private var buttonCreateCommunity: Button? = null
-    private var buttonProposeRide: Button? = null
-    private var buttonJoinRide: Button? = null
+    private var buttonCreateCommunity: ImageButton? = null
+    //private var buttonJoinRide: Button? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_home)
+        //a supp
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        //a supp
 
-        buttonCreateCommunity = findViewById<Button>(R.id.buttonCreateCommunity)
+        buttonCreateCommunity = findViewById(R.id.buttonCreateCommunity)
+        //buttonProposeRide = findViewById(R.id.buttonProposeRide)
 
-        buttonCreateCommunity?.setOnClickListener{
-            print("button create Community clicked");
-
-            val fragment = CreateCommunityFragment();
-
-            val fragmentManager: FragmentManager = supportFragmentManager
-            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.frameLayoutCreateCommunity, fragment)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
+        buttonCreateCommunity?.setOnClickListener {
+            openFragment(CreateCommunityFragment(), R.id.frameLayoutCommunitiesContainer)
         }
 
+        /*buttonProposeRide.setOnClickListener {
+            openFragment(ProposeRideFragment(), R.id.frameLayoutCommunitiesContainer)
+        }*/
 
-        buttonProposeRide = findViewById(R.id.buttonProposeRide)
-        buttonProposeRide?.setOnClickListener {
-            print("button Propose Ride clicked");
-            val fragment = ProposeRideFragment()
-            val fragmentManager: FragmentManager = supportFragmentManager
-            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.frameLayoutCreateCommunity, fragment)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
+        if (savedInstanceState == null) {
+            openFragment(ViewCommunitiesFragment(), R.id.frameLayoutCommunitiesContainer)
+            //openFragment(ViewRidesFragment(), R.id.frameLayoutRidesContainer)
         }
+    }
 
 
-        buttonJoinRide = findViewById(R.id.buttonJoinRide)
-        buttonJoinRide?.setOnClickListener {
-            print("button Join Ride clicked");
-            val fragment = JoinRideFragment()
-            fragment.arguments = Bundle().apply {
-                putString("destination", "Prison")
-                putString("date", "2024-11-11")
-                putInt("seats_taken", 2)
-                putInt("seats_total", 5)
-            }
-            val fragmentManager: FragmentManager = supportFragmentManager
-            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.frameLayoutCreateCommunity, fragment)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
-        }
-
-        val fragment = ViewCommunitiesFragment()
+    private fun openFragment(fragment: Fragment, containerId: Int) {
         val fragmentManager: FragmentManager = supportFragmentManager
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.frameLayoutFragmentContainer, fragment)
+        fragmentTransaction.replace(containerId, fragment)
+        fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
 
 

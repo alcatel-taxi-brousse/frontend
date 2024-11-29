@@ -17,12 +17,12 @@
             android:hint="@string/departure_box_hint"
             android:inputType="text" />
 
-        <EditText
-            android:id="@+id/editTextArrival"
+        <TextView
+            android:id="@+id/textArrival"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/destination_box_hint"
-            android:inputType="text" />
+            android:text="TEST"
+            android:textSize="16dp"/>
 
         <EditText
             android:id="@+id/editTextDateTime"
