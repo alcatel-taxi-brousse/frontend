@@ -9,11 +9,14 @@ import java.util.Date
 import java.util.Locale
 import java.util.Properties
 import android.content.SharedPreferences
+import org.json.JSONObject
 
 class ApiRequest private constructor(context: Context) {
     private val contextRef: WeakReference<Context> = WeakReference(context)
     private var requestQueue: RequestQueue
     private var apiUrl: String
+    private lateinit var token: String
+
 
     init {
         val properties = Properties()
@@ -50,6 +53,7 @@ class ApiRequest private constructor(context: Context) {
             Method.POST, "$apiUrl/auth",
             Response.Listener { response ->
                 onResponse(response)
+                token = JSONObject(response).getString("token")
             },
             Response.ErrorListener { error ->
                 onError("${error.message}")
@@ -96,10 +100,6 @@ class ApiRequest private constructor(context: Context) {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
 
-                val context = contextRef.get()
-                val sharedPreferences = context?.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-                val token = sharedPreferences?.getString("auth_token", "") ?: ""
-                println("token finded : $token")
                 headers["Authorization"] = "Bearer $token"
 
                 println("Headers envoyés : $headers")
@@ -124,10 +124,6 @@ class ApiRequest private constructor(context: Context) {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
 
-                val context = contextRef.get()
-                val sharedPreferences = context?.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-                val token = sharedPreferences?.getString("auth_token", "") ?: ""
-                println("token finded : $token")
                 headers["Authorization"] = "Bearer $token"
 
                 println("Headers envoyés : $headers")
