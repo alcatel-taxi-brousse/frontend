@@ -9,11 +9,14 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.Properties
+import android.content.SharedPreferences
+import org.json.JSONObject
 
 class ApiRequest private constructor(context: Context) {
     private val contextRef: WeakReference<Context> = WeakReference(context)
     private var requestQueue: RequestQueue
     private var apiUrl: String
+    private var token: String = ""
 
     init {
         val properties = Properties()
@@ -47,16 +50,17 @@ class ApiRequest private constructor(context: Context) {
         onError: (String) -> Unit
     ) {
         val stringRequest = object : StringRequest(
-            Method.POST, "$apiUrl/login",
+            Method.POST, "$apiUrl/auth",
             Response.Listener { response ->
                 onResponse(response)
+                token = JSONObject(response).getString("token")
             },
             Response.ErrorListener { error ->
                 onError("${error.message}")
             }) {
             override fun getParams(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params["login"] = login
+                params["email"] = login
                 params["password"] = password
                 return params
             }
@@ -74,7 +78,7 @@ class ApiRequest private constructor(context: Context) {
         onError: (String) -> Unit
     ){
         val stringRequest = object : StringRequest(
-            Method.POST, "$apiUrl/CreateCommunity",
+            Method.POST, "$apiUrl/bubbles",
             Response.Listener { response ->
                 onResponse(response)
             },
@@ -83,11 +87,47 @@ class ApiRequest private constructor(context: Context) {
             }) {
             override fun getParams(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params["communityName"] = communityName
-                params["destination"] = destination
+                params["name"] = communityName
+                //params["destination"] = destination
                 params["description"] = description
-                params["visibility"] = visibility
+                //params["visibility"] = visibility
+                //params["withHistory"] = "false"
+
+                println("Params envoyés : $params")
                 return params
+            }
+
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+
+                headers["Authorization"] = "Bearer $token"
+
+                println("Headers envoyés : $headers")
+                return headers
+            }
+        }
+        requestQueue.add(stringRequest)
+    }
+
+    public fun getCommunity(
+        onResponse: (String) -> Unit,
+        onError: (String) -> Unit
+    ){
+        val stringRequest = object : StringRequest(
+            Method.GET, "$apiUrl/bubbles",
+            Response.Listener { response ->
+                onResponse(response)
+            },
+            Response.ErrorListener { error ->
+                onError("${error.message}")
+            }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+
+                headers["Authorization"] = "Bearer $token"
+
+                println("Headers envoyés : $headers")
+                return headers
             }
         }
         requestQueue.add(stringRequest)
@@ -154,6 +194,12 @@ class ApiRequest private constructor(context: Context) {
             },
             {
                 "name": "Community C",
+                "destination": "Destination C",
+                "description": "This is the third community.",
+                "visibility": "Public"
+            },
+            {
+                "name": "Community D",
                 "destination": "Destination C",
                 "description": "This is the third community.",
                 "visibility": "Public"

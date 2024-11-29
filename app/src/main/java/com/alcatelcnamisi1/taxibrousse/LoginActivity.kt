@@ -15,6 +15,13 @@ import com.ale.infra.manager.room.Room
 import com.ale.infra.rest.listeners.RainbowError
 import com.ale.rainbowsdk.Connection
 import com.ale.rainbowsdk.RainbowSdk
+import com.android.volley.Request
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
+import org.json.JSONObject
+import android.content.Context
+import android.content.SharedPreferences
+
 
 
 class LoginActivity : AppCompatActivity() {
@@ -69,11 +76,18 @@ class LoginActivity : AppCompatActivity() {
         ApiRequest.getInstance(null).login(login, password, { response ->
             println("Response: $response")
 
+            val token = JSONObject(response).getString("token")
+            println("Token extrait : $token")
+
+            val sharedPreferences: SharedPreferences =
+                this.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putString("auth_token", token)
+            editor.apply()
+
         }, { error ->
             println("Error: $error")
         })
-
-
 
         val intent = Intent(this, HomeActivity::class.java)
         //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)

@@ -69,6 +69,8 @@ class CreateCommunityFragment : Fragment() {
         val description = editTextDescription?.text.toString()
         val visibility = editTextVisibility?.text.toString()
 
+        println("request sended")
+
         ApiRequest.getInstance(null).createCommunity(communityName, destination, description, visibility, { response ->
             println("Response: $response")
         }, { error ->
