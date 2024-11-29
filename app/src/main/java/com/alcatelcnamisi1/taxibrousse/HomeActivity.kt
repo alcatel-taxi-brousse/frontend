@@ -1,6 +1,8 @@
 package com.alcatelcnamisi1.taxibrousse
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -10,6 +12,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import org.json.JSONObject
 
 class HomeActivity : AppCompatActivity() {
 
@@ -70,13 +73,19 @@ class HomeActivity : AppCompatActivity() {
             fragmentTransaction.commit()
         }
 
-
-
-
         val fragment = ViewCommunitiesFragment()
         val fragmentManager: FragmentManager = supportFragmentManager
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frameLayoutFragmentContainer, fragment)
         fragmentTransaction.commit()
+
+
+        ApiRequest.getInstance(null).getCommunity({ response ->
+            println("Response: $response")
+        }, { error ->
+            println("Error: $error")
+        })
+
+
     }
 }

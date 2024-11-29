@@ -109,6 +109,34 @@ class ApiRequest private constructor(context: Context) {
         requestQueue.add(stringRequest)
     }
 
+    public fun getCommunity(
+        onResponse: (String) -> Unit,
+        onError: (String) -> Unit
+    ){
+        val stringRequest = object : StringRequest(
+            Method.GET, "$apiUrl/bubbles",
+            Response.Listener { response ->
+                onResponse(response)
+            },
+            Response.ErrorListener { error ->
+                onError("${error.message}")
+            }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+
+                val context = contextRef.get()
+                val sharedPreferences = context?.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+                val token = sharedPreferences?.getString("auth_token", "") ?: ""
+                println("token finded : $token")
+                headers["Authorization"] = "Bearer $token"
+
+                println("Headers envoyés : $headers")
+                return headers
+            }
+        }
+        requestQueue.add(stringRequest)
+    }
+
     fun proposeRide(
         departure: String,
         arrival: String,
