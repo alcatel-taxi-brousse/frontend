@@ -46,6 +46,8 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    implementation(libs.rainbowsdk)
+
     // API requests
     implementation("com.android.volley:volley:1.2.1")
 }

@@ -9,9 +9,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.android.volley.Request
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
+import com.ale.infra.list.ArrayItemList
+import com.ale.infra.manager.room.CreateRoomBody
+import com.ale.infra.manager.room.Room
+import com.ale.infra.rest.listeners.RainbowError
+import com.ale.rainbowsdk.Connection
+import com.ale.rainbowsdk.RainbowSdk
 
 
 class LoginActivity : AppCompatActivity() {
@@ -37,6 +40,26 @@ class LoginActivity : AppCompatActivity() {
         buttonLogin?.setOnClickListener {
             login()
         }
+        val ttoken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3VudFJlbmV3ZWQiOjAsIm1heFRva2VuUmVuZXciOjcsInVzZXIiOnsiaWQiOiI2NjQ3NTI5OGM3NjU5MGVkYzAwNTZlMDkiLCJsb2dpbkVtYWlsIjoibWVocmhhcmRAY2ZhaS1mb3JtYXRpb24uZnIifSwiZW52aXJvbm1lbnQiOnsiZW52aXJvbm1lbnROYW1lIjoib2ZmaWNpYWwiLCJlbnZpcm9ubWVudEFwaVVybCI6Imh0dHBzOi8vc2FuZGJveC5vcGVucmFpbmJvdy5jb20ifSwiYXBwIjp7ImlkIjoiYzcyMTljMzA3NGM2MTFlZmE2NjYxYjBiYjljOTAzNzAiLCJuYW1lIjoiTWFlbCBzYW5kYm94In0sImlhdCI6MTczMjg4NzQ2MSwiZXhwIjoxNzM0MTgzNDYxfQ.Kl80uoyBrNS2PjuMkaz5dsdiNSjiij2gHMfQVamIPCUXpU1lTp3ruJEFjktobcL19GArLFF_-CMfJ1NTNV1wp1wXSC_EKdAenJFYRea3yMYkJk_ijxfYRiZCGGrsKVOnFw75dQYZA5y1Hbprd6gmI88i59VkB-0enluAztjwDxKWUlrN2iue1pgWW4eWSd_vufd95EhGtWG2FFC3pXuZodrvoZlK23wLSVVhDobPN7M4UGWNAi6S3BjUqeuYfuGi8HLWy8YEa-ganA_1JrcdmQXHAxjhGLe_AHzEE66NrT0EJWWY9nc5rmXBVOzoP3Dffi4Fl2gOcbYP9W7qnm-0YA"
+        RainbowSdk().connection().signInWithToken(
+            token = ttoken,
+            host = "sandbox.openrainbow.com",
+            listener = object : Connection.ISignInListener {
+                override fun onSignInSucceeded() {
+                    super.onSignInSucceeded()
+                    println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+                }
+
+                override fun onSignInFailed(
+                    errorCode: Connection.ErrorCode,
+                    error: RainbowError<Unit>
+                ) {
+                    super.onSignInFailed(errorCode, error)
+                    println("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
+                }
+            }
+        )
+
     }
 
     private fun login() {
@@ -45,9 +68,12 @@ class LoginActivity : AppCompatActivity() {
 
         ApiRequest.getInstance(null).login(login, password, { response ->
             println("Response: $response")
+
         }, { error ->
             println("Error: $error")
         })
+
+
 
         val intent = Intent(this, HomeActivity::class.java)
         //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
