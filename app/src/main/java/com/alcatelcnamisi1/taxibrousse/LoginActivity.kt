@@ -12,6 +12,10 @@ import androidx.core.view.WindowInsetsCompat
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import org.json.JSONObject
+import android.content.Context
+import android.content.SharedPreferences
+
 
 
 class LoginActivity : AppCompatActivity() {
@@ -45,6 +49,16 @@ class LoginActivity : AppCompatActivity() {
 
         ApiRequest.getInstance(null).login(login, password, { response ->
             println("Response: $response")
+
+            val token = JSONObject(response).getString("token")
+            println("Token extrait : $token")
+
+            val sharedPreferences: SharedPreferences =
+                this.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putString("auth_token", token)
+            editor.apply()
+
         }, { error ->
             println("Error: $error")
         })
