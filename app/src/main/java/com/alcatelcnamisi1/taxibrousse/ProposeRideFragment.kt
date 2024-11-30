@@ -29,6 +29,7 @@ class ProposeRideFragment : Fragment() {
     private var editTextCarModel: EditText? = null
     private var editTextDescription: EditText? = null
     private var buttonProposeRide: Button? = null
+    private var buttonReturn: Button? = null
     private var calendar: Calendar = Calendar.getInstance()
 
 
@@ -57,6 +58,7 @@ class ProposeRideFragment : Fragment() {
         editTextCarModel = view.findViewById(R.id.editTextCarModel)
         editTextDescription = view.findViewById(R.id.editTextDescription)
         buttonProposeRide = view.findViewById(R.id.buttonProposeRide)
+        buttonReturn = view.findViewById(R.id.buttonReturn)
 
         editTextDateTime?.setOnClickListener {
             showDateTimePicker()
@@ -80,6 +82,10 @@ class ProposeRideFragment : Fragment() {
 
         buttonProposeRide?.setOnClickListener {
             proposeRide()
+        }
+
+        buttonReturn?.setOnClickListener {
+            activity?.supportFragmentManager?.popBackStack()
         }
 
         fieldListeners()

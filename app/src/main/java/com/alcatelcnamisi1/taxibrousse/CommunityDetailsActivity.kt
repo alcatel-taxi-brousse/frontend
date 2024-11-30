@@ -47,7 +47,12 @@ class CommunityDetailsActivity : AppCompatActivity() {
             navigateBackToHome()
         }
 
-        openFragment(ViewRidesFragment(), R.id.frameLayoutRidesContainer)
+        val fragment = ViewRidesFragment()
+        fragment.arguments = Bundle().apply {
+            putString("arrival", destination)
+            println("\n Data sent : $destination")
+        }
+        openFragment(fragment, R.id.frameLayoutRidesContainer)
     }
 
     private fun openFragment(fragment: Fragment, containerId: Int) {

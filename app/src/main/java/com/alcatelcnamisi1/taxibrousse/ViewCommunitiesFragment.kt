@@ -9,6 +9,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import org.json.JSONArray
 import org.json.JSONException
@@ -76,12 +77,12 @@ class ViewCommunitiesFragment : Fragment() {
 
             val nameTextView: TextView = communityView.findViewById(R.id.textViewCommunityName)
             val destinationTextView: TextView = communityView.findViewById(R.id.textViewCommunityDestination)
-            val arrowButton: ImageButton = communityView.findViewById(R.id.buttonArrow)
+            //val arrowButton: ImageButton = communityView.findViewById(R.id.buttonArrow)
 
             nameTextView.text = community["name"]
             destinationTextView.text = community["destination"]
 
-            arrowButton.setOnClickListener {
+            communityView.setOnClickListener {
                 val communityName = community["name"]
                 val destination = community["destination"]
 
