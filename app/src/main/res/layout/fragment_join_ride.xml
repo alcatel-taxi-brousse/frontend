@@ -14,11 +14,11 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textViewRouteName"
+            android:id="@+id/textViewDeparture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/route_name" />
+            android:text="departure" />
 
         <TextView
             android:id="@+id/textViewDate"

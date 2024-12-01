@@ -29,18 +29,17 @@
         android:ems="10"
         android:hint="Description" />
 
-    <EditText
-        android:id="@+id/editTextVisibility"
+    <CheckBox
+        android:id="@+id/checkBoxPrivate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Visbility" />
+        android:text="Communauté privée" />
 
     <Button
         android:id="@+id/ButtonCreateCommunity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ButtonCreateCommunity" />
+        android:text="Create Community" />
 
     <Button
         android:id="@+id/ButtonCloseCreateCommunity"

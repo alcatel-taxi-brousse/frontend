@@ -80,6 +80,12 @@
             android:layout_height="wrap_content"
             android:text="@string/ride_validation" />
 
+        <Button
+            android:id="@+id/buttonReturn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Retour" />
+
     </LinearLayout>
 
 </ScrollView>
