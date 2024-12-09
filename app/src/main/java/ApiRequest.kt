@@ -303,4 +303,47 @@ class ApiRequest private constructor(context: Context) {
     }
 
 
+    fun getMyRides(
+        onResponse: (String) -> Unit,
+        onError: (String) -> Unit
+    ) {
+
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+        val dummyRidesJson = """
+        [
+            {
+                "departure": "Strasbourg",
+                "arrival": "Paris",
+                "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 1) }.time)}",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed leo diam, auctor non faucibus quis, accumsan eu nunc. Quisque sed eleifend quam, a dignissim nunc. Phasellus laoreet lacus in augue rhoncus, quis euismod arcu sollicitudin. Aenean sed nunc nec leo placerat gravida id et ex. Integer lectus massa, feugiat sed hendrerit eu, ultricies consectetur ipsum. Pellentesque dictum, lacus molestie pretium fermentum, est erat viverra velit, sed placerat nisl libero ullamcorper ex. Nullam eu quam mi. Cras at tortor sagittis, vehicula ante nec, congue velit. Duis id justo eu velit rutrum feugiat at vitae sem. Proin interdum felis eget ex venenatis sodales. Suspendisse sagittis nibh at dolor ultrices commodo. Curabitur facilisis eros nec nunc vulputate gravida."
+            },
+            {
+                "departure": "Paris",
+                "arrival": "Strasbourg",
+                "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 5) }.time)}",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed leo diam, auctor non faucibus quis, accumsan eu nunc. Quisque sed eleifend quam, a dignissim nunc. Phasellus laoreet lacus in augue rhoncus, quis euismod arcu sollicitudin. Aenean sed nunc nec leo placerat gravida id et ex. Integer lectus massa, feugiat sed hendrerit eu, ultricies consectetur ipsum. Pellentesque dictum, lacus molestie pretium fermentum, est erat viverra velit, sed placerat nisl libero ullamcorper ex. Nullam eu quam mi. Cras at tortor sagittis, vehicula ante nec, congue velit. Duis id justo eu velit rutrum feugiat at vitae sem. Proin interdum felis eget ex venenatis sodales. Suspendisse sagittis nibh at dolor ultrices commodo. Curabitur facilisis eros nec nunc vulputate gravida."
+
+            }
+        ]
+    """
+
+
+        onResponse(dummyRidesJson)
+        /*
+        val urlWithParams = "$apiUrl/getRides"
+
+        val stringRequest = object : StringRequest(
+            Method.GET, urlWithParams,
+            Response.Listener { response ->
+                onResponse(response)
+            },
+            Response.ErrorListener { error ->
+                onError("${error.message}")
+            }
+        ) {}
+
+        requestQueue.add(stringRequest)*/
+    }
+
+
 }
