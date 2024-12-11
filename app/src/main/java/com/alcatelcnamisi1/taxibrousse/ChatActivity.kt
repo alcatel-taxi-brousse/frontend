@@ -9,8 +9,26 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.ale.infra.list.ArrayItemList
+import com.ale.infra.list.IItemListChangeListener
+import com.ale.infra.manager.IMMessage
+import com.ale.infra.proxy.conversation.IRainbowConversation
+import com.ale.rainbowsdk.RainbowSdk
+
 
 class ChatActivity : AppCompatActivity() {
+
+    lateinit var m_conversation: IRainbowConversation
+    lateinit var messages: ArrayItemList<IMMessage>
+
+    private val m_changeListener = IItemListChangeListener {
+    runOnUiThread {
+        val chatMessagesLayout = findViewById<LinearLayout>(R.id.chatMessages)
+        for (message in messages.items) {
+            addMessage(chatMessagesLayout, message.messageContent.toString(), false)
+        }
+    }
+}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +39,21 @@ class ChatActivity : AppCompatActivity() {
         val sendButton = findViewById<Button>(R.id.sendButton)
         val backButton = findViewById<ImageButton>(R.id.buttonBack)
 
+        val communityName = intent.getStringExtra("community_name")
+        // Initialiser la conversation
+        val room = RainbowSdk.instance().bubbles().findBubblesByName("azeazeaze")[0]
+        println("Room connected: $room")
+        m_conversation = RainbowSdk.instance().im().getConversationFromRoom(room)
+
+        messages = m_conversation.messages
+        m_conversation.messages.registerChangeListener(m_changeListener)
+
+        addMessage(chatMessagesLayout, room.name, false)
+        for (message in messages.items) {
+            addMessage(chatMessagesLayout, message.messageContent.toString(), message.isFromMaM)
+        }
+
+
         // Listener pour le bouton "Retour"
         backButton.setOnClickListener {
             onBackPressed() // Retour à l'activité précédente
@@ -29,15 +62,10 @@ class ChatActivity : AppCompatActivity() {
         // Ajouter un listener au bouton d'envoi
         sendButton.setOnClickListener {
             val messageText = messageInput.text.toString()
-
+            RainbowSdk.instance().im().sendMessageToConversation(m_conversation, messageText)
             if (messageText.isNotEmpty()) {
                 // Ajouter un message de l'utilisateur
                 addMessage(chatMessagesLayout, messageText, true)
-
-                // Simuler un message de réponse de l'autre utilisateur
-                chatMessagesLayout.postDelayed({
-                    addMessage(chatMessagesLayout, "Réponse automatique : $messageText", false)
-                }, 1000)
 
                 // Effacer la saisie
                 messageInput.text.clear()
@@ -76,5 +104,10 @@ class ChatActivity : AppCompatActivity() {
         chatMessagesLayout.post {
             chatMessagesLayout.parent?.requestChildFocus(chatMessagesLayout, messageView)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        m_conversation.messages.unregisterChangeListener(m_changeListener)
     }
 }

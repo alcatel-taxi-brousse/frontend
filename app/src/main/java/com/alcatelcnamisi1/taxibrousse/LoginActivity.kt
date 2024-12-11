@@ -73,7 +73,7 @@ class LoginActivity : AppCompatActivity() {
                         val r: Room? = RainbowSdk.instance().bubbles().findBubbleById(aze);
                         if (r != null) {
                             val conv = RainbowSdk.instance().im().getConversationFromRoom(r)
-                            RainbowSdk.instance().im().sendMessageToConversation(conv, "TEST 1234")
+                            RainbowSdk.instance().im().sendMessageToConversation(conv, "TEST 11/12")
                         }
                     }
 
@@ -86,13 +86,14 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             )
+            val intent = Intent(this, HomeActivity::class.java)
+            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
 
         }, { error ->
             println("Error: $error")
         })
 
-        val intent = Intent(this, HomeActivity::class.java)
-        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
+
     }
 }
