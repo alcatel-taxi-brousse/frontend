@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import com.google.android.material.button.MaterialButton
 
 class CommunityDetailsActivity : AppCompatActivity() {
 
@@ -16,6 +15,7 @@ class CommunityDetailsActivity : AppCompatActivity() {
     private lateinit var textViewDestination: TextView
     private lateinit var buttonProposeRide: ImageButton
     private lateinit var buttonBack: ImageButton
+    private lateinit var buttonChat: ImageButton // Nouveau bouton Chat
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +25,7 @@ class CommunityDetailsActivity : AppCompatActivity() {
         textViewDestination = findViewById(R.id.textViewDestination)
         buttonProposeRide = findViewById(R.id.buttonProposeRide)
         buttonBack = findViewById(R.id.buttonBack)
+        buttonChat = findViewById(R.id.buttonChat) // Initialisation du bouton Chat
 
         val communityName = intent.getStringExtra("communityName")
         val destination = intent.getStringExtra("destination")
@@ -32,21 +33,27 @@ class CommunityDetailsActivity : AppCompatActivity() {
         textViewCommunityName.text = communityName
         textViewDestination.text = destination
 
-
+        // Listener pour le bouton "Proposer un trajet"
         buttonProposeRide.setOnClickListener {
-            println("button Propose Ride clicked")
             val fragment = ProposeRideFragment()
             fragment.arguments = Bundle().apply {
-                println("Passing destination: $destination")
                 putString("arrival", destination)
             }
             openFragment(fragment, R.id.frameLayoutRidesContainer)
         }
 
+        // Listener pour le bouton "Retour"
         buttonBack.setOnClickListener {
             navigateBackToHome()
         }
 
+        // Listener pour le bouton "Chat"
+        buttonChat.setOnClickListener {
+            val intent = Intent(this, ChatActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Charger le fragment par défaut
         openFragment(ViewRidesFragment(), R.id.frameLayoutRidesContainer)
     }
 
@@ -58,11 +65,10 @@ class CommunityDetailsActivity : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
-
     private fun navigateBackToHome() {
         val intent = Intent(this, HomeActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
-        finish() // Optional to clear the current activity
+        finish() // Optionnel : termine l'activité actuelle
     }
 }

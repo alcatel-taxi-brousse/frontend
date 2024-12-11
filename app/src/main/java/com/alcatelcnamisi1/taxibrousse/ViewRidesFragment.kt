@@ -19,9 +19,21 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.*
 
+private const val ARG_PARAM1 = "arrival"
+
+
 class ViewRidesFragment : Fragment() {
 
     private lateinit var linearLayout: LinearLayout
+    private var arrival: String? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            arrival = it.getString(ARG_PARAM1)
+            println("Received arrival: $arrival")
+        }
+        println("\n OnCreate received data : $arrival")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -116,15 +128,17 @@ class ViewRidesFragment : Fragment() {
 
 
             buttonJoinRide.setOnClickListener {
-                print("button Join Ride clicked")
+                print("\n button Join Ride clicked")
                 val fragment = JoinRideFragment()
+                println("\n Data sent : $arrival")
                 fragment.arguments = Bundle().apply {
                     putString("departure", ride["departure"])
+                    putString("arrival", arrival)
                     putString("date", ride["date"])
                     putInt("seats_taken", 0)
                     ride["seatsAvailable"]?.let { it1 -> putInt("seats_total", it1.toInt()) }
                 }
-
+                print("\n Departure : " + ride["departure"])
                 val fragmentManager: FragmentManager = parentFragmentManager
                 val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
                 fragmentTransaction.replace(R.id.frameLayoutRidesContainer, fragment)

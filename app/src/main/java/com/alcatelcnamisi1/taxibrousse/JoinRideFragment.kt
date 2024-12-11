@@ -11,10 +11,12 @@ import android.widget.TextView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "destination"
-private const val ARG_PARAM2 = "date"
-private const val ARG_PARAM3 = "seats_taken"
-private const val ARG_PARAM4 = "seats_total"
+private const val ARG_PARAM1 = "departure"
+private const val ARG_PARAM2 = "arrival"
+private const val ARG_PARAM3 = "date"
+private const val ARG_PARAM4 = "seats_taken"
+private const val ARG_PARAM5 = "seats_total"
+
 
 /**
  * A simple [Fragment] subclass.
@@ -23,14 +25,15 @@ private const val ARG_PARAM4 = "seats_total"
  */
 class JoinRideFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var destination: String? = null
+    private var departure: String? = null
+    private var arrival: String? = null
     private var date: String? = null
     private var seatsTaken: Int? = null
     private var seatsAvailable: Int? = null
     private var seatsToTake: Int = 1
     private var seatsUpdated: Int? = null
 
-    private var textViewDestination: TextView? = null
+    private var textViewDeparture: TextView? = null
     private var textViewDate: TextView? = null
     private var textViewSeatCountTotal: TextView? = null
     private var textViewSeatsCount: TextView? = null
@@ -48,17 +51,19 @@ class JoinRideFragment : Fragment() {
 
     fun updateAvailableSeats() {
         seatsUpdated = (seatsAvailable!! - seatsToTake)
-        textViewSeatCountTotal?.text = seatsUpdated.toString() + " place(s) still available"
+        textViewSeatCountTotal?.text = seatsUpdated.toString() + " place(s) still available ( /" + seatsAvailable.toString() + ")"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            destination = it.getString(ARG_PARAM1)
-            date = it.getString(ARG_PARAM2)
-            seatsTaken = it.getInt(ARG_PARAM3)
-            seatsAvailable = it.getInt(ARG_PARAM4)
+            departure = it.getString(ARG_PARAM1)
+            arrival = it.getString(ARG_PARAM2)
+            date = it.getString(ARG_PARAM3)
+            seatsTaken = it.getInt(ARG_PARAM4)
+            seatsAvailable = it.getInt(ARG_PARAM5)
         }
+        println("\n Data received : $arrival")
     }
 
     private fun closeJoinRide(){
@@ -74,7 +79,8 @@ class JoinRideFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_join_ride, container, false)
 
         // Get elements
-        textViewDestination = view?.findViewById(R.id.textViewRouteName)
+
+        textViewDeparture = view?.findViewById(R.id.textViewDeparture)
         textViewDate = view?.findViewById(R.id.textViewDate)
         textViewSeatCountTotal = view?.findViewById(R.id.textViewSeatCountTotal)
         textViewSeatsCount = view?.findViewById(R.id.textViewSeatCount)
@@ -83,7 +89,8 @@ class JoinRideFragment : Fragment() {
         buttonJoinRide = view?.findViewById(R.id.buttonJoinRide)
         buttonClose = view?.findViewById(R.id.buttonCloseRide)
 
-        textViewDestination?.text = destination
+        print(departure)
+        textViewDeparture?.text = departure + "  ->  " + arrival
         textViewDate?.text = date
         updateAvailableSeats()
         textViewSeatsCount?.text = seatsToTake.toString()

@@ -45,6 +45,7 @@ class HomeActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             openFragment(ViewCommunitiesFragment(), R.id.frameLayoutCommunitiesContainer)
+            openFragment(MyRidesFragment(), R.id.frameLayoutMyRides)
             //openFragment(ViewRidesFragment(), R.id.frameLayoutRidesContainer)
         }
     }

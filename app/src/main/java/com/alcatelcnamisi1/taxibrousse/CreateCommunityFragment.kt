@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 
 private const val ARG_PARAM1 = "param1"
@@ -15,7 +16,7 @@ class CreateCommunityFragment : Fragment() {
     private var editTextCommunityName: EditText? = null
     private var editTextDestination: EditText? = null
     private var editTextDescription: EditText? = null
-    private var editTextVisibility: EditText? = null
+    private var checkBoxPrivate: CheckBox? = null
     private var buttonCreateCommunity: Button? = null
     private var buttonCloseCreateCommunity: Button? = null
 
@@ -37,12 +38,12 @@ class CreateCommunityFragment : Fragment() {
         editTextCommunityName = view.findViewById(R.id.editTextCommunityName)
         editTextDestination = view.findViewById(R.id.editTextDestination)
         editTextDescription = view.findViewById(R.id.editTextDescription)
-        editTextVisibility = view.findViewById(R.id.editTextVisibility)
+        checkBoxPrivate = view.findViewById(R.id.checkBoxPrivate)
         buttonCreateCommunity = view.findViewById(R.id.ButtonCreateCommunity)
         buttonCloseCreateCommunity = view.findViewById(R.id.ButtonCloseCreateCommunity)
 
         buttonCreateCommunity?.setOnClickListener {
-            createCommunity()
+            createCommunity(checkBoxPrivate?.isChecked)
         }
 
         buttonCloseCreateCommunity?.setOnClickListener {
@@ -63,11 +64,16 @@ class CreateCommunityFragment : Fragment() {
             }
     }
 
-    private fun createCommunity() {
+    private fun createCommunity(isPrivate: Boolean?) {
         val communityName = editTextCommunityName?.text.toString()
         val destination = editTextDestination?.text.toString()
         val description = editTextDescription?.text.toString()
-        val visibility = editTextVisibility?.text.toString()
+        var visibility = "public"
+        if(isPrivate == true) {
+            visibility = "private"
+        }
+
+
 
         println("request sended")
 
