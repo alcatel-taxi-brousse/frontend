@@ -133,6 +133,31 @@ class ApiRequest private constructor(context: Context) {
         requestQueue.add(stringRequest)
     }
 
+    public fun getTrips(
+        communityId : String,
+        onResponse: (String) -> Unit,
+        onError: (String) -> Unit
+    ){
+        val stringRequest = object : StringRequest(
+            Method.GET, "$apiUrl/communities/$communityId/trips",
+            Response.Listener { response ->
+                onResponse(response)
+            },
+            Response.ErrorListener { error ->
+                onError("${error.message}")
+            }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+
+                headers["Authorization"] = "Bearer $token"
+
+                println("Headers envoyés : $headers")
+                return headers
+            }
+        }
+        requestQueue.add(stringRequest)
+    }
+
     fun proposeRide(
         departure: String,
         arrival: String,
@@ -344,6 +369,4 @@ class ApiRequest private constructor(context: Context) {
 
         requestQueue.add(stringRequest)*/
     }
-
-
 }

@@ -66,7 +66,7 @@ class LoginActivity : AppCompatActivity() {
                 listener = object : Connection.ISignInListener {
                     override fun onSignInSucceeded() {
                         super.onSignInSucceeded()
-                        println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+                        println("SDK Successfully initialized")
                     }
 
                     override fun onSignInFailed(
@@ -74,7 +74,7 @@ class LoginActivity : AppCompatActivity() {
                         error: RainbowError<Unit>
                     ) {
                         super.onSignInFailed(errorCode, error)
-                        println("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
+                        println("SDK initialization error")
                     }
                 }
             )
