@@ -1,0 +1,7 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_chat"
+        android:icon="@drawable/messenger"
+        android:title="Chat"
+        />
+</menu>
