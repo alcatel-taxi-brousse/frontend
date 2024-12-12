@@ -66,15 +66,7 @@ class LoginActivity : AppCompatActivity() {
                 listener = object : Connection.ISignInListener {
                     override fun onSignInSucceeded() {
                         super.onSignInSucceeded()
-                        println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-                        val bubbles = RainbowSdk.instance().bubbles().findBubblesByName("azeazeaze")
-                        val aze = bubbles[0].id
-                        println("conv: $aze")
-                        val r: Room? = RainbowSdk.instance().bubbles().findBubbleById(aze);
-                        if (r != null) {
-                            val conv = RainbowSdk.instance().im().getConversationFromRoom(r)
-                            RainbowSdk.instance().im().sendMessageToConversation(conv, "TEST 11/12")
-                        }
+
                     }
 
                     override fun onSignInFailed(
