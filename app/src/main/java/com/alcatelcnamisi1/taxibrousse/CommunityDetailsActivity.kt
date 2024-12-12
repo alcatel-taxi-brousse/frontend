@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.ale.rainbowsdk.RainbowSdk
 
 class CommunityDetailsActivity : AppCompatActivity() {
 
@@ -50,6 +51,8 @@ class CommunityDetailsActivity : AppCompatActivity() {
         // Listener pour le bouton "Chat"
         buttonChat.setOnClickListener {
             val intent = Intent(this, ChatActivity::class.java)
+
+            intent.putExtra("community_name", communityName);
             startActivity(intent)
         }
 
