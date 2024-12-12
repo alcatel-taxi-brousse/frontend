@@ -78,7 +78,7 @@ class ApiRequest private constructor(context: Context) {
         onError: (String) -> Unit
     ){
         val stringRequest = object : StringRequest(
-            Method.POST, "$apiUrl/bubbles",
+            Method.POST, "$apiUrl/communities",
             Response.Listener { response ->
                 onResponse(response)
             },
@@ -114,7 +114,7 @@ class ApiRequest private constructor(context: Context) {
         onError: (String) -> Unit
     ){
         val stringRequest = object : StringRequest(
-            Method.GET, "$apiUrl/bubbles",
+            Method.GET, "$apiUrl/communities",
             Response.Listener { response ->
                 onResponse(response)
             },
