@@ -2,10 +2,13 @@ package com.alcatelcnamisi1.taxibrousse
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -17,7 +20,9 @@ import org.json.JSONException
 class ViewCommunitiesFragment : Fragment() {
 
     private lateinit var linearLayout: LinearLayout
+    private lateinit var searchBar: EditText
     private val joinedCommunityIds = mutableSetOf<String>()
+    private val allCommunities = mutableListOf<HashMap<String, String>>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,9 +36,24 @@ class ViewCommunitiesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         linearLayout = view.findViewById(R.id.linearLayoutCommunities)
+        searchBar = requireActivity().findViewById(R.id.searchBar)
+
+        // Add text change listener for search
+        searchBar.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val query = s.toString().lowercase()
+                val filteredCommunities = allCommunities.filter { community ->
+                    community["name"]?.lowercase()?.contains(query) == true ||
+                            community["destination"]?.lowercase()?.contains(query) == true
+                }
+                displayCommunities(filteredCommunities)
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
 
         fetchJoinedCommunities { fetchCommunities() }
-
     }
 
     private fun fetchCommunities() {
@@ -43,6 +63,8 @@ class ViewCommunitiesFragment : Fragment() {
                 try {
 
                     val communities = parseCommunityResponse(response)
+                    allCommunities.clear()
+                    allCommunities.addAll(communities)
                     displayCommunities(communities)
                 } catch (e: JSONException) {
                     e.printStackTrace()
