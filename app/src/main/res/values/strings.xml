@@ -32,6 +32,6 @@
     <string name="fermer">Annuler</string>
     <string name="valider">Valider</string>
     <string name="join_ride">Join ride</string>
-    <string name="join_community">Join Community</string>
+    <string name="join_community">Join</string>
     <string name="chat">chat</string>
 </resources>
