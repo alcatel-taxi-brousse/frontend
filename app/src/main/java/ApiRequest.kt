@@ -138,28 +138,32 @@ class ApiRequest private constructor(context: Context) {
         onError: (String) -> Unit
     ) {
 
-        val mockResponse = """
-        [
-            {
-                "name": "Community A",
-                "destination": "Destination A",
-                "description": "This is the first community.",
-                "visibility": "Public"
-            },
-            {
-                "name": "Community B",
-                "destination": "Destination B",
-                "description": "This is the second community.",
-                "visibility": "Private"
-            },
-            {
-                "name": "Community C",
-                "destination": "Destination C",
-                "description": "This is the third community.",
-                "visibility": "Public"
-            }
-        ]
+            val mockResponse = """
+    [
+        {
+            "id": "0",
+            "name": "Community A",
+            "destination": "Destination A",
+            "description": "This is the first community.",
+            "visibility": "Public"
+        },
+        {
+            "id": "1",
+            "name": "Community B",
+            "destination": "Destination B",
+            "description": "This is the second community.",
+            "visibility": "Private"
+        },
+        {
+            "id": "2",
+            "name": "Community C",
+            "destination": "Destination C",
+            "description": "This is the third community.",
+            "visibility": "Public"
+        }
+    ]
     """
+
 
         onResponse(mockResponse)/*
         val urlWithParams = "$apiUrl/getCommunities"
@@ -255,6 +259,78 @@ class ApiRequest private constructor(context: Context) {
 
         requestQueue.add(stringRequest)*/
     }
+
+    fun joinCommunity(
+        community: HashMap<String, String>, // Pass the entire community object
+        onResponse: (String) -> Unit,
+        onError: (String) -> Unit
+    ) {
+
+        val userLogin = "123"
+        val communityId = community["id"] ?: "0"
+
+        val mockResponse = """
+        {
+            "status": "success",
+            "message": "User $userLogin successfully joined community $communityId."
+        }
+    """
+
+        onResponse(mockResponse)
+
+        /*
+        val stringRequest = object : StringRequest(
+            Method.POST, "$apiUrl/joinCommunity",
+            Response.Listener { response ->
+                onResponse(response)
+            },
+            Response.ErrorListener { error ->
+                onError("${error.message}")
+            }) {
+            override fun getParams(): Map<String, String> {
+                val params = HashMap<String, String>()
+                params["userId"] = userId
+                params["communityId"] = communityId
+                return params
+            }
+        }
+        requestQueue.add(stringRequest)
+        */
+    }
+
+    fun getJoinedCommunities(
+        onResponse: (String) -> Unit,
+        onError: (String) -> Unit
+    ) {
+            val mockResponse = """
+    [
+        {"id": "0"},
+        {"id": "2"}
+    ]
+    """
+
+        onResponse(mockResponse)
+
+        /*
+        val urlWithParams = "$apiUrl/getJoinedCommunities"
+
+        val stringRequest = object : StringRequest(
+            Method.GET, urlWithParams,
+            Response.Listener { response ->
+                onResponse(response)
+            },
+            Response.ErrorListener { error ->
+                onError("${error.message}")
+            }
+        ) {}
+
+        requestQueue.add(stringRequest)
+        */
+    }
+
+
+
+
 
 
 }

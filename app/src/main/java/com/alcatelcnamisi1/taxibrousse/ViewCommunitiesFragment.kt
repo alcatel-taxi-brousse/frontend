@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -16,6 +17,7 @@ import org.json.JSONException
 class ViewCommunitiesFragment : Fragment() {
 
     private lateinit var linearLayout: LinearLayout
+    private val joinedCommunityIds = mutableSetOf<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +32,8 @@ class ViewCommunitiesFragment : Fragment() {
 
         linearLayout = view.findViewById(R.id.linearLayoutCommunities)
 
-        fetchCommunities()
+        fetchJoinedCommunities { fetchCommunities() }
+
     }
 
     private fun fetchCommunities() {
@@ -52,6 +55,7 @@ class ViewCommunitiesFragment : Fragment() {
         )
     }
 
+
     private fun parseCommunityResponse(response: String): List<HashMap<String, String>> {
         val communityList = mutableListOf<HashMap<String, String>>()
         val jsonArray = JSONArray(response)
@@ -60,6 +64,7 @@ class ViewCommunitiesFragment : Fragment() {
             val communityJson = jsonArray.getJSONObject(i)
             val communityMap = HashMap<String, String>()
 
+            communityMap["id"] = communityJson.getString("id") // Parse the id
             communityMap["name"] = communityJson.getString("name")
             communityMap["destination"] = communityJson.getString("destination")
 
@@ -69,30 +74,102 @@ class ViewCommunitiesFragment : Fragment() {
         return communityList
     }
 
+
+
+    private fun fetchJoinedCommunities(onComplete: () -> Unit) {
+        ApiRequest.getInstance(requireContext()).getJoinedCommunities(
+            onResponse = { response ->
+                try {
+                    joinedCommunityIds.clear()
+                    joinedCommunityIds.addAll(parseJoinedCommunityResponse(response))
+                    onComplete()
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                    Toast.makeText(requireContext(), "Error parsing joined communities", Toast.LENGTH_SHORT).show()
+                }
+            },
+            onError = { error ->
+                Toast.makeText(requireContext(), "Error fetching joined communities: $error", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+    private fun parseJoinedCommunityResponse(response: String): Set<String> {
+        val joinedIds = mutableSetOf<String>()
+        val jsonArray = JSONArray(response)
+
+        for (i in 0 until jsonArray.length()) {
+            val jsonObject = jsonArray.getJSONObject(i)
+            joinedIds.add(jsonObject.getString("id"))
+        }
+
+        return joinedIds
+    }
+
+
     private fun displayCommunities(communities: List<HashMap<String, String>>) {
+        linearLayout.removeAllViews()
+
         for (community in communities) {
             val communityView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.list_item_community, linearLayout, false)
 
             val nameTextView: TextView = communityView.findViewById(R.id.textViewCommunityName)
             val destinationTextView: TextView = communityView.findViewById(R.id.textViewCommunityDestination)
+            val joinButton: Button = communityView.findViewById(R.id.buttonJoinCommunity)
             val arrowButton: ImageButton = communityView.findViewById(R.id.buttonArrow)
 
             nameTextView.text = community["name"]
             destinationTextView.text = community["destination"]
 
-            arrowButton.setOnClickListener {
-                val communityName = community["name"]
-                val destination = community["destination"]
+            val communityId = community["id"] ?: ""
+            val isJoined = joinedCommunityIds.contains(communityId)
 
+            // Update button state based on join status
+            joinButton.text = if (isJoined) "Joined" else "Join"
+            joinButton.isEnabled = !isJoined
+
+            joinButton.setOnClickListener {
+                if (!isJoined) {
+                    ApiRequest.getInstance(requireContext()).joinCommunity(
+                        community,
+                        onResponse = {
+                            joinedCommunityIds.add(communityId)
+                            joinButton.text = "Joined"
+                            joinButton.isEnabled = false
+                            Toast.makeText(
+                                requireContext(),
+                                "Successfully joined ${community["name"]}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        },
+                        onError = { error ->
+                            Toast.makeText(
+                                requireContext(),
+                                "Error joining community: $error",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    )
+                }
+            }
+
+            arrowButton.setOnClickListener {
                 val intent = Intent(requireContext(), CommunityDetailsActivity::class.java)
-                intent.putExtra("communityName", communityName)
-                intent.putExtra("destination", destination)
+                intent.putExtra("communityName", community["name"])
+                intent.putExtra("destination", community["destination"])
                 startActivity(intent)
             }
 
             linearLayout.addView(communityView)
         }
     }
+
+
+
+
+
+
+
 
 }
