@@ -9,11 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import org.json.JSONArray
 import org.json.JSONException
@@ -29,7 +27,6 @@ class ViewCommunitiesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return inflater.inflate(R.layout.fragment_view_communities, container, false)
     }
 
@@ -45,7 +42,7 @@ class ViewCommunitiesFragment : Fragment() {
 
                 if (query.isEmpty()) {
                     val joinedCommunities = allCommunities.filter {
-                        joinedCommunityIds.contains(it["id"])
+                        joinedCommunityIds.contains(it["community_id"])
                     }
                     displayCommunities(joinedCommunities)
                 } else {
@@ -54,7 +51,10 @@ class ViewCommunitiesFragment : Fragment() {
                         onResponse = { response ->
                             try {
                                 val searchResults = parseCommunityResponse(response)
-                                displayCommunities(searchResults, showJoinButton = true)
+                                val filteredResults = searchResults.filter {
+                                    !joinedCommunityIds.contains(it["community_id"])
+                                }
+                                displayCommunities(filteredResults, isSearchResult = true)
                             } catch (e: JSONException) {
                                 e.printStackTrace()
                                 Toast.makeText(requireContext(), "Error parsing search results", Toast.LENGTH_SHORT).show()
@@ -71,7 +71,7 @@ class ViewCommunitiesFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
-        fetchJoinedCommunities { fetchCommunities() }
+        fetchCommunities()
     }
 
     private fun fetchCommunities() {
@@ -81,8 +81,9 @@ class ViewCommunitiesFragment : Fragment() {
                     val communities = parseCommunityResponse(response)
                     allCommunities.clear()
                     allCommunities.addAll(communities)
+
                     val joinedCommunities = communities.filter {
-                        joinedCommunityIds.contains(it["id"])
+                        joinedCommunityIds.contains(it["community_id"])
                     }
                     displayCommunities(joinedCommunities)
                 } catch (e: JSONException) {
@@ -103,7 +104,7 @@ class ViewCommunitiesFragment : Fragment() {
         for (i in 0 until jsonArray.length()) {
             val communityJson = jsonArray.getJSONObject(i)
             val communityMap = HashMap<String, String>()
-            communityMap["id"] = communityJson.getString("id")
+            communityMap["community_id"] = communityJson.getString("community_id")
             communityMap["name"] = communityJson.getString("name")
             communityMap["destination"] = communityJson.getString("destination")
             communityList.add(communityMap)
@@ -112,39 +113,9 @@ class ViewCommunitiesFragment : Fragment() {
         return communityList
     }
 
-    private fun fetchJoinedCommunities(onComplete: () -> Unit) {
-        ApiRequest.getInstance(requireContext()).getJoinedCommunities(
-            onResponse = { response ->
-                try {
-                    joinedCommunityIds.clear()
-                    joinedCommunityIds.addAll(parseJoinedCommunityResponse(response))
-                    onComplete()
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                    Toast.makeText(requireContext(), "Error parsing joined communities", Toast.LENGTH_SHORT).show()
-                }
-            },
-            onError = { error ->
-                Toast.makeText(requireContext(), "Error fetching joined communities: $error", Toast.LENGTH_SHORT).show()
-            }
-        )
-    }
-
-    private fun parseJoinedCommunityResponse(response: String): Set<String> {
-        val joinedIds = mutableSetOf<String>()
-        val jsonArray = JSONArray(response)
-
-        for (i in 0 until jsonArray.length()) {
-            val jsonObject = jsonArray.getJSONObject(i)
-            joinedIds.add(jsonObject.getString("id"))
-        }
-
-        return joinedIds
-    }
-
     private fun displayCommunities(
         communities: List<HashMap<String, String>>,
-        showJoinButton: Boolean = false
+        isSearchResult: Boolean = false
     ) {
         linearLayout.removeAllViews()
 
@@ -159,11 +130,24 @@ class ViewCommunitiesFragment : Fragment() {
             nameTextView.text = community["name"]
             destinationTextView.text = community["destination"]
 
-            val communityId = community["id"] ?: ""
+            val communityId = community["community_id"] ?: ""
             val isJoined = joinedCommunityIds.contains(communityId)
 
+            if (isSearchResult) {
+                joinButton.visibility = if (!isJoined) View.VISIBLE else View.GONE
+            } else {
+                joinButton.visibility = View.GONE
+            }
 
-            joinButton.visibility = if (showJoinButton && !isJoined) View.VISIBLE else View.GONE
+            communityView.setOnClickListener {
+                val communityName = community["name"]
+                val destination = community["destination"]
+
+                val intent = Intent(requireContext(), CommunityDetailsActivity::class.java)
+                intent.putExtra("communityName", communityName)
+                intent.putExtra("destination", destination)
+                startActivity(intent)
+            }
 
             joinButton.setOnClickListener {
                 ApiRequest.getInstance(requireContext()).joinCommunity(

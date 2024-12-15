@@ -180,31 +180,31 @@ class ApiRequest private constructor(context: Context) {
         onError: (String) -> Unit
     ) {
 
-        val mockResponse = """
+        /*val mockResponse = """
         [
             {
-                "id": "0",
+                "community_id": "0",
                 "name": "Community A",
                 "destination": "Destination A",
                 "description": "This is the first community.",
                 "visibility": "Public"
             },
             {
-                "id": "1",
+                "community_id": "1",
                 "name": "Community B",
                 "destination": "Destination B",
                 "description": "This is the second community.",
                 "visibility": "Private"
             },
             {
-                "id": "2",
+                "community_id": "2",
                 "name": "Community C",
                 "destination": "Destination C",
                 "description": "This is the third community.",
                 "visibility": "Public"
             },
             {
-                "id": "3",
+                "community_id": "3",
                 "name": "Community D",
                 "destination": "Destination D",
                 "description": "This is the fourth community.",
@@ -213,8 +213,9 @@ class ApiRequest private constructor(context: Context) {
         ]
     """
 
-        onResponse(mockResponse)/*
-        val urlWithParams = "$apiUrl/getCommunities"
+        onResponse(mockResponse)*/
+
+        val urlWithParams = "$apiUrl/communities"
 
         val stringRequest = object : StringRequest(
             Method.GET, urlWithParams,
@@ -224,9 +225,16 @@ class ApiRequest private constructor(context: Context) {
             Response.ErrorListener { error ->
                 onError("${error.message}")
             }
-        ){}*/
-       // requestQueue.add(stringRequest)
-    }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Authorization"] = "Bearer $token"
+                return headers
+            }
+        }
+
+        requestQueue.add(stringRequest)
+        }
 
     fun getRides(
         onResponse: (String) -> Unit,
@@ -357,6 +365,7 @@ class ApiRequest private constructor(context: Context) {
         onError: (String) -> Unit
     )
     //mock
+    /*
     {
         val mockResponse = """
         {
@@ -372,52 +381,23 @@ class ApiRequest private constructor(context: Context) {
         } else {
 
             onError("Mock error: Unable to join community.")
-        }
+        }*/
 
-    /*{
-        val urlWithParams = "$apiUrl/communities/$communityId/join"
+        {
+            val urlWithParams = "$apiUrl/communities/$communityId/join"
 
-        val stringRequest = object : StringRequest(
-            Method.POST, urlWithParams,
-            Response.Listener { response ->
-                onResponse(response)
-            },
-            Response.ErrorListener { error ->
-                onError("${error.message}")
-            }
-        ){}
+            val stringRequest = object : StringRequest(
+                Method.POST, urlWithParams,
+                Response.Listener { response ->
+                    onResponse(response)
+                },
+                Response.ErrorListener { error ->
+                    onError("${error.message}")
+                }
+            ){}
 
-        requestQueue.add(stringRequest)
-        */
-    }
+            requestQueue.add(stringRequest)
 
-    fun getJoinedCommunities(
-        onResponse: (String) -> Unit,
-        onError: (String) -> Unit
-    )
-    //mock
-    {
-        val mockResponse = """
-    [
-        {"id": "0"},
-        {"id": "2"}
-    ]
-    """
-
-        onResponse(mockResponse)
-        /*
-        val urlWithParams = "$apiUrl/getJoinedCommunities"
-        val stringRequest = object : StringRequest(
-            Method.GET, urlWithParams,
-            Response.Listener { response ->
-                onResponse(response)
-            },
-            Response.ErrorListener { error ->
-                onError("${error.message}")
-            }
-        ) {}
-        requestQueue.add(stringRequest)
-        */
     }
 
     fun searchCommunities(
@@ -427,32 +407,33 @@ class ApiRequest private constructor(context: Context) {
     )
 
     // mock
+    /*
     {
         val mockCommunities = """
         [
             {
-                "id": "0",
+                "community_id": "0",
                 "name": "Community A",
                 "destination": "Destination A",
                 "description": "This is the first community.",
                 "visibility": "Public"
             },
             {
-                "id": "1",
+                "community_id": "1",
                 "name": "Community B",
                 "destination": "Destination B",
                 "description": "This is the second community.",
                 "visibility": "Private"
             },
             {
-                "id": "2",
+                "community_id": "2",
                 "name": "Community C",
                 "destination": "Destination C",
                 "description": "This is the third community.",
                 "visibility": "Public"
             },
             {
-                "id": "3",
+                "community_id": "3",
                 "name": "Community D",
                 "destination": "Destination D",
                 "description": "This is the fourth community.",
@@ -480,27 +461,27 @@ class ApiRequest private constructor(context: Context) {
             onError("Error processing mock data: ${e.message}")
         }
 
-/*
-    {
-        val urlWithParams = "$apiUrl/communities/search?search=$searchQuery"
-
-        val stringRequest = object : StringRequest(
-            Method.GET, urlWithParams,
-            Response.Listener { response ->
-                onResponse(response)
-            },
-            Response.ErrorListener { error ->
-                onError("${error.message}")
-            }) {
-            override fun getHeaders(): MutableMap<String, String> {
-                val headers = HashMap<String, String>()
-                headers["Authorization"] = "Bearer $token"
-                return headers
-            }
-        }
-
-        requestQueue.add(stringRequest)
         */
+            {
+                val urlWithParams = "$apiUrl/communities/search?search=$searchQuery"
+
+                val stringRequest = object : StringRequest(
+                    Method.GET, urlWithParams,
+                    Response.Listener { response ->
+                        onResponse(response)
+                    },
+                    Response.ErrorListener { error ->
+                        onError("${error.message}")
+                    }) {
+                    override fun getHeaders(): MutableMap<String, String> {
+                        val headers = HashMap<String, String>()
+                        headers["Authorization"] = "Bearer $token"
+                        return headers
+                    }
+                }
+
+                requestQueue.add(stringRequest)
+
 
     }
 
