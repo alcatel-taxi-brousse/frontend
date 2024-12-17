@@ -10,6 +10,8 @@ import java.util.Date
 import java.util.Locale
 import java.util.Properties
 import android.content.SharedPreferences
+import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 
 class ApiRequest private constructor(context: Context) {
@@ -78,7 +80,7 @@ class ApiRequest private constructor(context: Context) {
         onError: (String) -> Unit
     ){
         val stringRequest = object : StringRequest(
-            Method.POST, "$apiUrl/bubbles",
+            Method.POST, "$apiUrl/communities",
             Response.Listener { response ->
                 onResponse(response)
             },
@@ -114,7 +116,7 @@ class ApiRequest private constructor(context: Context) {
         onError: (String) -> Unit
     ){
         val stringRequest = object : StringRequest(
-            Method.GET, "$apiUrl/bubbles",
+            Method.GET, "$apiUrl/communities/app",
             Response.Listener { response ->
                 onResponse(response)
             },
@@ -178,37 +180,42 @@ class ApiRequest private constructor(context: Context) {
         onError: (String) -> Unit
     ) {
 
-        val mockResponse = """
+        /*val mockResponse = """
         [
             {
+                "community_id": "0",
                 "name": "Community A",
                 "destination": "Destination A",
                 "description": "This is the first community.",
                 "visibility": "Public"
             },
             {
+                "community_id": "1",
                 "name": "Community B",
                 "destination": "Destination B",
                 "description": "This is the second community.",
                 "visibility": "Private"
             },
             {
+                "community_id": "2",
                 "name": "Community C",
                 "destination": "Destination C",
                 "description": "This is the third community.",
                 "visibility": "Public"
             },
             {
+                "community_id": "3",
                 "name": "Community D",
-                "destination": "Destination C",
-                "description": "This is the third community.",
+                "destination": "Destination D",
+                "description": "This is the fourth community.",
                 "visibility": "Public"
             }
         ]
     """
 
-        onResponse(mockResponse)/*
-        val urlWithParams = "$apiUrl/getCommunities"
+        onResponse(mockResponse)*/
+
+        val urlWithParams = "$apiUrl/communities/app"
 
         val stringRequest = object : StringRequest(
             Method.GET, urlWithParams,
@@ -218,9 +225,16 @@ class ApiRequest private constructor(context: Context) {
             Response.ErrorListener { error ->
                 onError("${error.message}")
             }
-        ){}*/
-       // requestQueue.add(stringRequest)
-    }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Authorization"] = "Bearer $token"
+                return headers
+            }
+        }
+
+        requestQueue.add(stringRequest)
+        }
 
     fun getRides(
         onResponse: (String) -> Unit,
@@ -345,5 +359,138 @@ class ApiRequest private constructor(context: Context) {
         requestQueue.add(stringRequest)*/
     }
 
+    fun joinCommunity(
+        communityId: String,
+        onResponse: (String) -> Unit,
+        onError: (String) -> Unit
+    )
+    //mock
+    /*
+    {
+        val mockResponse = """
+        {
+            "status": "success",
+            "message": "Community $communityId successfully joined."
+        }
+    """
+
+        val isSuccessful = true
+        if (isSuccessful) {
+
+            onResponse(mockResponse)
+        } else {
+
+            onError("Mock error: Unable to join community.")
+        }*/
+
+        {
+            val urlWithParams = "$apiUrl/communities/$communityId/join"
+
+            val stringRequest = object : StringRequest(
+                Method.POST, urlWithParams,
+                Response.Listener { response ->
+                    onResponse(response)
+                },
+                Response.ErrorListener { error ->
+                    onError("${error.message}")
+                }) {
+                override fun getHeaders(): MutableMap<String, String> {
+                    val headers = HashMap<String, String>()
+
+                    headers["Authorization"] = "Bearer $token"
+
+                    println("Headers envoyés : $headers")
+                    return headers
+                }
+            }
+
+            requestQueue.add(stringRequest)
+
+    }
+
+    fun searchCommunities(
+        searchQuery: String,
+        onResponse: (String) -> Unit,
+        onError: (String) -> Unit
+    )
+
+    // mock
+    /*
+    {
+        val mockCommunities = """
+        [
+            {
+                "community_id": "0",
+                "name": "Community A",
+                "destination": "Destination A",
+                "description": "This is the first community.",
+                "visibility": "Public"
+            },
+            {
+                "community_id": "1",
+                "name": "Community B",
+                "destination": "Destination B",
+                "description": "This is the second community.",
+                "visibility": "Private"
+            },
+            {
+                "community_id": "2",
+                "name": "Community C",
+                "destination": "Destination C",
+                "description": "This is the third community.",
+                "visibility": "Public"
+            },
+            {
+                "community_id": "3",
+                "name": "Community D",
+                "destination": "Destination D",
+                "description": "This is the fourth community.",
+                "visibility": "Public"
+            }
+        ]
+    """
+
+        try {
+
+            val filteredResponse = JSONArray(mockCommunities)
+                .let { jsonArray ->
+                    val filteredArray = JSONArray()
+                    for (i in 0 until jsonArray.length()) {
+                        val community = jsonArray.getJSONObject(i)
+                        if (community.getString("name").lowercase().contains(searchQuery.lowercase())) {
+                            filteredArray.put(community)
+                        }
+                    }
+                    filteredArray
+                }
+
+            onResponse(filteredResponse.toString())
+        } catch (e: JSONException) {
+            onError("Error processing mock data: ${e.message}")
+        }
+
+        */
+            {
+                val urlWithParams = "$apiUrl/communities/search?search=$searchQuery"
+
+                val stringRequest = object : StringRequest(
+                    Method.GET, urlWithParams,
+                    Response.Listener { response ->
+                        onResponse(response)
+                    },
+                    Response.ErrorListener { error ->
+                        onError("${error.message}")
+                    }) {
+                    override fun getHeaders(): MutableMap<String, String> {
+                        val headers = HashMap<String, String>()
+                        headers["Authorization"] = "Bearer $token"
+                        return headers
+                    }
+                }
+
+                requestQueue.add(stringRequest)
+
+
+    }
 
 }
