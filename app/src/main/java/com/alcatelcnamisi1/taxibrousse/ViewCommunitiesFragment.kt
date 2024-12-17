@@ -41,10 +41,7 @@ class ViewCommunitiesFragment : Fragment() {
                 val query = s.toString().lowercase()
 
                 if (query.isEmpty()) {
-                    val joinedCommunities = allCommunities.filter {
-                        joinedCommunityIds.contains(it["community_id"])
-                    }
-                    displayCommunities(joinedCommunities)
+                    displayCommunities(allCommunities)
                 } else {
                     ApiRequest.getInstance(requireContext()).searchCommunities(
                         searchQuery = query,
@@ -52,7 +49,8 @@ class ViewCommunitiesFragment : Fragment() {
                             try {
                                 val searchResults = parseCommunityResponse(response)
                                 val filteredResults = searchResults.filter {
-                                    !joinedCommunityIds.contains(it["community_id"])
+                                    true
+                                    //!joinedCommunityIds.contains(it["community_id"])
                                 }
                                 displayCommunities(filteredResults, isSearchResult = true)
                             } catch (e: JSONException) {
@@ -75,17 +73,14 @@ class ViewCommunitiesFragment : Fragment() {
     }
 
     private fun fetchCommunities() {
-        ApiRequest.getInstance(requireContext()).getCommunities(
+        ApiRequest.getInstance(requireContext()).getCommunity(
             onResponse = { response ->
                 try {
                     val communities = parseCommunityResponse(response)
                     allCommunities.clear()
                     allCommunities.addAll(communities)
 
-                    val joinedCommunities = communities.filter {
-                        joinedCommunityIds.contains(it["community_id"])
-                    }
-                    displayCommunities(joinedCommunities)
+                    displayCommunities(communities)
                 } catch (e: JSONException) {
                     e.printStackTrace()
                     Toast.makeText(requireContext(), "Error parsing communities", Toast.LENGTH_SHORT).show()
@@ -104,7 +99,11 @@ class ViewCommunitiesFragment : Fragment() {
         for (i in 0 until jsonArray.length()) {
             val communityJson = jsonArray.getJSONObject(i)
             val communityMap = HashMap<String, String>()
-            communityMap["community_id"] = communityJson.getString("community_id")
+            if(communityJson.has("community_id")) {
+                communityMap["community_id"] = communityJson.getString("community_id")
+            } else {
+                communityMap["community_id"] = communityJson.getString("id")
+            }
             communityMap["name"] = communityJson.getString("name")
             communityMap["destination"] = communityJson.getString("destination")
             communityList.add(communityMap)

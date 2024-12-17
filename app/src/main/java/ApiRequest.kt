@@ -80,7 +80,7 @@ class ApiRequest private constructor(context: Context) {
         onError: (String) -> Unit
     ){
         val stringRequest = object : StringRequest(
-            Method.POST, "$apiUrl/bubbles",
+            Method.POST, "$apiUrl/communities",
             Response.Listener { response ->
                 onResponse(response)
             },
@@ -116,7 +116,7 @@ class ApiRequest private constructor(context: Context) {
         onError: (String) -> Unit
     ){
         val stringRequest = object : StringRequest(
-            Method.GET, "$apiUrl/bubbles",
+            Method.GET, "$apiUrl/communities/app",
             Response.Listener { response ->
                 onResponse(response)
             },
@@ -215,7 +215,7 @@ class ApiRequest private constructor(context: Context) {
 
         onResponse(mockResponse)*/
 
-        val urlWithParams = "$apiUrl/communities"
+        val urlWithParams = "$apiUrl/communities/app"
 
         val stringRequest = object : StringRequest(
             Method.GET, urlWithParams,
@@ -393,8 +393,16 @@ class ApiRequest private constructor(context: Context) {
                 },
                 Response.ErrorListener { error ->
                     onError("${error.message}")
+                }) {
+                override fun getHeaders(): MutableMap<String, String> {
+                    val headers = HashMap<String, String>()
+
+                    headers["Authorization"] = "Bearer $token"
+
+                    println("Headers envoyés : $headers")
+                    return headers
                 }
-            ){}
+            }
 
             requestQueue.add(stringRequest)
 
