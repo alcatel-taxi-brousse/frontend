@@ -1,0 +1,78 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F3F3F3">
+
+    <!-- En-tête du chat -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#8A2BE2">
+
+        <!-- Bouton Retour aligné à gauche -->
+        <ImageButton
+            android:id="@+id/buttonBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/retourblanc"
+            android:background="@android:color/transparent"
+            android:contentDescription="back"
+            android:scaleType="centerInside"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="8dp" />
+
+        <!-- Titre du Chat, centré horizontalement -->
+        <TextView
+            android:id="@+id/chatHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chat"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+    <!-- Corps du chat -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:id="@+id/chatMessages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <!-- Zone de saisie de message -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <EditText
+            android:id="@+id/messageInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Type a message"
+            android:padding="10dp"
+            android:background="#EDEDED"
+            android:textColor="#000000" />
+
+        <Button
+            android:id="@+id/sendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Envoyer"
+            android:background="#8A2BE2"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+</LinearLayout>
