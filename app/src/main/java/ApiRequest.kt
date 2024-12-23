@@ -132,6 +132,30 @@ class ApiRequest private constructor(context: Context) {
         }
         requestQueue.add(stringRequest)
     }
+    public fun joinCommunity(
+        communityId : String,
+        onResponse: (String) -> Unit,
+        onError: (String) -> Unit
+    ){
+        val stringRequest = object : StringRequest(
+            Method.POST, "$apiUrl/communities/$communityId/join",
+            Response.Listener { response ->
+                onResponse(response)
+            },
+            Response.ErrorListener { error ->
+                onError("${error.message}")
+            }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+
+                headers["Authorization"] = "Bearer $token"
+
+                println("Headers envoyés : $headers")
+                return headers
+            }
+        }
+        requestQueue.add(stringRequest)
+    }
 
     public fun getTrips(
         communityId : String,
@@ -157,6 +181,49 @@ class ApiRequest private constructor(context: Context) {
         }
         requestQueue.add(stringRequest)
     }
+
+    public fun createTrip(
+        communityId : String,
+        start_location : String,
+        date : String,
+        frequency : String,
+        nb_seats_car : String,
+        description: String,
+        onResponse: (String) -> Unit,
+        onError: (String) -> Unit
+    ){
+        val stringRequest = object : StringRequest(
+            Method.POST, "$apiUrl/communities/$communityId/trips",
+            Response.Listener { response ->
+                onResponse(response)
+            },
+            Response.ErrorListener { error ->
+                onError("${error.message}")
+            }) {
+            override fun getParams(): Map<String, String> {
+                val params = HashMap<String, String>()
+                params["start_location"] = start_location
+                params["date"] = date
+                params["frequence"] = frequency
+                params["nb_seats_car"] = nb_seats_car
+                params["description"] = description
+
+                println("Params envoyés : $params")
+                return params
+            }
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+
+                headers["Authorization"] = "Bearer $token"
+
+                println("Headers envoyés : $headers")
+                return headers
+            }
+        }
+        requestQueue.add(stringRequest)
+    }
+
+    
 
     fun proposeRide(
         departure: String,
