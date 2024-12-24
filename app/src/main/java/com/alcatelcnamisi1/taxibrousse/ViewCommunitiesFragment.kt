@@ -139,13 +139,21 @@ class ViewCommunitiesFragment : Fragment() {
             }
 
             communityView.setOnClickListener {
-                val communityName = community["name"]
-                val destination = community["destination"]
+                if (isJoined) {
+                    val communityName = community["name"]
+                    val destination = community["destination"]
 
-                val intent = Intent(requireContext(), CommunityDetailsActivity::class.java)
-                intent.putExtra("communityName", communityName)
-                intent.putExtra("destination", destination)
-                startActivity(intent)
+                    val intent = Intent(requireContext(), CommunityDetailsActivity::class.java)
+                    intent.putExtra("communityName", communityName)
+                    intent.putExtra("destination", destination)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Veuillez rejoindre cette communauté pour voir les détails.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
 
             joinButton.setOnClickListener {
