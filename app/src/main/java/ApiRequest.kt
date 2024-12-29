@@ -9,9 +9,6 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.Properties
-import android.content.SharedPreferences
-import org.json.JSONArray
-import org.json.JSONException
 import org.json.JSONObject
 
 class ApiRequest private constructor(context: Context) {
@@ -45,7 +42,7 @@ class ApiRequest private constructor(context: Context) {
         }
     }
 
-    public fun login(
+    fun login(
         login: String,
         password: String,
         onResponse: (String) -> Unit,
@@ -71,7 +68,7 @@ class ApiRequest private constructor(context: Context) {
         requestQueue.add(stringRequest)
     }
 
-    public fun createCommunity(
+    fun createCommunity(
         communityName: String,
         destination: String,
         description: String,
@@ -111,7 +108,7 @@ class ApiRequest private constructor(context: Context) {
         requestQueue.add(stringRequest)
     }
 
-    public fun getCommunity(
+    fun getCommunity(
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
     ){
@@ -134,7 +131,10 @@ class ApiRequest private constructor(context: Context) {
         }
         requestQueue.add(stringRequest)
     }
+
+    /*
     public fun joinCommunity(
+
         communityId : String,
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
@@ -159,7 +159,10 @@ class ApiRequest private constructor(context: Context) {
         requestQueue.add(stringRequest)
     }
 
-    public fun getTrips(
+    */
+
+
+    fun getTrips(
         communityId : String,
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
@@ -184,7 +187,7 @@ class ApiRequest private constructor(context: Context) {
         requestQueue.add(stringRequest)
     }
 
-    public fun createTrip(
+    fun createTrip(
         communityId : String,
         start_location : String,
         date : String,
@@ -225,7 +228,7 @@ class ApiRequest private constructor(context: Context) {
         requestQueue.add(stringRequest)
     }
 
-    public fun getTrip(
+    fun getTrip(
         communityId : String,
         tripId: String,
         onResponse: (String) -> Unit,
@@ -251,7 +254,7 @@ class ApiRequest private constructor(context: Context) {
         requestQueue.add(stringRequest)
     }
 
-    public fun joinTrip(
+    fun joinTrip(
         communityId : String,
         tripId: String,
         nbPeople : String,
@@ -325,7 +328,7 @@ class ApiRequest private constructor(context: Context) {
     }
 
 
-    public fun getCommunities(
+    fun getCommunities(
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
     ) {
