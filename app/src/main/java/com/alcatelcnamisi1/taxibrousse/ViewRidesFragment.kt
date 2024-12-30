@@ -1,5 +1,6 @@
 package com.alcatelcnamisi1.taxibrousse
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,19 +21,23 @@ import java.util.Locale
 import java.util.*
 
 private const val ARG_PARAM1 = "arrival"
+private const val ARG_PARAM2 = "community_id"
 
 
 class ViewRidesFragment : Fragment() {
 
     private lateinit var linearLayout: LinearLayout
     private var arrival: String? = null
+    private var community_id: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             arrival = it.getString(ARG_PARAM1)
-            println("Received arrival: $arrival")
+            community_id = it.getString(ARG_PARAM2)
+
+            println("Received arrival: $arrival" + " | " + community_id)
         }
-        println("\n OnCreate received data : $arrival")
+        println("\n OnCreate received data : $arrival" + " | " + community_id)
     }
 
     override fun onCreateView(
@@ -45,6 +50,7 @@ class ViewRidesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         linearLayout = view.findViewById(R.id.linearLayoutRides)
+
 
         fetchRides()
     }

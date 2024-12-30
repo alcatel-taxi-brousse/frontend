@@ -147,6 +147,7 @@ class ViewCommunitiesFragment : Fragment() {
                     val intent = Intent(requireContext(), CommunityDetailsActivity::class.java)
                     intent.putExtra("communityName", communityName)
                     intent.putExtra("destination", destination)
+                    intent.putExtra("community_id", communityId)
                     startActivity(intent)
                 } else {
                     Toast.makeText(
