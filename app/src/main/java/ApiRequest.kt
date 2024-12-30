@@ -11,6 +11,7 @@ import java.util.Date
 import java.util.Locale
 import java.util.Properties
 import org.json.JSONObject
+import java.util.TimeZone
 
 data class Community(
     val id: String,
@@ -207,11 +208,42 @@ class ApiRequest private constructor(context: Context) {
         val stringRequest = object : StringRequest(
             Method.GET, "$apiUrl/communities/$communityId/trips",
             Response.Listener { response ->
-                onResponse(response)
+                try {
+
+                    println("RETOUR DE LA REPONSE pour les trips : " + response)
+                    // Transformation de la réponse pour produire une version simplifiée
+                    val originalArray = JSONArray(response)
+                    val simplifiedArray = JSONArray()
+
+                    for (i in 0 until originalArray.length()) {
+                        val community = originalArray.getJSONObject(i)
+
+                        // Création d'un objet simplifié
+                        val simplifiedCommunity = JSONObject()
+                        simplifiedCommunity.put("departure", community.optString("start_location"))
+                        simplifiedCommunity.put("date", formatDate(community.optString("date")))
+                        simplifiedCommunity.put("seatsAvailable", community.optString("nb_seats_car", "Unknown"))
+                        simplifiedCommunity.put("recurrence", community.optString("frequence", "No frequency available"))
+                        simplifiedCommunity.put("description", community.optString("description", "Public"))
+
+                        // Ajout de l'objet simplifié dans le tableau final
+                        simplifiedArray.put(simplifiedCommunity)
+                    }
+
+                    // Conversion du tableau simplifié en chaîne JSON
+                    val simplifiedResponse = simplifiedArray.toString(4) // JSON formaté
+                    onResponse(simplifiedResponse)
+                    println("Réponse simplifiée de la communauté : $simplifiedResponse")
+                } catch (e: Exception) {
+                    onError("Erreur lors de la transformation de la réponse : ${e.message}")
+                    println("Erreur : ${e.message}")
+                }
             },
             Response.ErrorListener { error ->
-                onError("${error.message}")
-            }) {
+                onError("Erreur réseau : ${error.message}")
+                println("Erreur lors de la récupération des trips : ${error.message}")
+            })
+        {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
 
@@ -360,81 +392,13 @@ class ApiRequest private constructor(context: Context) {
                 return params
             }
         }
-
         requestQueue.add(stringRequest)
     }
-
-
-    fun getCommunities(
-        onResponse: (String) -> Unit,
-        onError: (String) -> Unit
-    ) {
-        /*
-        val mockResponse = """
-        [
-            {
-                "community_id": "0",
-                "name": "Community A",
-                "destination": "Destination A",
-                "description": "This is the first community.",
-                "visibility": "Public"
-            },
-            {
-                "community_id": "1",
-                "name": "Community B",
-                "destination": "Destination B",
-                "description": "This is the second community.",
-                "visibility": "Private"
-            },
-            {
-                "community_id": "2",
-                "name": "Community C",
-                "destination": "Destination C",
-                "description": "This is the third community.",
-                "visibility": "Public"
-            },
-            {
-                "community_id": "3",
-                "name": "Community D",
-                "destination": "Destination D",
-                "description": "This is the fourth community.",
-                "visibility": "Public"
-            }
-        ]
-    """
-        onResponse(mockResponse);
-        */
-        val urlWithParams = "$apiUrl/communities/app"
-
-        val stringRequest = object : StringRequest(
-            Method.GET, urlWithParams,
-            Response.Listener { response ->
-                onResponse(response)
-                println("C'est la réponse des communautés : " + response)
-            },
-            Response.ErrorListener { error ->
-                onError("${error.message}")
-                println("COMMUNAUT2 PAS CHARGE")
-            }
-        ) {
-            override fun getHeaders(): MutableMap<String, String> {
-                val headers = HashMap<String, String>()
-                headers["Authorization"] = "Bearer $token"
-                return headers
-            }
-        }
-
-        requestQueue.add(stringRequest)
-        }
-
-
-
 
     fun getRides(
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
     ) {
-
         val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
         val dummyRidesJson = """
         [
@@ -492,22 +456,7 @@ class ApiRequest private constructor(context: Context) {
         ]
     """
 
-
         onResponse(dummyRidesJson)
-        /*
-        val urlWithParams = "$apiUrl/getRides"
-
-        val stringRequest = object : StringRequest(
-            Method.GET, urlWithParams,
-            Response.Listener { response ->
-                onResponse(response)
-            },
-            Response.ErrorListener { error ->
-                onError("${error.message}")
-            }
-        ) {}
-
-        requestQueue.add(stringRequest)*/
     }
 
 
@@ -685,5 +634,20 @@ class ApiRequest private constructor(context: Context) {
                 requestQueue.add(stringRequest)
 
             }
+
+    private fun formatDate(isoDate: String): String {
+        return try {
+            val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            isoFormat.timeZone = TimeZone.getTimeZone("UTC")
+
+            val targetFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+            val date = isoFormat.parse(isoDate)
+
+            targetFormat.format(date ?: "")
+        } catch (e: Exception) {
+            println("Erreur lors du parsing de la date : ${e.message}")
+            isoDate // Renvoie la date brute en cas d'erreur
+        }
+    }
 
 }

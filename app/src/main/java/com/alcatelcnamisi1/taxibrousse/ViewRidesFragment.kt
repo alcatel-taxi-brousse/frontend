@@ -56,20 +56,23 @@ class ViewRidesFragment : Fragment() {
     }
 
     private fun fetchRides() {
-        ApiRequest.getInstance(requireContext()).getRides(
-            onResponse = { response ->
-                try {
-                    val rides = parseRidesResponse(response)
-                    displayRides(rides)
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                    Toast.makeText(requireContext(), "Error parsing rides", Toast.LENGTH_SHORT).show()
+        community_id?.let {
+            ApiRequest.getInstance(requireContext()).getTrips(it,
+                onResponse = { response ->
+                    println("REPONSE DANS LE VRAI FRONT : " + response);
+                    try {
+                        val rides = parseRidesResponse(response)
+                        displayRides(rides)
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        Toast.makeText(requireContext(), "Error parsing rides", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                onError = { error ->
+                    Toast.makeText(requireContext(), "Error fetching rides: $error", Toast.LENGTH_SHORT).show()
                 }
-            },
-            onError = { error ->
-                Toast.makeText(requireContext(), "Error fetching rides: $error", Toast.LENGTH_SHORT).show()
-            }
-        )
+            )
+        }
     }
 
     private fun parseRidesResponse(response: String): List<Map<String, String>> {
