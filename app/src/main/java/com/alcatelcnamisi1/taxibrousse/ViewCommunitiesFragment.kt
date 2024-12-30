@@ -132,6 +132,7 @@ class ViewCommunitiesFragment : Fragment() {
             val communityId = community["community_id"] ?: ""
             val isJoined = joinedCommunityIds.contains(communityId)
 
+
             if (isSearchResult) {
                 joinButton.visibility = if (!isJoined) View.VISIBLE else View.GONE
             } else {
@@ -139,7 +140,7 @@ class ViewCommunitiesFragment : Fragment() {
             }
 
             communityView.setOnClickListener {
-                if (isJoined) {
+                if (!isJoined) {
                     val communityName = community["name"]
                     val destination = community["destination"]
 

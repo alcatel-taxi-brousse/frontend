@@ -3,6 +3,7 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import org.json.JSONArray
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -10,6 +11,13 @@ import java.util.Date
 import java.util.Locale
 import java.util.Properties
 import org.json.JSONObject
+
+data class Community(
+    val id: String,
+    val name: String,
+    val description: String,
+    val visibility: String
+)
 
 class ApiRequest private constructor(context: Context) {
     private val contextRef: WeakReference<Context> = WeakReference(context)
@@ -111,21 +119,50 @@ class ApiRequest private constructor(context: Context) {
     fun getCommunity(
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
-    ){
+    ) {
         val stringRequest = object : StringRequest(
             Method.GET, "$apiUrl/communities",
             Response.Listener { response ->
-                onResponse(response)
+                try {
+
+                    println("RETOUR DE LA REPONSE : " + response)
+                    // Transformation de la réponse pour produire une version simplifiée
+                    val originalArray = JSONArray(response)
+                    val simplifiedArray = JSONArray()
+
+                    for (i in 0 until originalArray.length()) {
+                        val community = originalArray.getJSONObject(i)
+
+                        // Création d'un objet simplifié
+                        val simplifiedCommunity = JSONObject()
+                        simplifiedCommunity.put("community_id", community.optString("id"))
+                        simplifiedCommunity.put("name", community.optString("name"))
+                        simplifiedCommunity.put("destination", community.optString("destination", "Unknown"))
+                        simplifiedCommunity.put("description", community.optString("description", "No description available"))
+                        simplifiedCommunity.put("visibility", community.optString("visibility", "Public"))
+
+                        // Ajout de l'objet simplifié dans le tableau final
+                        simplifiedArray.put(simplifiedCommunity)
+                    }
+
+                    // Conversion du tableau simplifié en chaîne JSON
+                    val simplifiedResponse = simplifiedArray.toString(4) // JSON formaté
+                    onResponse(simplifiedResponse)
+                    println("Réponse simplifiée de la communauté : $simplifiedResponse")
+                } catch (e: Exception) {
+                    onError("Erreur lors de la transformation de la réponse : ${e.message}")
+                    println("Erreur : ${e.message}")
+                }
             },
             Response.ErrorListener { error ->
-                onError("${error.message}")
-            }) {
+                onError("Erreur réseau : ${error.message}")
+                println("Erreur lors de la récupération des communautés : ${error.message}")
+            }
+        ) {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
-
                 headers["Authorization"] = "Bearer $token"
-
-                println("Headers envoyés : $headers")
+                println("Headers envoyés pour avoir la commu : $headers")
                 return headers
             }
         }
@@ -332,8 +369,8 @@ class ApiRequest private constructor(context: Context) {
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
     ) {
-
-        /*val mockResponse = """
+        /*
+        val mockResponse = """
         [
             {
                 "community_id": "0",
@@ -365,18 +402,19 @@ class ApiRequest private constructor(context: Context) {
             }
         ]
     """
-
-        onResponse(mockResponse)*/
-
+        onResponse(mockResponse);
+        */
         val urlWithParams = "$apiUrl/communities/app"
 
         val stringRequest = object : StringRequest(
             Method.GET, urlWithParams,
             Response.Listener { response ->
                 onResponse(response)
+                println("C'est la réponse des communautés : " + response)
             },
             Response.ErrorListener { error ->
                 onError("${error.message}")
+                println("COMMUNAUT2 PAS CHARGE")
             }
         ) {
             override fun getHeaders(): MutableMap<String, String> {
@@ -388,6 +426,9 @@ class ApiRequest private constructor(context: Context) {
 
         requestQueue.add(stringRequest)
         }
+
+
+
 
     fun getRides(
         onResponse: (String) -> Unit,
@@ -643,7 +684,6 @@ class ApiRequest private constructor(context: Context) {
 
                 requestQueue.add(stringRequest)
 
-
-    }
+            }
 
 }
