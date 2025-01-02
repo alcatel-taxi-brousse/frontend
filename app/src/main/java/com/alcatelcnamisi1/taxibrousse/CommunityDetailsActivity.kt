@@ -39,6 +39,7 @@ class CommunityDetailsActivity : AppCompatActivity() {
             val fragment = ProposeRideFragment()
             fragment.arguments = Bundle().apply {
                 putString("arrival", destination)
+                putString("community_id", community_id)
             }
             openFragment(fragment, R.id.frameLayoutRidesContainer)
         }

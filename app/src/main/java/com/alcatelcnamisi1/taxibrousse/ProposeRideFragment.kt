@@ -15,12 +15,14 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 private const val ARG_PARAM1 = "arrival"
+private const val ARG_PARAM2 = "community_id"
 
 class ProposeRideFragment : Fragment() {
 
 
     private var editTextDeparture: EditText? = null
     private var arrival: String? = null
+    private var community_id: String? = null
     private var textViewArrival: TextView? = null
     private var editTextDateTime: EditText? = null
     private var checkBoxRecurrent: CheckBox? = null
@@ -37,7 +39,9 @@ class ProposeRideFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             arrival = it.getString(ARG_PARAM1)
-            println("Received arrival: $arrival")
+            community_id = it.getString(ARG_PARAM2)
+
+            println("Received arrival: $arrival | $community_id")
         }
     }
     @SuppressLint("MissingInflatedId")
@@ -131,16 +135,18 @@ class ProposeRideFragment : Fragment() {
         val isRecurrent = checkBoxRecurrent?.isChecked ?: false
         val recurrence = if (isRecurrent) spinnerRecurrence?.selectedItem.toString() else "Non récurrent"
 
-        ApiRequest.getInstance(requireContext()).proposeRide(
-            departure, arrival, calendar.time, isRecurrent, recurrence, seats, carModel, description,
-            { response ->
-                Toast.makeText(requireContext(), "Trajet proposé avec succès !", Toast.LENGTH_SHORT).show()
-                parentFragmentManager.beginTransaction().remove(this).commit()
-            },
-            { error ->
-                Toast.makeText(requireContext(), "Erreur lors de la proposition du trajet : $error", Toast.LENGTH_SHORT).show()
-            }
-        )
+        community_id?.let {
+            ApiRequest.getInstance(requireContext()).createTrip(
+                it,departure,dateTime,recurrence, seats.toIntOrNull() ?: 0,description,
+                { response ->
+                    Toast.makeText(requireContext(), "Trajet proposé avec succès !", Toast.LENGTH_SHORT).show()
+                    parentFragmentManager.beginTransaction().remove(this).commit()
+                },
+                { error ->
+                    Toast.makeText(requireContext(), "Erreur lors de la proposition du trajet : $error", Toast.LENGTH_SHORT).show()
+                }
+            )
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

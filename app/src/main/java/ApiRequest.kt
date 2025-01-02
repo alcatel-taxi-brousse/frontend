@@ -20,7 +20,7 @@ data class Community(
     val visibility: String
 )
 
-class ApiRequest private constructor(context: Context) {
+class ApiRequest<JSONException> private constructor(context: Context) {
     private val contextRef: WeakReference<Context> = WeakReference(context)
     private var requestQueue: RequestQueue
     private var apiUrl: String
@@ -38,9 +38,9 @@ class ApiRequest private constructor(context: Context) {
     }
 
     companion object {
-        private var instance: ApiRequest? = null
+        private var instance: ApiRequest<Any?>? = null
 
-        fun getInstance(context: Context?): ApiRequest {
+        fun getInstance(context: Context?): ApiRequest<Any?> {
             synchronized(ApiRequest::class) {
                 if (instance == null &&context != null) {
                     instance = ApiRequest(context.applicationContext)
@@ -121,20 +121,23 @@ class ApiRequest private constructor(context: Context) {
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
     ) {
+        if (token.isNullOrBlank()) {
+            onError("token est invalide ou null.")
+            return
+        }
+
         val stringRequest = object : StringRequest(
             Method.GET, "$apiUrl/communities",
             Response.Listener { response ->
                 try {
 
                     println("RETOUR DE LA REPONSE : " + response)
-                    // Transformation de la réponse pour produire une version simplifiée
                     val originalArray = JSONArray(response)
                     val simplifiedArray = JSONArray()
 
                     for (i in 0 until originalArray.length()) {
                         val community = originalArray.getJSONObject(i)
 
-                        // Création d'un objet simplifié
                         val simplifiedCommunity = JSONObject()
                         simplifiedCommunity.put("community_id", community.optString("id"))
                         simplifiedCommunity.put("name", community.optString("name"))
@@ -142,11 +145,9 @@ class ApiRequest private constructor(context: Context) {
                         simplifiedCommunity.put("description", community.optString("description", "No description available"))
                         simplifiedCommunity.put("visibility", community.optString("visibility", "Public"))
 
-                        // Ajout de l'objet simplifié dans le tableau final
                         simplifiedArray.put(simplifiedCommunity)
                     }
 
-                    // Conversion du tableau simplifié en chaîne JSON
                     val simplifiedResponse = simplifiedArray.toString(4) // JSON formaté
                     onResponse(simplifiedResponse)
                     println("Réponse simplifiée de la communauté : $simplifiedResponse")
@@ -257,15 +258,32 @@ class ApiRequest private constructor(context: Context) {
     }
 
     fun createTrip(
-        communityId : String,
-        start_location : String,
-        date : String,
-        frequency : String,
-        nb_seats_car : String,
+        communityId: String,
+        start_location: String,
+        date: String,
+        frequency: String,
+        nb_seats_car: Int,
         description: String,
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
-    ){
+    ) {
+        if (communityId.isNullOrBlank()) {
+            onError("communityId est invalide ou null.")
+            return
+        }
+
+        val jsonBody = JSONObject()
+        try {
+            jsonBody.put("start_location", start_location)
+            jsonBody.put("date", date) // Format ISO, comme dans ton exemple
+            jsonBody.put("frequence", frequency)
+            jsonBody.put("nb_seats_car", nb_seats_car)
+            jsonBody.put("description", description)
+        } catch (e: Exception) {
+            onError("Erreur lors de la création du JSON : ${e.message}")
+            return
+        }
+
         val stringRequest = object : StringRequest(
             Method.POST, "$apiUrl/communities/$communityId/trips",
             Response.Listener { response ->
@@ -273,23 +291,20 @@ class ApiRequest private constructor(context: Context) {
             },
             Response.ErrorListener { error ->
                 onError("${error.message}")
-            }) {
-            override fun getParams(): Map<String, String> {
-                val params = HashMap<String, String>()
-                params["start_location"] = start_location
-                params["date"] = date
-                params["frequence"] = frequency
-                params["nb_seats_car"] = nb_seats_car
-                params["description"] = description
-
-                println("Params envoyés : $params")
-                return params
+                println("ERREUR DE OUF : ${error.cause}")
             }
+        ) {
+            override fun getBody(): ByteArray {
+                return jsonBody.toString().toByteArray(Charsets.UTF_8)
+            }
+
+            override fun getBodyContentType(): String {
+                return "application/json; charset=UTF-8"
+            }
+
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
-
                 headers["Authorization"] = "Bearer $token"
-
                 println("Headers envoyés : $headers")
                 return headers
             }
