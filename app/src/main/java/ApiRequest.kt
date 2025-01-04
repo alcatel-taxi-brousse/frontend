@@ -80,40 +80,62 @@ class ApiRequest<JSONException> private constructor(context: Context) {
     fun createCommunity(
         communityName: String,
         destination: String,
+        withHistory: String,
         description: String,
-        visibility: String,
+        private: String,
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
-    ){
+    ) {
+        println("Create community entered")
+
+        val jsonBody = JSONObject()
+        try {
+            jsonBody.put("name", communityName)
+            jsonBody.put("destination", destination)
+            jsonBody.put("withHistory", false)
+            jsonBody.put("description", description)
+            jsonBody.put("private", false)
+        } catch (e: Exception) {
+            onError("Erreur lors de la création du JSON : ${e.message}")
+            return
+        }
+
         val stringRequest = object : StringRequest(
             Method.POST, "$apiUrl/communities",
             Response.Listener { response ->
+                println("Réponse de l'API : $response")
                 onResponse(response)
             },
             Response.ErrorListener { error ->
-                onError("${error.message}")
-            }) {
-            override fun getParams(): Map<String, String> {
-                val params = HashMap<String, String>()
-                params["name"] = communityName
-                //params["destination"] = destination
-                params["description"] = description
-                //params["visibility"] = visibility
-                //params["withHistory"] = "false"
+                val networkResponse = error.networkResponse
+                if (networkResponse != null) {
+                    val statusCode = networkResponse.statusCode
+                    val data = String(networkResponse.data ?: ByteArray(0), Charsets.UTF_8)
+                    println("Erreur réseau - Code : $statusCode, Message : $data")
+                    onError("Erreur : $statusCode -> $data")
+                } else {
+                    println("Erreur inconnue : ${error.message}")
+                    onError("Erreur inconnue : ${error.message}")
+                }
+            }
+        ) {
+            override fun getBody(): ByteArray {
+                return jsonBody.toString().toByteArray(Charsets.UTF_8)
+            }
 
-                println("Params envoyés : $params")
-                return params
+            override fun getBodyContentType(): String {
+                return "application/json; charset=UTF-8"
             }
 
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
-
                 headers["Authorization"] = "Bearer $token"
-
                 println("Headers envoyés : $headers")
                 return headers
             }
         }
+
+        println("Requête envoyée avec le corps : ${jsonBody.toString(2)}")
         requestQueue.add(stringRequest)
     }
 

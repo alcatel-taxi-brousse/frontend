@@ -68,16 +68,14 @@ class CreateCommunityFragment : Fragment() {
         val communityName = editTextCommunityName?.text.toString()
         val destination = editTextDestination?.text.toString()
         val description = editTextDescription?.text.toString()
-        var visibility = "public"
+        var visibility = "false"
         if(isPrivate == true) {
-            visibility = "private"
+            visibility = "true"
         }
-
-
 
         println("request sended")
 
-        ApiRequest.getInstance(null).createCommunity(communityName, destination, description, visibility, { response ->
+        ApiRequest.getInstance(null).createCommunity(communityName, destination,"false", description, visibility, { response ->
             println("Response: $response")
         }, { error ->
             println("Error: $error")
