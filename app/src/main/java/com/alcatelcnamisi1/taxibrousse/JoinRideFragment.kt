@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -16,6 +17,8 @@ private const val ARG_PARAM2 = "arrival"
 private const val ARG_PARAM3 = "date"
 private const val ARG_PARAM4 = "seats_taken"
 private const val ARG_PARAM5 = "seats_total"
+private const val ARG_PARAM6 = "trip_id"
+private const val ARG_PARAM7 = "community_id"
 
 
 /**
@@ -30,8 +33,10 @@ class JoinRideFragment : Fragment() {
     private var date: String? = null
     private var seatsTaken: Int? = null
     private var seatsAvailable: Int? = null
+    private var communityId : String? = null
     private var seatsToTake: Int = 1
     private var seatsUpdated: Int? = null
+    private var trip_id:String? = null
 
     private var textViewDeparture: TextView? = null
     private var textViewDate: TextView? = null
@@ -62,6 +67,9 @@ class JoinRideFragment : Fragment() {
             date = it.getString(ARG_PARAM3)
             seatsTaken = it.getInt(ARG_PARAM4)
             seatsAvailable = it.getInt(ARG_PARAM5)
+            trip_id = it.getString(ARG_PARAM6)
+            communityId = it.getString(ARG_PARAM7)
+
         }
         println("\n Data received : $arrival")
     }
@@ -116,6 +124,21 @@ class JoinRideFragment : Fragment() {
         buttonJoinRide?.setOnClickListener {
             // TODO
             println("JOIN RIDE with seats = $seatsToTake")
+
+            //implement the query
+            ApiRequest.getInstance(requireContext()).joinTrip(
+                communityId.toString(), trip_id.toString(), seatsToTake,
+                { response ->
+                    Toast.makeText(requireContext(), "Trajet rejoint avec succès !", Toast.LENGTH_SHORT).show()
+                    parentFragmentManager.beginTransaction().remove(this).commit()
+                },
+                { error ->
+                    Toast.makeText(requireContext(), "Erreur lors de la tentative de rejoindre le trajet : $error", Toast.LENGTH_SHORT).show()
+                }
+            )
+
+
+
             closeJoinRide()
         }
 

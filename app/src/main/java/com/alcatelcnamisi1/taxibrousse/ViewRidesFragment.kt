@@ -86,7 +86,8 @@ class ViewRidesFragment : Fragment() {
                 "date" to rideJson.getString("date"),
                 "seatsAvailable" to rideJson.getString("seatsAvailable"),
                 "recurrence" to rideJson.getString("recurrence"),
-                "description" to rideJson.getString("description")
+                "description" to rideJson.getString("description"),
+                "trip_id" to rideJson.getString("trip_id")
             )
             rideList.add(rideMap)
         }
@@ -144,6 +145,8 @@ class ViewRidesFragment : Fragment() {
                     putString("departure", ride["departure"])
                     putString("arrival", arrival)
                     putString("date", ride["date"])
+                    putString("community_id", community_id)
+                    putString("trip_id", ride["trip_id"])
                     putInt("seats_taken", 0)
                     ride["seatsAvailable"]?.let { it1 -> putInt("seats_total", it1.toInt()) }
                 }

@@ -221,8 +221,6 @@ class ApiRequest<JSONException> private constructor(context: Context) {
     }
 
     */
-
-
     fun getTrips(
         communityId : String,
         onResponse: (String) -> Unit,
@@ -248,6 +246,7 @@ class ApiRequest<JSONException> private constructor(context: Context) {
                         simplifiedCommunity.put("seatsAvailable", community.optString("nb_seats_car", "Unknown"))
                         simplifiedCommunity.put("recurrence", community.optString("frequence", "No frequency available"))
                         simplifiedCommunity.put("description", community.optString("description", "Public"))
+                        simplifiedCommunity.put("trip_id", community.optString("trip_id"))
 
                         // Ajout de l'objet simplifié dans le tableau final
                         simplifiedArray.put(simplifiedCommunity)
@@ -361,32 +360,44 @@ class ApiRequest<JSONException> private constructor(context: Context) {
     }
 
     fun joinTrip(
-        communityId : String,
+        communityId: String,
         tripId: String,
-        nbPeople : String,
+        nbPeople: Int,
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
-    ){
+    ) {
+        println("$apiUrl/communities/$communityId/trips/$tripId/join")
+
+        val jsonBody = JSONObject()
+        try {
+            jsonBody.put("nbPeople", nbPeople)
+        } catch (e: Exception) {
+            onError("Erreur lors de la création du JSON : ${e.message}")
+            return
+        }
+
         val stringRequest = object : StringRequest(
             Method.POST, "$apiUrl/communities/$communityId/trips/$tripId/join",
             Response.Listener { response ->
+                println("Join Trip réussi")
                 onResponse(response)
             },
             Response.ErrorListener { error ->
                 onError("${error.message}")
-            }) {
-            override fun getParams(): Map<String, String> {
-                val params = HashMap<String, String>()
-                params["nbPeople"] = nbPeople
-
-                println("Params envoyés : $params")
-                return params
+                println("Erreur rencontrée : ${error.cause}")
             }
+        ) {
+            override fun getBody(): ByteArray {
+                return jsonBody.toString().toByteArray(Charsets.UTF_8)
+            }
+
+            override fun getBodyContentType(): String {
+                return "application/json; charset=UTF-8"
+            }
+
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
-
                 headers["Authorization"] = "Bearer $token"
-
                 println("Headers envoyés : $headers")
                 return headers
             }
