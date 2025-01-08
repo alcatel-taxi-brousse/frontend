@@ -77,6 +77,10 @@ class ApiRequest<JSONException> private constructor(context: Context) {
         requestQueue.add(stringRequest)
     }
 
+    fun getToken(): String {
+        return token;
+    }
+
     fun createCommunity(
         communityName: String,
         destination: String,
@@ -86,7 +90,7 @@ class ApiRequest<JSONException> private constructor(context: Context) {
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
     ) {
-        println("Create community entered")
+        //println("Create community entered")
 
         val jsonBody = JSONObject()
         try {
@@ -103,7 +107,7 @@ class ApiRequest<JSONException> private constructor(context: Context) {
         val stringRequest = object : StringRequest(
             Method.POST, "$apiUrl/communities",
             Response.Listener { response ->
-                println("Réponse de l'API : $response")
+                //println("Réponse de l'API : $response")
                 onResponse(response)
             },
             Response.ErrorListener { error ->
@@ -111,10 +115,10 @@ class ApiRequest<JSONException> private constructor(context: Context) {
                 if (networkResponse != null) {
                     val statusCode = networkResponse.statusCode
                     val data = String(networkResponse.data ?: ByteArray(0), Charsets.UTF_8)
-                    println("Erreur réseau - Code : $statusCode, Message : $data")
+                    //println("Erreur réseau - Code : $statusCode, Message : $data")
                     onError("Erreur : $statusCode -> $data")
                 } else {
-                    println("Erreur inconnue : ${error.message}")
+                    //println("Erreur inconnue : ${error.message}")
                     onError("Erreur inconnue : ${error.message}")
                 }
             }
@@ -130,12 +134,12 @@ class ApiRequest<JSONException> private constructor(context: Context) {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
                 headers["Authorization"] = "Bearer $token"
-                println("Headers envoyés : $headers")
+                //println("Headers envoyés : $headers")
                 return headers
             }
         }
 
-        println("Requête envoyée avec le corps : ${jsonBody.toString(2)}")
+        //println("Requête envoyée avec le corps : ${jsonBody.toString(2)}")
         requestQueue.add(stringRequest)
     }
 
@@ -153,7 +157,7 @@ class ApiRequest<JSONException> private constructor(context: Context) {
             Response.Listener { response ->
                 try {
 
-                    println("RETOUR DE LA REPONSE : " + response)
+                    //println("RETOUR DE LA REPONSE : " + response)
                     val originalArray = JSONArray(response)
                     val simplifiedArray = JSONArray()
 
@@ -172,21 +176,21 @@ class ApiRequest<JSONException> private constructor(context: Context) {
 
                     val simplifiedResponse = simplifiedArray.toString(4) // JSON formaté
                     onResponse(simplifiedResponse)
-                    println("Réponse simplifiée de la communauté : $simplifiedResponse")
+                    //println("Réponse simplifiée de la communauté : $simplifiedResponse")
                 } catch (e: Exception) {
                     onError("Erreur lors de la transformation de la réponse : ${e.message}")
-                    println("Erreur : ${e.message}")
+                    //println("Erreur : ${e.message}")
                 }
             },
             Response.ErrorListener { error ->
                 onError("Erreur réseau : ${error.message}")
-                println("Erreur lors de la récupération des communautés : ${error.message}")
+                //println("Erreur lors de la récupération des communautés : ${error.message}")
             }
         ) {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
                 headers["Authorization"] = "Bearer $token"
-                println("Headers envoyés pour avoir la commu : $headers")
+                //println("Headers envoyés pour avoir la commu : $headers")
                 return headers
             }
         }
@@ -231,7 +235,7 @@ class ApiRequest<JSONException> private constructor(context: Context) {
             Response.Listener { response ->
                 try {
 
-                    println("RETOUR DE LA REPONSE pour les trips : " + response)
+                    //println("RETOUR DE LA REPONSE pour les trips : " + response)
                     // Transformation de la réponse pour produire une version simplifiée
                     val originalArray = JSONArray(response)
                     val simplifiedArray = JSONArray()
@@ -255,15 +259,15 @@ class ApiRequest<JSONException> private constructor(context: Context) {
                     // Conversion du tableau simplifié en chaîne JSON
                     val simplifiedResponse = simplifiedArray.toString(4) // JSON formaté
                     onResponse(simplifiedResponse)
-                    println("Réponse simplifiée de la communauté : $simplifiedResponse")
+                    //println("Réponse simplifiée de la communauté : $simplifiedResponse")
                 } catch (e: Exception) {
                     onError("Erreur lors de la transformation de la réponse : ${e.message}")
-                    println("Erreur : ${e.message}")
+                    //println("Erreur : ${e.message}")
                 }
             },
             Response.ErrorListener { error ->
                 onError("Erreur réseau : ${error.message}")
-                println("Erreur lors de la récupération des trips : ${error.message}")
+                //println("Erreur lors de la récupération des trips : ${error.message}")
             })
         {
             override fun getHeaders(): MutableMap<String, String> {
@@ -271,7 +275,7 @@ class ApiRequest<JSONException> private constructor(context: Context) {
 
                 headers["Authorization"] = "Bearer $token"
 
-                println("Headers envoyés : $headers")
+                //println("Headers envoyés : $headers")
                 return headers
             }
         }
@@ -312,7 +316,7 @@ class ApiRequest<JSONException> private constructor(context: Context) {
             },
             Response.ErrorListener { error ->
                 onError("${error.message}")
-                println("ERREUR DE OUF : ${error.cause}")
+                //println("ERREUR DE OUF : ${error.cause}")
             }
         ) {
             override fun getBody(): ByteArray {
@@ -326,7 +330,7 @@ class ApiRequest<JSONException> private constructor(context: Context) {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
                 headers["Authorization"] = "Bearer $token"
-                println("Headers envoyés : $headers")
+                //println("Headers envoyés : $headers")
                 return headers
             }
         }
@@ -352,7 +356,7 @@ class ApiRequest<JSONException> private constructor(context: Context) {
 
                 headers["Authorization"] = "Bearer $token"
 
-                println("Headers envoyés : $headers")
+                //println("Headers envoyés : $headers")
                 return headers
             }
         }
@@ -590,7 +594,7 @@ class ApiRequest<JSONException> private constructor(context: Context) {
 
                     headers["Authorization"] = "Bearer $token"
 
-                    println("Headers envoyés : $headers")
+                    //println("Headers envoyés : $headers")
                     return headers
                 }
             }
@@ -693,7 +697,7 @@ class ApiRequest<JSONException> private constructor(context: Context) {
 
             targetFormat.format(date ?: "")
         } catch (e: Exception) {
-            println("Erreur lors du parsing de la date : ${e.message}")
+            //println("Erreur lors du parsing de la date : ${e.message}")
             isoDate // Renvoie la date brute en cas d'erreur
         }
     }

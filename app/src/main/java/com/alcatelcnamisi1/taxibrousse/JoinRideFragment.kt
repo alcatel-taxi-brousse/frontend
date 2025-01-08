@@ -1,5 +1,6 @@
 package com.alcatelcnamisi1.taxibrousse
 
+import ApiRequest
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -125,24 +126,25 @@ class JoinRideFragment : Fragment() {
             // TODO
             println("JOIN RIDE with seats = $seatsToTake")
 
+
             //implement the query
             ApiRequest.getInstance(requireContext()).joinTrip(
                 communityId.toString(), trip_id.toString(), seatsToTake,
                 { response ->
                     Toast.makeText(requireContext(), "Trajet rejoint avec succès !", Toast.LENGTH_SHORT).show()
-                    parentFragmentManager.beginTransaction().remove(this).commit()
+                    //parentFragmentManager.beginTransaction().remove(this).commit()
+                    closeJoinRide()
                 },
                 { error ->
                     Toast.makeText(requireContext(), "Erreur lors de la tentative de rejoindre le trajet : $error", Toast.LENGTH_SHORT).show()
                 }
             )
-
-
-
-            closeJoinRide()
         }
 
         updateButtonsDisable()
+
+        println("Value of token : " + ApiRequest.getInstance(requireContext()).getToken())
+
 
         return view
     }
