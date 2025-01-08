@@ -370,7 +370,7 @@ class ApiRequest<JSONException> private constructor(context: Context) {
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
     ) {
-        println("$apiUrl/communities/$communityId/trips/$tripId/join")
+        //println("$apiUrl/communities/$communityId/trips/$tripId/join")
 
         val jsonBody = JSONObject()
         try {
@@ -383,12 +383,12 @@ class ApiRequest<JSONException> private constructor(context: Context) {
         val stringRequest = object : StringRequest(
             Method.POST, "$apiUrl/communities/$communityId/trips/$tripId/join",
             Response.Listener { response ->
-                println("Join Trip réussi")
+                //println("Join Trip réussi")
                 onResponse(response)
             },
             Response.ErrorListener { error ->
                 onError("${error.message}")
-                println("Erreur rencontrée : ${error.cause}")
+                //println("Erreur rencontrée : ${error.cause}")
             }
         ) {
             override fun getBody(): ByteArray {
@@ -402,7 +402,7 @@ class ApiRequest<JSONException> private constructor(context: Context) {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
                 headers["Authorization"] = "Bearer $token"
-                println("Headers envoyés : $headers")
+                //println("Headers envoyés : $headers")
                 return headers
             }
         }

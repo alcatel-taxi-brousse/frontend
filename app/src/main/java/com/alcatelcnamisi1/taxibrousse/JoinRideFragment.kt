@@ -132,7 +132,6 @@ class JoinRideFragment : Fragment() {
                 communityId.toString(), trip_id.toString(), seatsToTake,
                 { response ->
                     Toast.makeText(requireContext(), "Trajet rejoint avec succès !", Toast.LENGTH_SHORT).show()
-                    //parentFragmentManager.beginTransaction().remove(this).commit()
                     closeJoinRide()
                 },
                 { error ->
@@ -143,7 +142,7 @@ class JoinRideFragment : Fragment() {
 
         updateButtonsDisable()
 
-        println("Value of token : " + ApiRequest.getInstance(requireContext()).getToken())
+        //println("Value of token : " + ApiRequest.getInstance(requireContext()).getToken())
 
 
         return view
