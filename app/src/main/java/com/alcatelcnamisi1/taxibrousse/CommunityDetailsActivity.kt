@@ -29,6 +29,7 @@ class CommunityDetailsActivity : AppCompatActivity() {
 
         val communityName = intent.getStringExtra("communityName")
         val destination = intent.getStringExtra("destination")
+        val community_id = intent.getStringExtra("community_id")
 
         textViewCommunityName.text = communityName
         textViewDestination.text = destination
@@ -38,6 +39,7 @@ class CommunityDetailsActivity : AppCompatActivity() {
             val fragment = ProposeRideFragment()
             fragment.arguments = Bundle().apply {
                 putString("arrival", destination)
+                putString("community_id", community_id)
             }
             openFragment(fragment, R.id.frameLayoutRidesContainer)
         }
@@ -53,8 +55,13 @@ class CommunityDetailsActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Charger le fragment par défaut
-        openFragment(ViewRidesFragment(), R.id.frameLayoutRidesContainer)
+        val fragment = ViewRidesFragment()
+        fragment.arguments = Bundle().apply {
+            putString("arrival", destination)
+            putString("community_id", community_id)
+            println("\n Data sent : $destination" + " | " + community_id)
+        }
+        openFragment(fragment, R.id.frameLayoutRidesContainer)
     }
 
     private fun openFragment(fragment: Fragment, containerId: Int) {
