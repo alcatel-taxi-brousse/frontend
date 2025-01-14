@@ -124,12 +124,14 @@ class ProposeRideFragment : Fragment() {
         val arrival = textViewArrival?.text.toString().trim()
         val carModel = editTextCarModel?.text.toString().trim()
         val seats = spinnerSeats?.selectedItem.toString().trim()
-        val dateTime = editTextDateTime?.text.toString().trim()
+        var dateTime = editTextDateTime?.text.toString().trim()
 
         if (!fieldsValidation(departure, arrival, carModel, seats, dateTime)) {
             Toast.makeText(requireContext(), "Veuillez remplir les champs obligatoires.", Toast.LENGTH_SHORT).show()
             return
         }
+
+        dateTime = formatToIso(dateTime);
 
         val description = editTextDescription?.text.toString()
         val isRecurrent = checkBoxRecurrent?.isChecked ?: false
@@ -146,6 +148,21 @@ class ProposeRideFragment : Fragment() {
                     Toast.makeText(requireContext(), "Erreur lors de la proposition du trajet : $error", Toast.LENGTH_SHORT).show()
                 }
             )
+        }
+    }
+
+
+    private fun formatToIso(dateTime: String): String {
+        val inputFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+        val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        isoFormat.timeZone = TimeZone.getTimeZone("UTC") // Définit le fuseau horaire en UTC
+
+        return try {
+            val date = inputFormat.parse(dateTime) // Convertit la chaîne au format `dd/MM/yyyy HH:mm` en objet `Date`
+            isoFormat.format(date!!) // Formate l'objet `Date` en chaîne ISO 8601
+        } catch (e: Exception) {
+            e.printStackTrace()
+            "" // Retourne une chaîne vide en cas d'erreur
         }
     }
 

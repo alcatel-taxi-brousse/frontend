@@ -60,9 +60,6 @@ class LoginActivity : AppCompatActivity() {
 
             val token = JSONObject(response).getString("token")
 
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
-
             println("Token extrait : $token")
 
             RainbowSdk().connection().signInWithToken(
@@ -83,6 +80,9 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             )
+            val intent = Intent(this, HomeActivity::class.java)
+            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
 
         }, { error ->
             println("Error sur le login: $error")

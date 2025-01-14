@@ -42,7 +42,7 @@ class ApiRequest<JSONException> private constructor(context: Context) {
 
         fun getInstance(context: Context?): ApiRequest<Any?> {
             synchronized(ApiRequest::class) {
-                if (instance == null &&context != null) {
+                if (instance == null && context != null) {
                     instance = ApiRequest(context.applicationContext)
                 }
             }
@@ -57,22 +57,24 @@ class ApiRequest<JSONException> private constructor(context: Context) {
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
     ) {
-        val stringRequest = object : StringRequest(
-            Method.POST, "$apiUrl/auth",
-            Response.Listener { response ->
-                onResponse(response)
-                token = JSONObject(response).getString("token")
-            },
-            Response.ErrorListener { error ->
-                onError("${error.message}")
-            }) {
-            override fun getParams(): Map<String, String> {
-                val params = HashMap<String, String>()
-                params["email"] = login
-                params["password"] = password
-                return params
-            }
-        }
+        val stringRequest =
+                object :
+                        StringRequest(
+                                Method.POST,
+                                "$apiUrl/auth",
+                                Response.Listener { response ->
+                                    onResponse(response)
+                                    token = JSONObject(response).getString("token")
+                                },
+                                Response.ErrorListener { error -> onError("${error.message}") }
+                        ) {
+                    override fun getParams(): Map<String, String> {
+                        val params = HashMap<String, String>()
+                        params["email"] = login
+                        params["password"] = password
+                        return params
+                    }
+                }
 
         requestQueue.add(stringRequest)
     }
@@ -215,7 +217,7 @@ class ApiRequest<JSONException> private constructor(context: Context) {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
 
-                headers["Authorization"] = "Bearer $token"
+                        headers["Authorization"] = "Bearer $token"
 
                 println("Headers envoyés : $headers")
                 return headers
@@ -410,16 +412,16 @@ class ApiRequest<JSONException> private constructor(context: Context) {
     }
     
     fun proposeRide(
-        departure: String,
-        arrival: String,
-        dateTime: Date,
-        isRecurrent: Boolean,
-        recurrence: String,
-        seats: String,
-        carModel: String,
-        description: String,
-        onResponse: (String) -> Unit,
-        onError: (String) -> Unit
+            departure: String,
+            arrival: String,
+            dateTime: Date,
+            isRecurrent: Boolean,
+            recurrence: String,
+            seats: String,
+            carModel: String,
+            description: String,
+            onResponse: (String) -> Unit,
+            onError: (String) -> Unit
     ) {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val formattedDateTime = dateFormat.format(dateTime)
@@ -452,7 +454,8 @@ class ApiRequest<JSONException> private constructor(context: Context) {
         onError: (String) -> Unit
     ) {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-        val dummyRidesJson = """
+        val dummyRidesJson =
+                """
         [
             {
                 "departure": "Paris",
@@ -518,7 +521,8 @@ class ApiRequest<JSONException> private constructor(context: Context) {
     ) {
 
         val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-        val dummyRidesJson = """
+        val dummyRidesJson =
+                """
         [
             {
                 "departure": "Strasbourg",
@@ -535,7 +539,6 @@ class ApiRequest<JSONException> private constructor(context: Context) {
             }
         ]
     """
-
 
         onResponse(dummyRidesJson)
         /*
