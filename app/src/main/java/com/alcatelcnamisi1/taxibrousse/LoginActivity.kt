@@ -21,7 +21,7 @@ import com.android.volley.toolbox.Volley
 import org.json.JSONObject
 import android.content.Context
 import android.content.SharedPreferences
-
+import android.widget.Toast
 
 
 class LoginActivity : AppCompatActivity() {
@@ -56,17 +56,22 @@ class LoginActivity : AppCompatActivity() {
         val password = editTextPassword?.text.toString()
 
         ApiRequest.getInstance(null).login(login, password, { response ->
-            println("Response: $response")
+            println("Response pour le login: $response")
 
             val token = JSONObject(response).getString("token")
+
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+
             println("Token extrait : $token")
+
             RainbowSdk().connection().signInWithToken(
                 token = token,
                 host = "sandbox.openrainbow.com",
                 listener = object : Connection.ISignInListener {
                     override fun onSignInSucceeded() {
                         super.onSignInSucceeded()
-
+                        println("SDK Successfully initialized")
                     }
 
                     override fun onSignInFailed(
@@ -74,7 +79,7 @@ class LoginActivity : AppCompatActivity() {
                         error: RainbowError<Unit>
                     ) {
                         super.onSignInFailed(errorCode, error)
-                        println("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN")
+                        println("SDK initialization error")
                     }
                 }
             )
@@ -83,9 +88,16 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
 
         }, { error ->
-            println("Error: $error")
+            println("Error sur le login: $error")
+            Toast.makeText(
+                this,
+                "Login ou mot de passe invalide. Veuillez réessayer.",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            editTextLogin?.setText("");
+            editTextPassword?.setText("");
+
         })
-
-
     }
 }
