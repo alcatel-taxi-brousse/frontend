@@ -60,9 +60,6 @@ class LoginActivity : AppCompatActivity() {
 
             val token = JSONObject(response).getString("token")
 
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
-
             println("Token extrait : $token")
 
             RainbowSdk().connection().signInWithToken(
