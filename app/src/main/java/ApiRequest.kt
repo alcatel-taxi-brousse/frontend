@@ -13,12 +13,6 @@ import java.util.Properties
 import org.json.JSONObject
 import java.util.TimeZone
 
-data class Community(
-    val id: String,
-    val name: String,
-    val description: String,
-    val visibility: String
-)
 
 class ApiRequest<JSONException> private constructor(context: Context) {
     private val contextRef: WeakReference<Context> = WeakReference(context)
@@ -77,10 +71,6 @@ class ApiRequest<JSONException> private constructor(context: Context) {
                 }
 
         requestQueue.add(stringRequest)
-    }
-
-    fun getToken(): String {
-        return token;
     }
 
     fun createCommunity(
@@ -199,34 +189,6 @@ class ApiRequest<JSONException> private constructor(context: Context) {
         requestQueue.add(stringRequest)
     }
 
-    /*
-    public fun joinCommunity(
-
-        communityId : String,
-        onResponse: (String) -> Unit,
-        onError: (String) -> Unit
-    ){
-        val stringRequest = object : StringRequest(
-            Method.POST, "$apiUrl/communities/$communityId/join",
-            Response.Listener { response ->
-                onResponse(response)
-            },
-            Response.ErrorListener { error ->
-                onError("${error.message}")
-            }) {
-            override fun getHeaders(): MutableMap<String, String> {
-                val headers = HashMap<String, String>()
-
-                        headers["Authorization"] = "Bearer $token"
-
-                println("Headers envoyés : $headers")
-                return headers
-            }
-        }
-        requestQueue.add(stringRequest)
-    }
-
-    */
     fun getTrips(
         communityId : String,
         onResponse: (String) -> Unit,
@@ -339,31 +301,6 @@ class ApiRequest<JSONException> private constructor(context: Context) {
         requestQueue.add(stringRequest)
     }
 
-    fun getTrip(
-        communityId : String,
-        tripId: String,
-        onResponse: (String) -> Unit,
-        onError: (String) -> Unit
-    ){
-        val stringRequest = object : StringRequest(
-            Method.GET, "$apiUrl/communities/$communityId/trips/$tripId",
-            Response.Listener { response ->
-                onResponse(response)
-            },
-            Response.ErrorListener { error ->
-                onError("${error.message}")
-            }) {
-            override fun getHeaders(): MutableMap<String, String> {
-                val headers = HashMap<String, String>()
-
-                headers["Authorization"] = "Bearer $token"
-
-                //println("Headers envoyés : $headers")
-                return headers
-            }
-        }
-        requestQueue.add(stringRequest)
-    }
 
     fun joinTrip(
         communityId: String,
@@ -410,110 +347,6 @@ class ApiRequest<JSONException> private constructor(context: Context) {
         }
         requestQueue.add(stringRequest)
     }
-    
-    fun proposeRide(
-            departure: String,
-            arrival: String,
-            dateTime: Date,
-            isRecurrent: Boolean,
-            recurrence: String,
-            seats: String,
-            carModel: String,
-            description: String,
-            onResponse: (String) -> Unit,
-            onError: (String) -> Unit
-    ) {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        val formattedDateTime = dateFormat.format(dateTime)
-
-        val stringRequest = object : StringRequest(
-            Method.POST, "$apiUrl/ProposeRide",
-            Response.Listener { response ->
-                onResponse(response)
-            },
-            Response.ErrorListener { error ->
-                onError("${error.message}")
-            }) {
-            override fun getParams(): Map<String, String> {
-                val params = HashMap<String, String>()
-                params["departure"] = departure
-                params["dateTime"] = formattedDateTime
-                params["isRecurrent"] = isRecurrent.toString()
-                params["recurrence"] = recurrence
-                params["seats"] = seats
-                params["carModel"] = carModel
-                params["description"] = description
-                return params
-            }
-        }
-        requestQueue.add(stringRequest)
-    }
-
-    fun getRides(
-        onResponse: (String) -> Unit,
-        onError: (String) -> Unit
-    ) {
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-        val dummyRidesJson =
-                """
-        [
-            {
-                "departure": "Paris",
-                "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, -1) }.time)}",
-                "seatsAvailable": "1",
-                "recurrence": "Weekly",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed leo diam, auctor non faucibus quis, accumsan eu nunc. Quisque sed eleifend quam, a dignissim nunc. Phasellus laoreet lacus in augue rhoncus, quis euismod arcu sollicitudin. Aenean sed nunc nec leo placerat gravida id et ex. Integer lectus massa, feugiat sed hendrerit eu, ultricies consectetur ipsum. Pellentesque dictum, lacus molestie pretium fermentum, est erat viverra velit, sed placerat nisl libero ullamcorper ex. Nullam eu quam mi. Cras at tortor sagittis, vehicula ante nec, congue velit. Duis id justo eu velit rutrum feugiat at vitae sem. Proin interdum felis eget ex venenatis sodales. Suspendisse sagittis nibh at dolor ultrices commodo. Curabitur facilisis eros nec nunc vulputate gravida."
-            },
-            {
-                "departure": "Paris",
-                "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 1) }.time)}",
-                "seatsAvailable": "3",
-                "recurrence": "Weekly",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed leo diam, auctor non faucibus quis, accumsan eu nunc. Quisque sed eleifend quam, a dignissim nunc. Phasellus laoreet lacus in augue rhoncus, quis euismod arcu sollicitudin. Aenean sed nunc nec leo placerat gravida id et ex. Integer lectus massa, feugiat sed hendrerit eu, ultricies consectetur ipsum. Pellentesque dictum, lacus molestie pretium fermentum, est erat viverra velit, sed placerat nisl libero ullamcorper ex. Nullam eu quam mi. Cras at tortor sagittis, vehicula ante nec, congue velit. Duis id justo eu velit rutrum feugiat at vitae sem. Proin interdum felis eget ex venenatis sodales. Suspendisse sagittis nibh at dolor ultrices commodo. Curabitur facilisis eros nec nunc vulputate gravida."
-
-            },
-            {
-                "departure": "Marseille",
-                "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 2) }.time)}",
-                "seatsAvailable": "2",
-                "recurrence": "Daily",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed leo diam, auctor non faucibus quis, accumsan eu nunc. Quisque sed eleifend quam, a dignissim nunc. Phasellus laoreet lacus in augue rhoncus, quis euismod arcu sollicitudin. Aenean sed nunc nec leo placerat gravida id et ex. Integer lectus massa, feugiat sed hendrerit eu, ultricies consectetur ipsum. Pellentesque dictum, lacus molestie pretium fermentum, est erat viverra velit, sed placerat nisl libero ullamcorper ex. Nullam eu quam mi. Cras at tortor sagittis, vehicula ante nec, congue velit. Duis id justo eu velit rutrum feugiat at vitae sem. Proin interdum felis eget ex venenatis sodales. Suspendisse sagittis nibh at dolor ultrices commodo. Curabitur facilisis eros nec nunc vulputate gravida."
-
-            },
-            {
-                "departure": "Toulouse",
-                "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 3) }.time)}",
-                "seatsAvailable": "4",
-                "recurrence": "Weekly",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed leo diam, auctor non faucibus quis, accumsan eu nunc. Quisque sed eleifend quam, a dignissim nunc. Phasellus laoreet lacus in augue rhoncus, quis euismod arcu sollicitudin. Aenean sed nunc nec leo placerat gravida id et ex. Integer lectus massa, feugiat sed hendrerit eu, ultricies consectetur ipsum. Pellentesque dictum, lacus molestie pretium fermentum, est erat viverra velit, sed placerat nisl libero ullamcorper ex. Nullam eu quam mi. Cras at tortor sagittis, vehicula ante nec, congue velit. Duis id justo eu velit rutrum feugiat at vitae sem. Proin interdum felis eget ex venenatis sodales. Suspendisse sagittis nibh at dolor ultrices commodo. Curabitur facilisis eros nec nunc vulputate gravida."
-            },
-            {
-                "departure": "Strasbourg",
-                "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 3) }.time)}",
-                "seatsAvailable": "1",
-                "recurrence": "Monthly",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed leo diam, auctor non faucibus quis, accumsan eu nunc. Quisque sed eleifend quam, a dignissim nunc. Phasellus laoreet lacus in augue rhoncus, quis euismod arcu sollicitudin. Aenean sed nunc nec leo placerat gravida id et ex. Integer lectus massa, feugiat sed hendrerit eu, ultricies consectetur ipsum. Pellentesque dictum, lacus molestie pretium fermentum, est erat viverra velit, sed placerat nisl libero ullamcorper ex. Nullam eu quam mi. Cras at tortor sagittis, vehicula ante nec, congue velit. Duis id justo eu velit rutrum feugiat at vitae sem. Proin interdum felis eget ex venenatis sodales. Suspendisse sagittis nibh at dolor ultrices commodo. Curabitur facilisis eros nec nunc vulputate gravida."
-            },
-            {
-                "departure": "Tours",
-                "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 3) }.time)}",
-                "seatsAvailable": "0",
-                "recurrence": "Daily",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed leo diam, auctor non faucibus quis, accumsan eu nunc. Quisque sed eleifend quam, a dignissim nunc. Phasellus laoreet lacus in augue rhoncus, quis euismod arcu sollicitudin. Aenean sed nunc nec leo placerat gravida id et ex. Integer lectus massa, feugiat sed hendrerit eu, ultricies consectetur ipsum. Pellentesque dictum, lacus molestie pretium fermentum, est erat viverra velit, sed placerat nisl libero ullamcorper ex. Nullam eu quam mi. Cras at tortor sagittis, vehicula ante nec, congue velit. Duis id justo eu velit rutrum feugiat at vitae sem. Proin interdum felis eget ex venenatis sodales. Suspendisse sagittis nibh at dolor ultrices commodo. Curabitur facilisis eros nec nunc vulputate gravida."
-            },
-            {
-                "departure": "Rennes",
-                "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 3) }.time)}",
-                "seatsAvailable": "3",
-                "recurrence": "Daily",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed leo diam, auctor non faucibus quis, accumsan eu nunc. Quisque sed eleifend quam, a dignissim nunc. Phasellus laoreet lacus in augue rhoncus, quis euismod arcu sollicitudin. Aenean sed nunc nec leo placerat gravida id et ex. Integer lectus massa, feugiat sed hendrerit eu, ultricies consectetur ipsum. Pellentesque dictum, lacus molestie pretium fermentum, est erat viverra velit, sed placerat nisl libero ullamcorper ex. Nullam eu quam mi. Cras at tortor sagittis, vehicula ante nec, congue velit. Duis id justo eu velit rutrum feugiat at vitae sem. Proin interdum felis eget ex venenatis sodales. Suspendisse sagittis nibh at dolor ultrices commodo. Curabitur facilisis eros nec nunc vulputate gravida."
-            }
-        ]
-    """
-
-        onResponse(dummyRidesJson)
-    }
-
 
     fun getMyRides(
         onResponse: (String) -> Unit,
