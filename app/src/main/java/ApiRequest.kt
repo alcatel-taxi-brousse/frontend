@@ -145,7 +145,7 @@ class ApiRequest<JSONException> private constructor(context: Context) {
         }
 
         val stringRequest = object : StringRequest(
-            Method.GET, "$apiUrl/communities",
+            Method.GET, "$apiUrl/communities/app",
             Response.Listener { response ->
                 try {
 

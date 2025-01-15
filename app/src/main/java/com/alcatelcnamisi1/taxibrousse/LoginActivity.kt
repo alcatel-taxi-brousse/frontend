@@ -2,6 +2,7 @@ package com.alcatelcnamisi1.taxibrousse
 
 import ApiRequest
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -39,11 +40,13 @@ class LoginActivity : AppCompatActivity() {
         buttonLogin?.setOnClickListener {
             login()
         }
-
-
     }
 
     private fun login() {
+
+        buttonLogin?.setEnabled(false)
+        buttonLogin?.setText("Loading...")
+
         val login = editTextLogin?.text.toString()
         val password = editTextPassword?.text.toString()
 
@@ -70,10 +73,11 @@ class LoginActivity : AppCompatActivity() {
                     ) {
                         super.onSignInFailed(errorCode, error)
                         println("SDK initialization error")
+                        buttonLogin?.setEnabled(true);
+                        buttonLogin?.setText("Se connecter")
                     }
                 }
             )
-
 
         }, { error ->
             println("Error sur le login: $error")
@@ -82,8 +86,9 @@ class LoginActivity : AppCompatActivity() {
                 "Login ou mot de passe invalide. Veuillez réessayer.",
                 Toast.LENGTH_SHORT
             ).show()
+            buttonLogin?.setEnabled(true);
+            buttonLogin?.setText("Se connecter")
 
-            editTextLogin?.setText("");
             editTextPassword?.setText("");
 
         })
