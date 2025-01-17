@@ -1,4 +1,5 @@
 import android.content.Context
+import android.widget.Toast
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
@@ -100,7 +101,18 @@ class ApiRequest<JSONException> private constructor(context: Context) {
             Method.POST, "$apiUrl/communities",
             Response.Listener { response ->
                 //println("Réponse de l'API : $response")
-                onResponse(response)
+                val jsonObject = JSONObject(response) // Convertir la réponse JSON en objet JSONObject
+                val id = jsonObject.optString("id", "Default ID") // Extraire la clé "id"
+
+                joinCommunity(
+                    communityId = id,
+                    onResponse = {
+                        onResponse(response)
+                    },
+                    onError = { error ->
+                        onResponse(response);
+                    }
+                )
             },
             Response.ErrorListener { error ->
                 val networkResponse = error.networkResponse
