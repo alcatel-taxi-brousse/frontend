@@ -348,46 +348,63 @@ class ApiRequest<JSONException> private constructor(context: Context) {
         requestQueue.add(stringRequest)
     }
 
-    fun getMyRides(
+    fun getMyTrips(
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
-    ) {
-
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-        val dummyRidesJson =
-                """
-        [
-            {
-                "departure": "Strasbourg",
-                "arrival": "Paris",
-                "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 1) }.time)}",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed leo diam, auctor non faucibus quis, accumsan eu nunc. Quisque sed eleifend quam, a dignissim nunc. Phasellus laoreet lacus in augue rhoncus, quis euismod arcu sollicitudin. Aenean sed nunc nec leo placerat gravida id et ex. Integer lectus massa, feugiat sed hendrerit eu, ultricies consectetur ipsum. Pellentesque dictum, lacus molestie pretium fermentum, est erat viverra velit, sed placerat nisl libero ullamcorper ex. Nullam eu quam mi. Cras at tortor sagittis, vehicula ante nec, congue velit. Duis id justo eu velit rutrum feugiat at vitae sem. Proin interdum felis eget ex venenatis sodales. Suspendisse sagittis nibh at dolor ultrices commodo. Curabitur facilisis eros nec nunc vulputate gravida."
-            },
-            {
-                "departure": "Paris",
-                "arrival": "Strasbourg",
-                "date": "${dateFormat.format(Calendar.getInstance().apply { add(Calendar.DATE, 5) }.time)}",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed leo diam, auctor non faucibus quis, accumsan eu nunc. Quisque sed eleifend quam, a dignissim nunc. Phasellus laoreet lacus in augue rhoncus, quis euismod arcu sollicitudin. Aenean sed nunc nec leo placerat gravida id et ex. Integer lectus massa, feugiat sed hendrerit eu, ultricies consectetur ipsum. Pellentesque dictum, lacus molestie pretium fermentum, est erat viverra velit, sed placerat nisl libero ullamcorper ex. Nullam eu quam mi. Cras at tortor sagittis, vehicula ante nec, congue velit. Duis id justo eu velit rutrum feugiat at vitae sem. Proin interdum felis eget ex venenatis sodales. Suspendisse sagittis nibh at dolor ultrices commodo. Curabitur facilisis eros nec nunc vulputate gravida."
-
-            }
-        ]
-    """
-
-        onResponse(dummyRidesJson)
-        /*
-        val urlWithParams = "$apiUrl/getRides"
-
+    ){
         val stringRequest = object : StringRequest(
-            Method.GET, urlWithParams,
+            Method.GET, "$apiUrl/trips/me",
             Response.Listener { response ->
-                onResponse(response)
+
+                println("response de my community :" + response);
+
+                try {
+
+                    //println("RETOUR DE LA REPONSE pour les trips : " + response)
+                    // Transformation de la réponse pour produire une version simplifiée
+                    val originalArray = JSONArray(response)
+                    val simplifiedArray = JSONArray()
+
+                    for (i in 0 until originalArray.length()) {
+                        val community = originalArray.getJSONObject(i)
+
+                        val communityObject = community.optJSONObject("community") // Récupère l'objet "community"
+
+                        // Création d'un objet simplifié
+                        val simplifiedCommunity = JSONObject()
+                        simplifiedCommunity.put("departure", community.optString("start_location"))
+                        simplifiedCommunity.put("arrival", communityObject?.optString("destination"))
+                        simplifiedCommunity.put("date", formatDate(community.optString("date")))
+                        simplifiedCommunity.put("description", community.optString("description", "Public"))
+
+                        // Ajout de l'objet simplifié dans le tableau final
+                        simplifiedArray.put(simplifiedCommunity)
+                    }
+
+                    // Conversion du tableau simplifié en chaîne JSON
+                    val simplifiedResponse = simplifiedArray.toString(4) // JSON formaté
+                    onResponse(simplifiedResponse)
+                    //println("Réponse simplifiée de la communauté : $simplifiedResponse")
+                } catch (e: Exception) {
+                    onError("Erreur lors de la transformation de la réponse : ${e.message}")
+                    //println("Erreur : ${e.message}")
+                }
             },
             Response.ErrorListener { error ->
-                onError("${error.message}")
-            }
-        ) {}
+                onError("Erreur réseau : ${error.message}")
+                //println("Erreur lors de la récupération des trips : ${error.message}")
+            })
+        {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
 
-        requestQueue.add(stringRequest)*/
+                headers["Authorization"] = "Bearer $token"
+
+                //println("Headers envoyés : $headers")
+                return headers
+            }
+        }
+        requestQueue.add(stringRequest)
     }
 
     fun joinCommunity(

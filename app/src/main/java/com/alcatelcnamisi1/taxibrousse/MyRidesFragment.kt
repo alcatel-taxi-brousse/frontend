@@ -1,4 +1,5 @@
 package com.alcatelcnamisi1.taxibrousse
+import ApiRequest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,7 +35,7 @@ class MyRidesFragment : Fragment() {
     }
 
     private fun fetchRides() {
-        ApiRequest.getInstance(requireContext()).getMyRides(
+        ApiRequest.getInstance(requireContext()).getMyTrips(
             onResponse = { response ->
                 try {
                     val rides = parseRidesResponse(response)
