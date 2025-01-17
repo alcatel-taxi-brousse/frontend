@@ -142,7 +142,7 @@ class ProposeRideFragment : Fragment() {
                 it,departure,dateTime,recurrence, seats.toIntOrNull() ?: 0,description,
                 { response ->
                     Toast.makeText(requireContext(), "Trajet proposé avec succès !", Toast.LENGTH_SHORT).show()
-                    parentFragmentManager.beginTransaction().remove(this).commit()
+                    activity?.supportFragmentManager?.popBackStack()
                 },
                 { error ->
                     Toast.makeText(requireContext(), "Erreur lors de la proposition du trajet : $error", Toast.LENGTH_SHORT).show()

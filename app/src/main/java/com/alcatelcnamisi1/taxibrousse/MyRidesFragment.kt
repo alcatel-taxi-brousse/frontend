@@ -3,20 +3,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import org.json.JSONArray
 import org.json.JSONException
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.*
 
 class MyRidesFragment : Fragment() {
     private lateinit var linearLayout: LinearLayout

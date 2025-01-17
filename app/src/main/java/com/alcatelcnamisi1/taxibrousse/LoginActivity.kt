@@ -2,6 +2,7 @@ package com.alcatelcnamisi1.taxibrousse
 
 import ApiRequest
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -9,18 +10,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.ale.infra.list.ArrayItemList
-import com.ale.infra.manager.room.CreateRoomBody
-import com.ale.infra.manager.room.Room
 import com.ale.infra.rest.listeners.RainbowError
 import com.ale.rainbowsdk.Connection
 import com.ale.rainbowsdk.RainbowSdk
-import com.android.volley.Request
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import org.json.JSONObject
-import android.content.Context
-import android.content.SharedPreferences
 import android.widget.Toast
 
 
@@ -47,11 +40,13 @@ class LoginActivity : AppCompatActivity() {
         buttonLogin?.setOnClickListener {
             login()
         }
-
-
     }
 
     private fun login() {
+
+        buttonLogin?.setEnabled(false)
+        buttonLogin?.setText("Loading...")
+
         val login = editTextLogin?.text.toString()
         val password = editTextPassword?.text.toString()
 
@@ -69,6 +64,7 @@ class LoginActivity : AppCompatActivity() {
                     override fun onSignInSucceeded() {
                         super.onSignInSucceeded()
                         println("SDK Successfully initialized")
+                        openHome()
                     }
 
                     override fun onSignInFailed(
@@ -77,12 +73,11 @@ class LoginActivity : AppCompatActivity() {
                     ) {
                         super.onSignInFailed(errorCode, error)
                         println("SDK initialization error")
+                        buttonLogin?.setEnabled(true);
+                        buttonLogin?.setText("Se connecter")
                     }
                 }
             )
-            val intent = Intent(this, HomeActivity::class.java)
-            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
 
         }, { error ->
             println("Error sur le login: $error")
@@ -91,10 +86,17 @@ class LoginActivity : AppCompatActivity() {
                 "Login ou mot de passe invalide. Veuillez réessayer.",
                 Toast.LENGTH_SHORT
             ).show()
+            buttonLogin?.setEnabled(true);
+            buttonLogin?.setText("Se connecter")
 
-            editTextLogin?.setText("");
             editTextPassword?.setText("");
 
         })
+    }
+
+    fun openHome(){
+        val intent = Intent(this, HomeActivity::class.java)
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
     }
 }

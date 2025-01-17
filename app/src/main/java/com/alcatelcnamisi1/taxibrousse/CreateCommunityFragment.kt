@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.Toast
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -77,11 +78,19 @@ class CreateCommunityFragment : Fragment() {
 
         ApiRequest.getInstance(null).createCommunity(communityName, destination,"false", description, visibility, { response ->
             println("Response: $response")
+
+            //Toast Message
+            Toast.makeText(
+                this.context,
+                "Communauté $communityName bien créée !",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            closeCreateCommunity()
         }, { error ->
             println("Error: $error")
         })
     }
-
     private fun closeCreateCommunity(){
         activity?.supportFragmentManager?.popBackStack()
     }

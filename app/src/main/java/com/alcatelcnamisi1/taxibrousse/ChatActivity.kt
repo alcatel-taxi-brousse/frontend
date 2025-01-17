@@ -20,6 +20,7 @@ import com.ale.infra.manager.IMMessage
 import com.ale.infra.proxy.conversation.IRainbowConversation
 import com.ale.rainbowsdk.RainbowSdk
 import org.jivesoftware.smackx.chatstates.ChatState
+import kotlin.concurrent.thread
 
 class ChatActivity : AppCompatActivity() {
 
@@ -72,8 +73,12 @@ class ChatActivity : AppCompatActivity() {
 
         // Ajouter un listener au bouton d'envoi
         sendButton.setOnClickListener {
+
             val messageText = messageInput.text.toString()
+
+            //Envoyer le message à l'aide du SDK
             RainbowSdk.instance().im().sendMessageToConversation(m_conversation, messageText)
+
             if (messageText.isNotEmpty()) {
                 // Ajouter un message de l'utilisateur
                 addMessage(chatMessagesLayout, messageText, true)
@@ -82,6 +87,8 @@ class ChatActivity : AppCompatActivity() {
                 messageInput.text.clear()
                 RainbowSdk.instance().im().sendIsTyping(m_conversation, ChatState.inactive)
             }
+
+            println("Message envoyé")
         }
 
         scrollView.viewTreeObserver.addOnScrollChangedListener {
@@ -180,9 +187,14 @@ class ChatActivity : AppCompatActivity() {
         // Ajouter la bulle au layout
         chatMessagesLayout.addView(messageView)
 
-        // Faire défiler automatiquement vers le bas
+        // Faire défiler automatiquement vers le dernier messsage
         chatMessagesLayout.post {
-            chatMessagesLayout.parent?.requestChildFocus(chatMessagesLayout, messageView)
+            val parentScrollView = chatMessagesLayout.parent as? ScrollView
+            if (parentScrollView != null) {
+                if (messageView.parent == chatMessagesLayout) {
+                    parentScrollView.smoothScrollTo(0, chatMessagesLayout.bottom)
+                }
+            }
         }
     }
 
