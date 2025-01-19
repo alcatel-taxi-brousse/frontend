@@ -241,6 +241,9 @@ class ApiRequest<JSONException> private constructor(context: Context) {
                             if (userTripEntity != null) {
                                 User_ids += userJson.optString("user_id")
                                 User_ids += ";"
+                                User_ids += userTripEntity.optInt("nb_people", 0)
+                                User_ids += ";"
+
                                 totalPeople += userTripEntity.optInt("nb_people", 0)
                             }
                         }

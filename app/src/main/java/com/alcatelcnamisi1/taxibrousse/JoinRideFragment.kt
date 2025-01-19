@@ -35,6 +35,7 @@ class JoinRideFragment : Fragment() {
     private var date: String? = null
     private var seatsTaken: Int? = null
     private var seatsAvailable: Int? = null
+    private var isSetted: Boolean? = true;
     private var communityId : String? = null
     private var seatsToTake: Int = 1
     private var seatsUpdated: Int? = null
@@ -64,12 +65,26 @@ class JoinRideFragment : Fragment() {
 
         val usersIdList = this.users_id?.split(";")
 
-        if (usersIdList != null) {
-            if (currentUserId in usersIdList) {
-                seatsAvailable = seatsAvailable!! + 1;
+        println("Join ride fragment - UserIdList : " +usersIdList )
+
+        val index = usersIdList?.indexOf(currentUserId)
+
+        var associatedCount = "";
+
+        // Vérifier si l'ID existe et qu'il y a bien un nombre après l'ID
+        if (index != null) {
+            if (index != -1 && index + 1 < usersIdList.size) {
+                associatedCount = usersIdList[index + 1]
             }
         }
 
+        if (usersIdList != null) {
+            if (currentUserId in usersIdList && isSetted == true) {
+                isSetted =false;
+                buttonJoinRide?.text = "Modifier";
+                seatsAvailable = seatsAvailable!! + associatedCount.toInt();
+            }
+        }
         seatsUpdated = (seatsAvailable!! - seatsToTake)
         textViewSeatCountTotal?.text = seatsUpdated.toString() + " place(s) still available ( /" + seatsAvailable.toString() + ")"
     }
