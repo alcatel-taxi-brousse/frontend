@@ -65,13 +65,10 @@ class JoinRideFragment : Fragment() {
 
         val usersIdList = this.users_id?.split(";")
 
-        println("Join ride fragment - UserIdList : " +usersIdList )
-
         val index = usersIdList?.indexOf(currentUserId)
 
         var associatedCount = "";
 
-        // Vérifier si l'ID existe et qu'il y a bien un nombre après l'ID
         if (index != null) {
             if (index != -1 && index + 1 < usersIdList.size) {
                 associatedCount = usersIdList[index + 1]
@@ -101,6 +98,22 @@ class JoinRideFragment : Fragment() {
             communityId = it.getString(ARG_PARAM7)
             users_id= it.getString(ARG_PARAM8)
         }
+
+        var currentUserId = ApiRequest.getInstance(requireContext()).getActiveUserId()
+
+        val usersIdList = this.users_id?.split(";")
+
+        val index = usersIdList?.indexOf(currentUserId)
+
+        var associatedCount = "1";
+
+        if (index != null) {
+            if (index != -1 && index + 1 < usersIdList.size) {
+                associatedCount = usersIdList[index + 1]
+            }
+        }
+
+        seatsToTake = associatedCount.toInt();
         println("\n Data received : $arrival")
     }
 
@@ -170,9 +183,6 @@ class JoinRideFragment : Fragment() {
         }
 
         updateButtonsDisable()
-
-        //println("Value of token : " + ApiRequest.getInstance(requireContext()).getToken())
-
 
         return view
     }

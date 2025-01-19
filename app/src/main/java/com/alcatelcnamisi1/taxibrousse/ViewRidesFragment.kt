@@ -1,5 +1,6 @@
 package com.alcatelcnamisi1.taxibrousse
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +29,7 @@ class ViewRidesFragment : Fragment() {
     private lateinit var linearLayout: LinearLayout
     private var arrival: String? = null
     private var community_id: String? = null
+    private var users_id: String? =null;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -78,8 +80,11 @@ class ViewRidesFragment : Fragment() {
         val rideList = mutableListOf<Map<String, String>>()
         val jsonArray = JSONArray(response)
 
+
+
         for (i in 0 until jsonArray.length()) {
             val rideJson = jsonArray.getJSONObject(i)
+            users_id = users_id+rideJson.getString("users_id")
             val rideMap = mapOf(
                 "departure" to rideJson.getString("departure"),
                 "date" to rideJson.getString("date"),
@@ -124,7 +129,23 @@ class ViewRidesFragment : Fragment() {
 
             val rideDate = dateFormat.parse(ride["date"] ?: "")
             val currentDate = Date()
-            if (ride["seatsAvailable"] == "0" || (rideDate != null && rideDate.before(currentDate))) {
+            var isInTheTrip = false;
+
+            var currentUserId = ApiRequest.getInstance(requireContext()).getActiveUserId()
+            val usersIdList = this.users_id?.split(";")
+
+            if (usersIdList != null) {
+                if (currentUserId in usersIdList) {
+                   isInTheTrip = true;
+                }
+            }
+            if (isInTheTrip == true ) {
+                buttonJoinRide.text = "Modifier"
+            }
+            if (isInTheTrip == true && ride["seatsAvailable"] == "0" || (rideDate != null && rideDate.before(currentDate))) {
+                overlayUnavailable.visibility = View.VISIBLE
+            }
+            else if (isInTheTrip==false && ride["seatsAvailable"] == "0" || (rideDate != null && rideDate.before(currentDate))) {
                 overlayUnavailable.visibility = View.VISIBLE
                 buttonJoinRide.isClickable = false
                 buttonJoinRide.isEnabled = false
