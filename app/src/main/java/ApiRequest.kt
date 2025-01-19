@@ -65,9 +65,8 @@ class ApiRequest<JSONException> private constructor(context: Context) {
                                     try {
                                         val jsonResponse = JSONObject(response)
                                         val loggedInUser = jsonResponse.getJSONObject("loggedInUser")
-
-                                        val customDataId = loggedInUser.optString("id", "ID non trouvé")
-                                        println("ID sous CustomData : $customDataId")
+                                        //println("join ride fragment - "+loggedInUser.optString("id", "ID non trouvé"))
+                                        this.user_id  = loggedInUser.optString("id", "ID non trouvé")
                                     } catch (e :Error) {
                                         println("Erreur lors de l'extraction de l'ID : " + e.message)
                                     }
@@ -217,6 +216,7 @@ class ApiRequest<JSONException> private constructor(context: Context) {
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
     ) {
+
         val stringRequest = object : StringRequest(
             Method.GET, "$apiUrl/communities/$communityId/trips",
             Response.Listener { response ->
@@ -232,10 +232,15 @@ class ApiRequest<JSONException> private constructor(context: Context) {
                         val usersArray = community.optJSONArray("users") ?: JSONArray()
                         var totalPeople = 0
 
+                        var User_ids = ""
+
                         for (j in 0 until usersArray.length()) {
                             val userJson = usersArray.getJSONObject(j)
+
                             val userTripEntity = userJson.optJSONObject("UserTripEntity")
                             if (userTripEntity != null) {
+                                User_ids += userJson.optString("user_id")
+                                User_ids += ";"
                                 totalPeople += userTripEntity.optInt("nb_people", 0)
                             }
                         }
@@ -249,6 +254,8 @@ class ApiRequest<JSONException> private constructor(context: Context) {
                         simplifiedCommunity.put("recurrence", community.optString("frequence", "No frequency available"))
                         simplifiedCommunity.put("description", community.optString("description", "Public"))
                         simplifiedCommunity.put("trip_id", community.optString("trip_id"))
+
+                        simplifiedCommunity.put("users_id", User_ids);
 
                         simplifiedArray.put(simplifiedCommunity)
                     }
@@ -505,7 +512,7 @@ class ApiRequest<JSONException> private constructor(context: Context) {
         }
     }
 
-    public fun getActiveUserId():String
+    fun getActiveUserId():String
     {
         return if(this.user_id!=""){
             this.user_id;

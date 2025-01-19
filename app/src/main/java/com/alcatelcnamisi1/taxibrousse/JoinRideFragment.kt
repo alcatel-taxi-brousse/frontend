@@ -20,6 +20,7 @@ private const val ARG_PARAM4 = "seats_taken"
 private const val ARG_PARAM5 = "seats_total"
 private const val ARG_PARAM6 = "trip_id"
 private const val ARG_PARAM7 = "community_id"
+private const val ARG_PARAM8 = "users_id"
 
 
 /**
@@ -38,6 +39,7 @@ class JoinRideFragment : Fragment() {
     private var seatsToTake: Int = 1
     private var seatsUpdated: Int? = null
     private var trip_id:String? = null
+    private var users_id:String? = null
 
     private var textViewDeparture: TextView? = null
     private var textViewDate: TextView? = null
@@ -56,6 +58,18 @@ class JoinRideFragment : Fragment() {
     }
 
     fun updateAvailableSeats() {
+
+        //HERE is the job
+        var currentUserId = ApiRequest.getInstance(requireContext()).getActiveUserId()
+
+        val usersIdList = this.users_id?.split(";")
+
+        if (usersIdList != null) {
+            if (currentUserId in usersIdList) {
+                seatsAvailable = seatsAvailable!! + 1;
+            }
+        }
+
         seatsUpdated = (seatsAvailable!! - seatsToTake)
         textViewSeatCountTotal?.text = seatsUpdated.toString() + " place(s) still available ( /" + seatsAvailable.toString() + ")"
     }
@@ -70,7 +84,7 @@ class JoinRideFragment : Fragment() {
             seatsAvailable = it.getInt(ARG_PARAM5)
             trip_id = it.getString(ARG_PARAM6)
             communityId = it.getString(ARG_PARAM7)
-
+            users_id= it.getString(ARG_PARAM8)
         }
         println("\n Data received : $arrival")
     }
