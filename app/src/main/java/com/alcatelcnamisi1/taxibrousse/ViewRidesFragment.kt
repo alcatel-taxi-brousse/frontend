@@ -29,7 +29,6 @@ class ViewRidesFragment : Fragment() {
     private lateinit var linearLayout: LinearLayout
     private var arrival: String? = null
     private var community_id: String? = null
-    private var users_id: String? =null;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -80,11 +79,9 @@ class ViewRidesFragment : Fragment() {
         val rideList = mutableListOf<Map<String, String>>()
         val jsonArray = JSONArray(response)
 
-
-
         for (i in 0 until jsonArray.length()) {
             val rideJson = jsonArray.getJSONObject(i)
-            users_id = users_id+rideJson.getString("users_id")
+            //users_id = users_id+rideJson.getString("users_id")
             val rideMap = mapOf(
                 "departure" to rideJson.getString("departure"),
                 "date" to rideJson.getString("date"),
@@ -96,7 +93,6 @@ class ViewRidesFragment : Fragment() {
             )
             rideList.add(rideMap)
         }
-
         return rideList
     }
 
@@ -132,7 +128,8 @@ class ViewRidesFragment : Fragment() {
             var isInTheTrip = false;
 
             var currentUserId = ApiRequest.getInstance(requireContext()).getActiveUserId()
-            val usersIdList = this.users_id?.split(";")
+
+            val usersIdList = ride["users_id"]?.split(";")
 
             if (usersIdList != null) {
                 if (currentUserId in usersIdList) {

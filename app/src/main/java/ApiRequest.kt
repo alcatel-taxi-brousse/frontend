@@ -478,27 +478,54 @@ class ApiRequest<JSONException> private constructor(context: Context) {
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
     )
-            {
-                val urlWithParams = "$apiUrl/communities/search?search=$searchQuery"
+    {
+        val urlWithParams = "$apiUrl/communities/search?search=$searchQuery"
 
-                val stringRequest = object : StringRequest(
-                    Method.GET, urlWithParams,
-                    Response.Listener { response ->
-                        onResponse(response)
-                    },
-                    Response.ErrorListener { error ->
-                        onError("${error.message}")
-                    }) {
-                    override fun getHeaders(): MutableMap<String, String> {
-                        val headers = HashMap<String, String>()
-                        headers["Authorization"] = "Bearer $token"
-                        return headers
-                    }
-                }
-
-                requestQueue.add(stringRequest)
-
+        val stringRequest = object : StringRequest(
+            Method.GET, urlWithParams,
+            Response.Listener { response ->
+                onResponse(response)
+            },
+            Response.ErrorListener { error ->
+                onError("${error.message}")
+            }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Authorization"] = "Bearer $token"
+                return headers
             }
+        }
+
+        requestQueue.add(stringRequest)
+
+    }
+
+    fun leaveTrips(
+        tripId: String,
+        onResponse: (String) -> Unit,
+        onError: (String) -> Unit
+    )
+    {
+        val urlWithParams = "$apiUrl/communities/{communityId}/trips/$tripId/leave"
+
+        val stringRequest = object : StringRequest(
+            Method.DELETE, urlWithParams,
+            Response.Listener { response ->
+                onResponse(response)
+            },
+            Response.ErrorListener { error ->
+                onError("${error.message}")
+            }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Authorization"] = "Bearer $token"
+                return headers
+            }
+        }
+
+        requestQueue.add(stringRequest)
+
+    }
 
     private fun formatDate(isoDate: String): String {
         return try {
@@ -514,6 +541,7 @@ class ApiRequest<JSONException> private constructor(context: Context) {
             isoDate // Renvoie la date brute en cas d'erreur
         }
     }
+
 
     fun getActiveUserId():String
     {
