@@ -131,6 +131,11 @@ class ViewRidesFragment : Fragment() {
 
             val usersIdList = ride["users_id"]?.split(";")
 
+            if (rideDate != null && rideDate.before(currentDate)) {
+                textUnavailable.visibility = View.VISIBLE
+                buttonJoinRide.isClickable = false
+                buttonJoinRide.isEnabled = false
+            }
             if (usersIdList != null) {
                 if (currentUserId in usersIdList) {
                    isInTheTrip = true;
@@ -149,11 +154,8 @@ class ViewRidesFragment : Fragment() {
 
                 if (ride["seatsAvailable"] == "0") {
                     textFull.visibility = View.VISIBLE
-                } else if (rideDate != null && rideDate.before(currentDate)) {
-                    textUnavailable.visibility = View.VISIBLE
                 }
             }
-
 
             buttonJoinRide.setOnClickListener {
                 print("\n button Join Ride clicked")

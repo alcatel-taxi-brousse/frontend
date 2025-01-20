@@ -10,6 +10,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.ale.infra.rest.listeners.RainbowError
+import com.ale.rainbowsdk.Connection
+import com.ale.rainbowsdk.RainbowSdk
+import org.json.JSONObject
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -51,6 +55,7 @@ class JoinRideFragment : Fragment() {
     private var buttonAdd: Button? = null
     private var buttonJoinRide: Button? = null
     private var buttonClose: Button? = null
+    private var buttonLeave: Button? = null
 
     fun updateButtonsDisable() {
         buttonSub?.isEnabled = seatsToTake > 0
@@ -80,6 +85,9 @@ class JoinRideFragment : Fragment() {
                 isSetted =false;
                 buttonJoinRide?.text = "Modifier";
                 seatsAvailable = seatsAvailable!! + associatedCount.toInt();
+            }
+            else{
+                buttonLeave?.visibility = View.INVISIBLE
             }
         }
         seatsUpdated = (seatsAvailable!! - seatsToTake)
@@ -139,6 +147,7 @@ class JoinRideFragment : Fragment() {
         buttonAdd = view?.findViewById(R.id.buttonAdd)
         buttonJoinRide = view?.findViewById(R.id.buttonJoinRide)
         buttonClose = view?.findViewById(R.id.buttonCloseRide)
+        buttonLeave = view?.findViewById(R.id.button_leave)
 
         print(departure)
         textViewDeparture?.text = departure + "  ->  " + arrival
@@ -163,6 +172,10 @@ class JoinRideFragment : Fragment() {
         buttonClose?.setOnClickListener {
             closeJoinRide()
         }
+        buttonLeave?.setOnClickListener{
+            trip_id?.let { it1 -> leaveTrip(it1) };
+            closeJoinRide()
+        }
 
         buttonJoinRide?.setOnClickListener {
             // TODO
@@ -185,6 +198,14 @@ class JoinRideFragment : Fragment() {
         updateButtonsDisable()
 
         return view
+    }
+
+    fun leaveTrip(trip_id : String){
+        ApiRequest.getInstance(null).leaveTrips( trip_id, { response ->
+            println("Trip bien quitté")
+        }, { error ->
+            println("Trip non quitté")
+        })
     }
 
     companion object {

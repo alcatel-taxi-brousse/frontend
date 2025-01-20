@@ -93,6 +93,13 @@
 
             </LinearLayout>
 
+            <Button
+                android:id="@+id/button_leave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#000000"
+                android:text="Leave the trip" />
+
         </LinearLayout>
 
     </LinearLayout>
