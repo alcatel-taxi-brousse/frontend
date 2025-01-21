@@ -81,13 +81,12 @@ class JoinRideFragment : Fragment() {
         }
 
         if (usersIdList != null) {
+            if(currentUserId in usersIdList){}
+            else{buttonLeave?.visibility = View.INVISIBLE}
             if (currentUserId in usersIdList && isSetted == true) {
                 isSetted =false;
                 buttonJoinRide?.text = "Modifier";
                 seatsAvailable = seatsAvailable!! + associatedCount.toInt();
-            }
-            else{
-                buttonLeave?.visibility = View.INVISIBLE
             }
         }
         seatsUpdated = (seatsAvailable!! - seatsToTake)
@@ -173,8 +172,10 @@ class JoinRideFragment : Fragment() {
             closeJoinRide()
         }
         buttonLeave?.setOnClickListener{
-            trip_id?.let { it1 -> leaveTrip(it1) };
-            closeJoinRide()
+            if(trip_id!=null){
+                leaveTrip(trip_id!!)
+
+            }
         }
 
         buttonJoinRide?.setOnClickListener {
@@ -203,6 +204,7 @@ class JoinRideFragment : Fragment() {
     fun leaveTrip(trip_id : String){
         ApiRequest.getInstance(null).leaveTrips( trip_id, { response ->
             println("Trip bien quitté")
+            closeJoinRide()
         }, { error ->
             println("Trip non quitté")
         })
