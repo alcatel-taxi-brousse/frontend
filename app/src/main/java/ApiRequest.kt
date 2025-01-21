@@ -346,6 +346,8 @@ class ApiRequest<JSONException> private constructor(context: Context) {
     ) {
         //println("$apiUrl/communities/$communityId/trips/$tripId/join")
 
+        println("API REQUEST - NB PEOPLE : "+nbPeople)
+
         val jsonBody = JSONObject()
         try {
             jsonBody.put("nbPeople", nbPeople)

@@ -203,10 +203,10 @@ class JoinRideFragment : Fragment() {
 
     fun leaveTrip(trip_id : String){
         ApiRequest.getInstance(null).leaveTrips( trip_id, { response ->
-            println("Trip bien quitté")
+            Toast.makeText(requireContext(), "Trip bien quitté" , Toast.LENGTH_SHORT).show()
             closeJoinRide()
         }, { error ->
-            println("Trip non quitté")
+            Toast.makeText(requireContext(), "Erreur lors de la tentative de rejoindre le trajet : $error", Toast.LENGTH_SHORT).show()
         })
     }
 
