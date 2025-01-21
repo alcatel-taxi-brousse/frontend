@@ -1,5 +1,8 @@
 package com.alcatelcnamisi1.taxibrousse
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +15,9 @@ import androidx.fragment.app.FragmentTransaction
 class HomeActivity : AppCompatActivity() {
 
     private var buttonCreateCommunity: ImageButton? = null
+    private var buttonDeconnexion: Button? = null
     //private var buttonJoinRide: Button? = null
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -27,9 +32,14 @@ class HomeActivity : AppCompatActivity() {
 
         buttonCreateCommunity = findViewById(R.id.buttonCreateCommunity)
         //buttonProposeRide = findViewById(R.id.buttonProposeRide)
+        buttonDeconnexion = findViewById(R.id.button_deconnexion)
 
         buttonCreateCommunity?.setOnClickListener {
             openFragment(CreateCommunityFragment(), R.id.frameLayoutCommunitiesContainer)
+        }
+
+        buttonDeconnexion?.setOnClickListener{
+            closeActivity();
         }
 
         /*buttonProposeRide.setOnClickListener {
@@ -41,6 +51,14 @@ class HomeActivity : AppCompatActivity() {
             openFragment(MyRidesFragment(), R.id.frameLayoutMyRides)
             //openFragment(ViewRidesFragment(), R.id.frameLayoutRidesContainer)
         }
+    }
+
+    fun closeActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+        finish()
+        Runtime.getRuntime().exit(0)
     }
 
 
