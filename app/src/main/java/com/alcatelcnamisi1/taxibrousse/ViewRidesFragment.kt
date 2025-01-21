@@ -1,5 +1,6 @@
 package com.alcatelcnamisi1.taxibrousse
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -80,17 +81,18 @@ class ViewRidesFragment : Fragment() {
 
         for (i in 0 until jsonArray.length()) {
             val rideJson = jsonArray.getJSONObject(i)
+            //users_id = users_id+rideJson.getString("users_id")
             val rideMap = mapOf(
                 "departure" to rideJson.getString("departure"),
                 "date" to rideJson.getString("date"),
                 "seatsAvailable" to rideJson.getString("seatsAvailable"),
                 "recurrence" to rideJson.getString("recurrence"),
                 "description" to rideJson.getString("description"),
-                "trip_id" to rideJson.getString("trip_id")
+                "trip_id" to rideJson.getString("trip_id"),
+                "users_id" to rideJson.getString("users_id")
             )
             rideList.add(rideMap)
         }
-
         return rideList
     }
 
@@ -123,18 +125,37 @@ class ViewRidesFragment : Fragment() {
 
             val rideDate = dateFormat.parse(ride["date"] ?: "")
             val currentDate = Date()
-            if (ride["seatsAvailable"] == "0" || (rideDate != null && rideDate.before(currentDate))) {
+            var isInTheTrip = false;
+
+            var currentUserId = ApiRequest.getInstance(requireContext()).getActiveUserId()
+
+            val usersIdList = ride["users_id"]?.split(";")
+
+            if (rideDate != null && rideDate.before(currentDate)) {
+                textUnavailable.visibility = View.VISIBLE
+                buttonJoinRide.isClickable = false
+                buttonJoinRide.isEnabled = false
+            }
+            if (usersIdList != null) {
+                if (currentUserId in usersIdList) {
+                   isInTheTrip = true;
+                }
+            }
+            if (isInTheTrip == true ) {
+                buttonJoinRide.text = "Modifier"
+            }
+            if (isInTheTrip == true && ride["seatsAvailable"] == "0" || (rideDate != null && rideDate.before(currentDate))) {
+                overlayUnavailable.visibility = View.VISIBLE
+            }
+            else if (isInTheTrip==false && ride["seatsAvailable"] == "0" || (rideDate != null && rideDate.before(currentDate))) {
                 overlayUnavailable.visibility = View.VISIBLE
                 buttonJoinRide.isClickable = false
                 buttonJoinRide.isEnabled = false
 
                 if (ride["seatsAvailable"] == "0") {
                     textFull.visibility = View.VISIBLE
-                } else if (rideDate != null && rideDate.before(currentDate)) {
-                    textUnavailable.visibility = View.VISIBLE
                 }
             }
-
 
             buttonJoinRide.setOnClickListener {
                 print("\n button Join Ride clicked")
@@ -147,6 +168,7 @@ class ViewRidesFragment : Fragment() {
                     putString("community_id", community_id)
                     putString("trip_id", ride["trip_id"])
                     putInt("seats_taken", 0)
+                    putString("users_id", ride["users_id"])
                     ride["seatsAvailable"]?.let { it1 -> putInt("seats_total", it1.toInt()) }
                 }
                 print("\n Departure : " + ride["departure"])

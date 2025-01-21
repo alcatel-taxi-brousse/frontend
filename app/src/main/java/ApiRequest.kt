@@ -20,6 +20,7 @@ class ApiRequest<JSONException> private constructor(context: Context) {
     private var requestQueue: RequestQueue
     private var apiUrl: String
     private var token: String = ""
+    private var user_id: String = ""
 
     init {
         val properties = Properties()
@@ -60,6 +61,15 @@ class ApiRequest<JSONException> private constructor(context: Context) {
                                 Response.Listener { response ->
                                     onResponse(response)
                                     token = JSONObject(response).getString("token")
+
+                                    try {
+                                        val jsonResponse = JSONObject(response)
+                                        val loggedInUser = jsonResponse.getJSONObject("loggedInUser")
+                                        //println("join ride fragment - "+loggedInUser.optString("id", "ID non trouvé"))
+                                        this.user_id  = loggedInUser.optString("id", "ID non trouvé")
+                                    } catch (e :Error) {
+                                        println("Erreur lors de l'extraction de l'ID : " + e.message)
+                                    }
                                 },
                                 Response.ErrorListener { error -> onError("${error.message}") }
                         ) {
@@ -202,56 +212,69 @@ class ApiRequest<JSONException> private constructor(context: Context) {
     }
 
     fun getTrips(
-        communityId : String,
+        communityId: String,
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
-    ){
+    ) {
+
         val stringRequest = object : StringRequest(
             Method.GET, "$apiUrl/communities/$communityId/trips",
             Response.Listener { response ->
                 try {
-
-                    //println("RETOUR DE LA REPONSE pour les trips : " + response)
-                    // Transformation de la réponse pour produire une version simplifiée
                     val originalArray = JSONArray(response)
                     val simplifiedArray = JSONArray()
 
                     for (i in 0 until originalArray.length()) {
                         val community = originalArray.getJSONObject(i)
 
-                        // Création d'un objet simplifié
+                        val nbSeatsCar = community.optInt("nb_seats_car", 0)
+
+                        val usersArray = community.optJSONArray("users") ?: JSONArray()
+                        var totalPeople = 0
+
+                        var User_ids = ""
+
+                        for (j in 0 until usersArray.length()) {
+                            val userJson = usersArray.getJSONObject(j)
+
+                            val userTripEntity = userJson.optJSONObject("UserTripEntity")
+                            if (userTripEntity != null) {
+                                User_ids += userJson.optString("user_id")
+                                User_ids += ";"
+                                User_ids += userTripEntity.optInt("nb_people", 0)
+                                User_ids += ";"
+
+                                totalPeople += userTripEntity.optInt("nb_people", 0)
+                            }
+                        }
+
+                        val seatsAvailable = nbSeatsCar - totalPeople
+
                         val simplifiedCommunity = JSONObject()
                         simplifiedCommunity.put("departure", community.optString("start_location"))
                         simplifiedCommunity.put("date", formatDate(community.optString("date")))
-                        simplifiedCommunity.put("seatsAvailable", community.optString("nb_seats_car", "Unknown"))
+                        simplifiedCommunity.put("seatsAvailable", seatsAvailable.toString()) // Résultat calculé
                         simplifiedCommunity.put("recurrence", community.optString("frequence", "No frequency available"))
                         simplifiedCommunity.put("description", community.optString("description", "Public"))
                         simplifiedCommunity.put("trip_id", community.optString("trip_id"))
 
-                        // Ajout de l'objet simplifié dans le tableau final
+                        simplifiedCommunity.put("users_id", User_ids);
+
                         simplifiedArray.put(simplifiedCommunity)
                     }
 
-                    // Conversion du tableau simplifié en chaîne JSON
                     val simplifiedResponse = simplifiedArray.toString(4) // JSON formaté
                     onResponse(simplifiedResponse)
-                    //println("Réponse simplifiée de la communauté : $simplifiedResponse")
                 } catch (e: Exception) {
                     onError("Erreur lors de la transformation de la réponse : ${e.message}")
-                    //println("Erreur : ${e.message}")
                 }
             },
             Response.ErrorListener { error ->
                 onError("Erreur réseau : ${error.message}")
-                //println("Erreur lors de la récupération des trips : ${error.message}")
-            })
-        {
+            }) {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
-
                 headers["Authorization"] = "Bearer $token"
-
-                //println("Headers envoyés : $headers")
                 return headers
             }
         }
@@ -322,6 +345,8 @@ class ApiRequest<JSONException> private constructor(context: Context) {
         onError: (String) -> Unit
     ) {
         //println("$apiUrl/communities/$communityId/trips/$tripId/join")
+
+        println("API REQUEST - NB PEOPLE : "+nbPeople)
 
         val jsonBody = JSONObject()
         try {
@@ -424,24 +449,6 @@ class ApiRequest<JSONException> private constructor(context: Context) {
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
     )
-    //mock
-    /*
-    {
-        val mockResponse = """
-        {
-            "status": "success",
-            "message": "Community $communityId successfully joined."
-        }
-    """
-
-        val isSuccessful = true
-        if (isSuccessful) {
-
-            onResponse(mockResponse)
-        } else {
-
-            onError("Mock error: Unable to join community.")
-        }*/
 
         {
             val urlWithParams = "$apiUrl/communities/$communityId/join"
@@ -473,84 +480,54 @@ class ApiRequest<JSONException> private constructor(context: Context) {
         onResponse: (String) -> Unit,
         onError: (String) -> Unit
     )
-
-    // mock
-    /*
     {
-        val mockCommunities = """
-        [
-            {
-                "community_id": "0",
-                "name": "Community A",
-                "destination": "Destination A",
-                "description": "This is the first community.",
-                "visibility": "Public"
+        val urlWithParams = "$apiUrl/communities/search?search=$searchQuery"
+
+        val stringRequest = object : StringRequest(
+            Method.GET, urlWithParams,
+            Response.Listener { response ->
+                onResponse(response)
             },
-            {
-                "community_id": "1",
-                "name": "Community B",
-                "destination": "Destination B",
-                "description": "This is the second community.",
-                "visibility": "Private"
-            },
-            {
-                "community_id": "2",
-                "name": "Community C",
-                "destination": "Destination C",
-                "description": "This is the third community.",
-                "visibility": "Public"
-            },
-            {
-                "community_id": "3",
-                "name": "Community D",
-                "destination": "Destination D",
-                "description": "This is the fourth community.",
-                "visibility": "Public"
+            Response.ErrorListener { error ->
+                onError("${error.message}")
+            }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Authorization"] = "Bearer $token"
+                return headers
             }
-        ]
-    """
-
-        try {
-
-            val filteredResponse = JSONArray(mockCommunities)
-                .let { jsonArray ->
-                    val filteredArray = JSONArray()
-                    for (i in 0 until jsonArray.length()) {
-                        val community = jsonArray.getJSONObject(i)
-                        if (community.getString("name").lowercase().contains(searchQuery.lowercase())) {
-                            filteredArray.put(community)
-                        }
-                    }
-                    filteredArray
-                }
-
-            onResponse(filteredResponse.toString())
-        } catch (e: JSONException) {
-            onError("Error processing mock data: ${e.message}")
         }
 
-        */
-            {
-                val urlWithParams = "$apiUrl/communities/search?search=$searchQuery"
+        requestQueue.add(stringRequest)
 
-                val stringRequest = object : StringRequest(
-                    Method.GET, urlWithParams,
-                    Response.Listener { response ->
-                        onResponse(response)
-                    },
-                    Response.ErrorListener { error ->
-                        onError("${error.message}")
-                    }) {
-                    override fun getHeaders(): MutableMap<String, String> {
-                        val headers = HashMap<String, String>()
-                        headers["Authorization"] = "Bearer $token"
-                        return headers
-                    }
-                }
+    }
 
-                requestQueue.add(stringRequest)
+    fun leaveTrips(
+        tripId: String,
+        onResponse: (String) -> Unit,
+        onError: (String) -> Unit
+    )
+    {
+        val urlWithParams = "$apiUrl/communities/{communityId}/trips/$tripId/leave"
 
+        val stringRequest = object : StringRequest(
+            Method.DELETE, urlWithParams,
+            Response.Listener { response ->
+                onResponse(response)
+            },
+            Response.ErrorListener { error ->
+                onError("${error.message}")
+            }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Authorization"] = "Bearer $token"
+                return headers
             }
+        }
+
+        requestQueue.add(stringRequest)
+
+    }
 
     private fun formatDate(isoDate: String): String {
         return try {
@@ -564,6 +541,16 @@ class ApiRequest<JSONException> private constructor(context: Context) {
         } catch (e: Exception) {
             //println("Erreur lors du parsing de la date : ${e.message}")
             isoDate // Renvoie la date brute en cas d'erreur
+        }
+    }
+
+
+    fun getActiveUserId():String
+    {
+        return if(this.user_id!=""){
+            this.user_id;
+        } else{
+            "User ID Vide";
         }
     }
 
