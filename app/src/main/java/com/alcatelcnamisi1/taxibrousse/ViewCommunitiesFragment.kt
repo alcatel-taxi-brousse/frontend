@@ -23,6 +23,8 @@ class ViewCommunitiesFragment : Fragment() {
     private val joinedCommunityIds = mutableSetOf<String>()
     private val allCommunities = mutableListOf<HashMap<String, String>>()
 
+    val communityJoined: MutableList<String> = mutableListOf()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -110,6 +112,13 @@ class ViewCommunitiesFragment : Fragment() {
             communityMap["destination"] = communityJson.getString("destination")
             //Cette ligne provoque l'erreur de parsing sur le search
             communityMap["currentUserInCommunity"]= communityJson.getString("currentUserInCommunity")
+            if (communityMap["currentUserInCommunity"] == "true") {
+                println("ViewCommunityFragment - On ajoute l'id de communauté : " + communityMap["community_id"])
+                communityMap["community_id"]?.let { communityId ->
+                    communityJoined.add(communityId)
+                }
+            }
+
             communityList.add(communityMap)
         }
         return communityList
@@ -126,6 +135,12 @@ class ViewCommunitiesFragment : Fragment() {
             val communityMap = HashMap<String, String>()
             if(communityJson.has("community_id")) {
                 communityMap["community_id"] = communityJson.getString("community_id")
+                if(communityMap["community_id"] in communityJoined){
+                    communityMap["isJoined"]="true";
+                }
+                else{
+                    communityMap["isJoined"]="false";
+                }
             } else {
                 communityMap["community_id"] = communityJson.getString("id")
             }
@@ -229,7 +244,11 @@ class ViewCommunitiesFragment : Fragment() {
             destinationTextView.text = community["destination"]
 
             val communityId = community["community_id"] ?: ""
-            val isJoined = joinedCommunityIds.contains(communityId)
+            var isJoined = false;
+
+            if(community["isJoined"]=="true"){
+                isJoined = true;
+            }
 
 
             if (isSearchResult) {
