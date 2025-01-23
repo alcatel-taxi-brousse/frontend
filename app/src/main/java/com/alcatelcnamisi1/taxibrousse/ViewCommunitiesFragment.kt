@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -181,7 +182,7 @@ class ViewCommunitiesFragment : Fragment() {
                 }
 
                 communityView.setOnClickListener {
-                    if (!isJoined) {
+                    if (isJoined) {
                         val communityName = community["name"]
                         val destination = community["destination"]
 
@@ -239,6 +240,7 @@ class ViewCommunitiesFragment : Fragment() {
             val nameTextView: TextView = communityView.findViewById(R.id.textViewCommunityName)
             val destinationTextView: TextView = communityView.findViewById(R.id.textViewCommunityDestination)
             val joinButton: Button = communityView.findViewById(R.id.buttonJoinCommunity)
+            val arrowImageView: ImageView = communityView.findViewById(R.id.buttonArrow)
 
             nameTextView.text = community["name"]
             destinationTextView.text = community["destination"]
@@ -250,23 +252,43 @@ class ViewCommunitiesFragment : Fragment() {
                 isJoined = true;
             }
 
-
             if (isSearchResult) {
-                joinButton.visibility = if (!isJoined) View.VISIBLE else View.GONE
+                if(!isJoined){
+                    joinButton.visibility = View.VISIBLE;
+                    arrowImageView.visibility = View.INVISIBLE;
+                    communityView.setOnClickListener {
+                    }
+                }
+                else{
+                    joinButton.visibility = View.GONE;
+
+                    communityView.setOnClickListener {
+                        val communityName = community["name"]
+                        val destination = community["destination"]
+
+                        val intent = Intent(requireContext(), CommunityDetailsActivity::class.java)
+                        intent.putExtra("communityName", communityName)
+                        intent.putExtra("destination", destination)
+                        intent.putExtra("community_id", communityId)
+                        startActivity(intent)
+                    }
+                }
             } else {
                 joinButton.visibility = View.GONE
+                communityView.isClickable = true;
+                communityView.setOnClickListener {
+                    val communityName = community["name"]
+                    val destination = community["destination"]
+
+                    val intent = Intent(requireContext(), CommunityDetailsActivity::class.java)
+                    intent.putExtra("communityName", communityName)
+                    intent.putExtra("destination", destination)
+                    intent.putExtra("community_id", communityId)
+                    startActivity(intent)
+                }
             }
 
-            communityView.setOnClickListener {
-                val communityName = community["name"]
-                val destination = community["destination"]
 
-                val intent = Intent(requireContext(), CommunityDetailsActivity::class.java)
-                intent.putExtra("communityName", communityName)
-                intent.putExtra("destination", destination)
-                intent.putExtra("community_id", communityId)
-                startActivity(intent)
-            }
 
             joinButton.setOnClickListener {
                 ApiRequest.getInstance(requireContext()).joinCommunity(
