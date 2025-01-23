@@ -170,41 +170,63 @@ class ApiRequest<JSONException> private constructor(context: Context) {
             Method.GET, "$apiUrl/communities/app",
             Response.Listener { response ->
                 try {
-
-                    //println("RETOUR DE LA REPONSE : " + response)
+                    // Parse la réponse JSON
                     val originalArray = JSONArray(response)
                     val simplifiedArray = JSONArray()
 
                     for (i in 0 until originalArray.length()) {
                         val community = originalArray.getJSONObject(i)
 
+                        // Récupérer les utilisateurs
+                        val usersArray = community.optJSONArray("users")
+                        val userIds = mutableListOf<String>()
+
+                        usersArray?.let {
+                            for (j in 0 until it.length()) {
+                                val user = it.getJSONObject(j)
+                                userIds.add(user.optString("userId"))
+                            }
+                        }
+
+                        var isInCommunity = "false";
+
+                        val userIdsString = userIds.joinToString(";")
+                        println("API REQUST TEST - UsersIDs : " + userIdsString)
+
+                        val usersIdList = userIdsString.split(";")
+
+                        if(usersIdList!=null){
+                            if (getActiveUserId() in usersIdList){
+                                isInCommunity = "true"
+                            }
+                        }
+
+                        // Ajouter les données simplifiées de la communauté
                         val simplifiedCommunity = JSONObject()
                         simplifiedCommunity.put("community_id", community.optString("id"))
                         simplifiedCommunity.put("name", community.optString("name"))
                         simplifiedCommunity.put("destination", community.optString("destination", "Unknown"))
                         simplifiedCommunity.put("description", community.optString("description", "No description available"))
                         simplifiedCommunity.put("visibility", community.optString("visibility", "Public"))
+                        simplifiedCommunity.put("currentUserInCommunity", isInCommunity)
 
                         simplifiedArray.put(simplifiedCommunity)
                     }
 
+                    // Format JSON final
                     val simplifiedResponse = simplifiedArray.toString(4) // JSON formaté
                     onResponse(simplifiedResponse)
-                    //println("Réponse simplifiée de la communauté : $simplifiedResponse")
                 } catch (e: Exception) {
                     onError("Erreur lors de la transformation de la réponse : ${e.message}")
-                    //println("Erreur : ${e.message}")
                 }
             },
             Response.ErrorListener { error ->
                 onError("Erreur réseau : ${error.message}")
-                //println("Erreur lors de la récupération des communautés : ${error.message}")
             }
         ) {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
                 headers["Authorization"] = "Bearer $token"
-                //println("Headers envoyés pour avoir la commu : $headers")
                 return headers
             }
         }

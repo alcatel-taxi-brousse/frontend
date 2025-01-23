@@ -17,6 +17,8 @@ class HomeActivity : AppCompatActivity() {
     private var buttonCreateCommunity: ImageButton? = null
     private var buttonDeconnexion: Button? = null
     //private var buttonJoinRide: Button? = null
+
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
