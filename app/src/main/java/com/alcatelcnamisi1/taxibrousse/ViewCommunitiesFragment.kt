@@ -182,7 +182,7 @@ class ViewCommunitiesFragment : Fragment() {
                 }
 
                 communityView.setOnClickListener {
-                    if (isJoined) {
+                    if (!isJoined) {
                         val communityName = community["name"]
                         val destination = community["destination"]
 
