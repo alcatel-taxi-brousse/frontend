@@ -45,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
     private fun login() {
 
         buttonLogin?.setEnabled(false)
-        buttonLogin?.setText("Loading...")
+        buttonLogin?.setText("Chargement...")
 
         val login = editTextLogin?.text.toString()
         val password = editTextPassword?.text.toString()

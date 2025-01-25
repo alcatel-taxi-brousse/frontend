@@ -80,6 +80,7 @@ class MyRidesFragment : Fragment() {
             val descriptionTextView: TextView = rideView.findViewById(R.id.textViewDescription)
             val textSeeDescription: TextView = rideView.findViewById(R.id.textViewSeeDescription)
 
+            //TODO: Change en 2 Textview séparés par une icone fleche, la c'est dégueu avec -->
             departureArrivalTextView.text = "${ride["departure"]} --> ${ride["arrival"]}"
             dateTextView.text = "Départ le : ${ride["date"]}"
             descriptionTextView.text = ride["description"]
@@ -87,11 +88,11 @@ class MyRidesFragment : Fragment() {
             val cardViewRide: CardView = rideView.findViewById(R.id.cardViewMyRide)
             cardViewRide.setOnClickListener {
                 if(descriptionTextView.visibility == View.VISIBLE) {
-                    textSeeDescription.text = "Afficher description"
+                    textSeeDescription.text = "Voir la description"
                     descriptionTextView.visibility = View.GONE
                 }
                 else{
-                    textSeeDescription.text = "Masquer description"
+                    textSeeDescription.text = "Masquer la description"
                     descriptionTextView.visibility = View.VISIBLE
                 }
             }

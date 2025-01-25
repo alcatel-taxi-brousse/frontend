@@ -205,7 +205,7 @@ class ViewCommunitiesFragment : Fragment() {
                         communityId = communityId,
                         onResponse = {
                             joinedCommunityIds.add(communityId)
-                            joinButton.text = "Joined"
+                            joinButton.text = "Rejointe"
                             joinButton.isEnabled = false
                             Toast.makeText(
                                 requireContext(),
@@ -295,7 +295,7 @@ class ViewCommunitiesFragment : Fragment() {
                     communityId = communityId,
                     onResponse = {
                         joinedCommunityIds.add(communityId)
-                        joinButton.text = "Joined"
+                        joinButton.text = "Rejointe"
                         joinButton.isEnabled = false
                         Toast.makeText(
                             requireContext(),

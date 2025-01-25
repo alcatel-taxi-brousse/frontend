@@ -116,9 +116,9 @@ class ViewRidesFragment : Fragment() {
             val buttonJoinRide: Button = rideView.findViewById(R.id.buttonJoinRide)
 
 
-            departureTextView.text = "Departure : ${ride["departure"]}"
+            departureTextView.text = "Départ : ${ride["departure"]}"
             dateTextView.text = ride["date"]
-            seatsTextView.text = "${ride["seatsAvailable"]} seat(s) available"
+            seatsTextView.text = "${ride["seatsAvailable"]} siège(s) disponibl(s)"
             recurrenceTextView.text = ride["recurrence"]
             descriptionTextView.text = ride["description"]
             buttonJoinRide.isClickable = true
@@ -182,11 +182,11 @@ class ViewRidesFragment : Fragment() {
             val cardViewRide: CardView = rideView.findViewById(R.id.cardViewRide)
             cardViewRide.setOnClickListener {
                 if(descriptionTextView.visibility == View.VISIBLE) {
-                    textSeeDescription.text = "See ride description"
+                    textSeeDescription.text = "Voir la description"
                     descriptionTextView.visibility = View.GONE
                 }
                 else{
-                    textSeeDescription.text = "Hide ride description"
+                    textSeeDescription.text = "Masquer la description"
                     descriptionTextView.visibility = View.VISIBLE
                 }
             }
