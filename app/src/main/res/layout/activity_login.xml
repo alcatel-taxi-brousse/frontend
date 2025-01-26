@@ -5,9 +5,15 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E8F5E9"
+    android:background="@color/app_background"
     tools:context=".LoginActivity">
-
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background_image"
+        android:alpha="0.2" />
     <LinearLayout
         android:id="@+id/headerLayout"
         android:layout_width="wrap_content"
@@ -80,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/se_connecter"
-            android:backgroundTint="#2E7D32"
+            android:backgroundTint="@color/green"
             android:textColor="#FFFFFF" />
     </LinearLayout>
 

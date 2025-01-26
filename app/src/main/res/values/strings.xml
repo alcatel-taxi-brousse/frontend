@@ -40,4 +40,9 @@
     <string name="avaliable_seats">Siège(s) disponible(s)</string>
     <string name="communaut_privee">Communauté privée</string>
     <string name="logout">Déconnexion</string>
+    <string name="mes_prochains_trajets">Mes prochains trajets :</string>
+    <string name="community_chat">Chat de communauté</string>
+    <string name="message_hint">Entrez un message</string>
+    <string name="envoyer">Envoyer</string>
+    <string name="to">vers</string>
 </resources>

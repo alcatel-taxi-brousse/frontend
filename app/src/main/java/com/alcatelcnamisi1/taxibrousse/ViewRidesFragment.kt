@@ -118,7 +118,7 @@ class ViewRidesFragment : Fragment() {
 
             departureTextView.text = "Départ : ${ride["departure"]}"
             dateTextView.text = ride["date"]
-            seatsTextView.text = "${ride["seatsAvailable"]} siège(s) disponibl(s)"
+            seatsTextView.text = "${ride["seatsAvailable"]} siège(s) disponible(s)"
             recurrenceTextView.text = ride["recurrence"]
             descriptionTextView.text = ride["description"]
             buttonJoinRide.isClickable = true
