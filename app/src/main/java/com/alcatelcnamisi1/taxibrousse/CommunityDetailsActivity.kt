@@ -41,7 +41,7 @@ class CommunityDetailsActivity : AppCompatActivity() {
                 putString("arrival", destination)
                 putString("community_id", community_id)
             }
-            openFragment(fragment, R.id.frameLayoutRidesContainer)
+            openFragment(fragment, R.id.communityLayoutContainer)
         }
 
         // Listener pour le bouton "Retour"

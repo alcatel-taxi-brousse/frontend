@@ -75,13 +75,15 @@ class MyRidesFragment : Fragment() {
             val rideView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.list_item_my_rides, linearLayout, false)
 
-            val departureArrivalTextView: TextView = rideView.findViewById(R.id.textViewDepartureArrival)
+            val departureTextView: TextView = rideView.findViewById(R.id.textViewDeparture)
+            val arrivalTextView: TextView = rideView.findViewById(R.id.textViewArrival)
             val dateTextView: TextView = rideView.findViewById(R.id.textViewDate)
             val descriptionTextView: TextView = rideView.findViewById(R.id.textViewDescription)
             val textSeeDescription: TextView = rideView.findViewById(R.id.textViewSeeDescription)
 
-            //TODO: Change en 2 Textview séparés par une icone fleche, la c'est dégueu avec -->
-            departureArrivalTextView.text = "${ride["departure"]} --> ${ride["arrival"]}"
+            //DONE: Change en 2 Textview séparés par une icone fleche, la c'est dégueu avec -->
+            departureTextView.text = "${ride["departure"]}"
+            arrivalTextView.text = "${ride["arrival"]}"
             dateTextView.text = "Départ le : ${ride["date"]}"
             descriptionTextView.text = ride["description"]
 

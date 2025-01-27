@@ -1,6 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/app_background">
 
     <ImageView
         android:id="@+id/backgroundImage"
@@ -50,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/destination"
                     android:textStyle="bold"
-                    android:textSize="16sp"
+                    android:textSize="17sp"
                     android:textColor="@color/dark_green"
                     android:layout_marginBottom="12dp"
                     android:layout_marginStart="10dp"/>
@@ -73,19 +74,28 @@
                 android:layout_height="wrap_content"
                 android:text="@string/recurring_ride"
                 android:textSize="15sp"
-                android:textColor="@color/dark_green" />
+                android:textStyle="bold"
+                android:textColor="@color/dark_green"
+                android:buttonTintMode="src_in"
+                android:buttonTint="@color/dark_green" />
 
             <Spinner
                 android:id="@+id/spinnerRecurrence"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:textColor="@color/dark_green"
+                android:ems="10"
+                android:background="@drawable/border"
+                android:layout_marginBottom="12dp"
+                android:padding="8dp" />
 
             <TextView
                 android:text="@string/places"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:textSize="17sp"
+                android:textStyle="bold"
                 android:textColor="@color/dark_green"
                 />
 
@@ -93,7 +103,11 @@
                 android:id="@+id/spinnerSeats"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp" />
+                android:textColor="@color/dark_green"
+                android:ems="10"
+                android:background="@drawable/border"
+                android:layout_marginBottom="12dp"
+                android:padding="8dp" />
 
             <TextView
                 android:id="@+id/spinnerSeatsError"
