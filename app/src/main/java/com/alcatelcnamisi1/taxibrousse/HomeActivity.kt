@@ -15,7 +15,7 @@ import androidx.fragment.app.FragmentTransaction
 class HomeActivity : AppCompatActivity() {
 
     private var buttonCreateCommunity: ImageButton? = null
-    private var buttonDeconnexion: Button? = null
+    private var buttonDeconnexion: ImageButton? = null
     //private var buttonJoinRide: Button? = null
 
 
@@ -37,7 +37,7 @@ class HomeActivity : AppCompatActivity() {
         buttonDeconnexion = findViewById(R.id.button_deconnexion)
 
         buttonCreateCommunity?.setOnClickListener {
-            openFragment(CreateCommunityFragment(), R.id.frameLayoutCommunitiesContainer)
+            openFragment(CreateCommunityFragment(), R.id.homeLayoutContainer)
         }
 
         buttonDeconnexion?.setOnClickListener{

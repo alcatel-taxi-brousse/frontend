@@ -45,7 +45,7 @@ class ChatActivity : AppCompatActivity() {
     private fun fillData() {
         val chatMessagesLayout = findViewById<LinearLayout>(R.id.chatMessages)
         val messageInput = findViewById<EditText>(R.id.messageInput)
-        val sendButton = findViewById<Button>(R.id.sendButton)
+        val sendButton = findViewById<ImageButton>(R.id.sendButton)
         val backButton = findViewById<ImageButton>(R.id.buttonBack)
 
         scrollView = findViewById(R.id.chatScroll)

@@ -75,23 +75,26 @@ class MyRidesFragment : Fragment() {
             val rideView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.list_item_my_rides, linearLayout, false)
 
-            val departureArrivalTextView: TextView = rideView.findViewById(R.id.textViewDepartureArrival)
+            val departureTextView: TextView = rideView.findViewById(R.id.textViewDeparture)
+            val arrivalTextView: TextView = rideView.findViewById(R.id.textViewArrival)
             val dateTextView: TextView = rideView.findViewById(R.id.textViewDate)
             val descriptionTextView: TextView = rideView.findViewById(R.id.textViewDescription)
             val textSeeDescription: TextView = rideView.findViewById(R.id.textViewSeeDescription)
 
-            departureArrivalTextView.text = "${ride["departure"]} --> ${ride["arrival"]}"
+            //DONE: Change en 2 Textview séparés par une icone fleche, la c'est dégueu avec -->
+            departureTextView.text = "${ride["departure"]}"
+            arrivalTextView.text = "${ride["arrival"]}"
             dateTextView.text = "Départ le : ${ride["date"]}"
             descriptionTextView.text = ride["description"]
 
             val cardViewRide: CardView = rideView.findViewById(R.id.cardViewMyRide)
             cardViewRide.setOnClickListener {
                 if(descriptionTextView.visibility == View.VISIBLE) {
-                    textSeeDescription.text = "Afficher description"
+                    textSeeDescription.text = "Voir la description"
                     descriptionTextView.visibility = View.GONE
                 }
                 else{
-                    textSeeDescription.text = "Masquer description"
+                    textSeeDescription.text = "Masquer la description"
                     descriptionTextView.visibility = View.VISIBLE
                 }
             }

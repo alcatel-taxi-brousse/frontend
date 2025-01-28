@@ -6,12 +6,12 @@
     <string name="mot_de_passe">Mot de passe</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="create_community">Create community</string>
+    <string name="create_community">Créer la communauté</string>
     <string name="plus" />
-    <string name="view_communities">View communities</string>
-    <string name="community_name">Community Name</string>
+    <string name="view_communities">Voir les communautés</string>
+    <string name="community_name">Nom de la communauté</string>
     <string name="destination">Destination</string>
-    <string name="propose_ride">Propose ride</string>
+    <string name="propose_ride">Proposer le trajet</string>
     <string name="destination_box_hint">Arrivée</string>
     <string name="departure_box_hint">Départ</string>
     <string name="departure_time_hint">Date et heure de départ</string>
@@ -28,10 +28,23 @@
     <string name="_0">0</string>
     <string name="route_name">Route name</string>
     <string name="date">Date</string>
-    <string name="seat_count_seat_total">Seat count/Seat total</string>
+    <string name="seat_count_seat_total">Siège(s) pris/Sièges au total</string>
     <string name="fermer">Annuler</string>
     <string name="valider">Valider</string>
-    <string name="join_ride">Join ride</string>
-    <string name="join_community">Join</string>
+    <string name="join">Rejoindre</string>
     <string name="chat">chat</string>
+    <string name="indisponible">Indisponible</string>
+    <string name="complet">Complet</string>
+    <string name="recurrence">Récurrence</string>
+    <string name="see_description">Voir la description</string>
+    <string name="avaliable_seats">Siège(s) disponible(s)</string>
+    <string name="communaut_privee">Communauté privée</string>
+    <string name="logout">Déconnexion</string>
+    <string name="mes_prochains_trajets">Mes prochains trajets :</string>
+    <string name="community_chat">Chat de communauté</string>
+    <string name="message_hint">Entrez un message</string>
+    <string name="envoyer">Envoyer</string>
+    <string name="to">vers</string>
+    <string name="recently_proposed_rides">Trajets récement proposés</string>
+    <string name="leave_the_trip">Quitter le trajet</string>
 </resources>

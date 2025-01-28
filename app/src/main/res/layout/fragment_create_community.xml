@@ -1,50 +1,88 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".CreateCommunityFragment">
+    tools:context=".CreateCommunityFragment"
+    android:background="@color/app_background">
 
-    <!-- TODO: Update blank fragment layout -->
 
-    <EditText
-        android:id="@+id/editTextCommunityName"
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background_image_v3"
+        android:alpha="0.3" />
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="15"
-        android:hint="CommunityName" />
+        android:orientation="vertical"
+        android:background="@color/app_background"
+        android:padding="16dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        android:elevation="4dp">
 
-    <EditText
-        android:id="@+id/editTextDestination"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Destination" />
+        <EditText
+            android:id="@+id/editTextCommunityName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="15"
+            android:hint="@string/community_name"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/border"
+            android:padding="12dp" />
 
-    <EditText
-        android:id="@+id/editTextDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Description" />
+        <EditText
+            android:id="@+id/editTextDestination"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/destination"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/border"
+            android:padding="12dp" />
 
-    <CheckBox
-        android:id="@+id/checkBoxPrivate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Communauté privée" />
+        <EditText
+            android:id="@+id/editTextDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:background="@drawable/border"
+            android:hint="@string/description_hint"
+            android:layout_marginBottom="12dp"
+            android:padding="12dp" />
 
-    <Button
-        android:id="@+id/ButtonCreateCommunity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Create Community" />
+        <CheckBox
+            android:id="@+id/checkBoxPrivate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/communaut_privee"
+            android:layout_marginBottom="16dp"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@color/dark_green"
+            android:buttonTintMode="src_in"
+            android:buttonTint="@color/dark_green" />
 
-    <Button
-        android:id="@+id/ButtonCloseCreateCommunity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Close" />
+        <Button
+            android:id="@+id/ButtonCreateCommunity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create_community"
+            android:backgroundTint="@color/green"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="2dp" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/ButtonCloseCreateCommunity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fermer"
+            android:backgroundTint="@color/gris_annuler" />
+
+    </LinearLayout>
+
+</FrameLayout>

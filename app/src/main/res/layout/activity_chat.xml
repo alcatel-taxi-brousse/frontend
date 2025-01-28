@@ -8,8 +8,8 @@
     <!-- En-tête du chat -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#8A2BE2">
+        android:layout_height="70dp"
+        android:background="@color/green_greyish">
 
         <!-- Bouton Retour aligné à gauche -->
         <ImageButton
@@ -29,33 +29,52 @@
             android:id="@+id/chatHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chat"
+            android:text="@string/community_chat"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
             android:gravity="center"
             android:layout_centerInParent="true" />
     </RelativeLayout>
 
-    <!-- Corps du chat -->
-    <ScrollView
-        android:id="@+id/chatScroll"
+    <!-- Corps du chat avec FrameLayout pour séparer le fond des messages -->
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="8dp">
+        android:layout_weight="10">
 
-        <LinearLayout
-            android:id="@+id/chatMessages"
+        <!-- Image en arrière-plan -->
+        <ImageView
+            android:id="@+id/chatBackground"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/background_image_v2"
+            android:alpha="0.3" /> <!-- Opacité ici pour que SEUL le fond soit affecté -->
+
+        <!-- ScrollView contenant les messages -->
+        <ScrollView
+            android:id="@+id/chatScroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:id="@+id/chatMessages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            </LinearLayout>
+
+        </ScrollView>
+
+    </FrameLayout>
 
     <!-- Zone de saisie de message -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="@color/card_background_v2"
         android:padding="8dp">
 
         <EditText
@@ -63,17 +82,21 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Type a message"
+            android:hint="@string/message_hint"
             android:padding="10dp"
-            android:background="#EDEDED"
+            android:background="@color/card_background"
             android:textColor="#000000" />
 
-        <Button
+        <ImageButton
             android:id="@+id/sendButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Envoyer"
-            android:background="#8A2BE2"
-            android:textColor="#FFFFFF" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/sending_icon"
+            android:background="@drawable/rounded_button"
+            android:scaleType="centerInside"
+            android:padding="8dp"
+            android:contentDescription="Envoyer"
+            android:layout_marginStart="5dp"/>
     </LinearLayout>
+
 </LinearLayout>
