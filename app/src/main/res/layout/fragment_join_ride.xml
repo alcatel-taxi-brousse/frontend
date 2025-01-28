@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textStyle="bold"
-            android:text="departure" />
+            android:text="@string/departure_box_hint" />
 
         <TextView
             android:id="@+id/textViewDate"
@@ -105,7 +105,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/dark_red"
-                android:text="Leave the trip" />
+                android:text="@string/leave_the_trip" />
 
         </LinearLayout>
 

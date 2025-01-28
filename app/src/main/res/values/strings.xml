@@ -28,7 +28,7 @@
     <string name="_0">0</string>
     <string name="route_name">Route name</string>
     <string name="date">Date</string>
-    <string name="seat_count_seat_total">Seat count/Seat total</string>
+    <string name="seat_count_seat_total">Siège(s) pris/Sièges au total</string>
     <string name="fermer">Annuler</string>
     <string name="valider">Valider</string>
     <string name="join">Rejoindre</string>
@@ -46,4 +46,5 @@
     <string name="envoyer">Envoyer</string>
     <string name="to">vers</string>
     <string name="recently_proposed_rides">Trajets récement proposés</string>
+    <string name="leave_the_trip">Quitter le trajet</string>
 </resources>

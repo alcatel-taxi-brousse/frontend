@@ -90,7 +90,7 @@ class JoinRideFragment : Fragment() {
             }
         }
         seatsUpdated = (seatsAvailable!! - seatsToTake)
-        textViewSeatCountTotal?.text = seatsUpdated.toString() + " place(s) still available ( /" + seatsAvailable.toString() + ")"
+        textViewSeatCountTotal?.text = seatsUpdated.toString() + " place(s) disponible(s) ( /" + seatsAvailable.toString() + ")"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
