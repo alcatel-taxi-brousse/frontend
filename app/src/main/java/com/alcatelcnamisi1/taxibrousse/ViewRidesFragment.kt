@@ -1,5 +1,6 @@
 package com.alcatelcnamisi1.taxibrousse
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,7 +23,6 @@ import java.util.*
 
 private const val ARG_PARAM1 = "arrival"
 private const val ARG_PARAM2 = "community_id"
-
 
 class ViewRidesFragment : Fragment() {
 
@@ -51,7 +51,9 @@ class ViewRidesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         linearLayout = view.findViewById(R.id.linearLayoutRides)
 
-
+        parentFragmentManager.setFragmentResultListener("REQUEST_KEY", this) { _, _ ->
+            fetchRides()
+        }
         fetchRides()
     }
 
@@ -73,6 +75,10 @@ class ViewRidesFragment : Fragment() {
                 }
             )
         }
+    }
+
+    private fun cleanPorn(){
+
     }
 
     private fun parseRidesResponse(response: String): List<Map<String, String>> {
@@ -97,6 +103,9 @@ class ViewRidesFragment : Fragment() {
     }
 
     private fun displayRides(rides: List<Map<String, String>>) {
+
+        linearLayout.removeAllViews()
+
         val reversedRides = rides.asReversed()
 
         for (ride in reversedRides) {

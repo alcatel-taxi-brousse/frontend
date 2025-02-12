@@ -13,6 +13,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.concurrent.thread
 
 private const val ARG_PARAM1 = "arrival"
 private const val ARG_PARAM2 = "community_id"
@@ -141,6 +142,8 @@ class ProposeRideFragment : Fragment() {
             ApiRequest.getInstance(requireContext()).createTrip(
                 it,departure,dateTime,recurrence, seats.toIntOrNull() ?: 0,description,
                 { response ->
+                    parentFragmentManager.setFragmentResult("REQUEST_KEY", Bundle())
+
                     Toast.makeText(requireContext(), "Trajet proposé avec succès !", Toast.LENGTH_SHORT).show()
                     activity?.supportFragmentManager?.popBackStack()
                 },

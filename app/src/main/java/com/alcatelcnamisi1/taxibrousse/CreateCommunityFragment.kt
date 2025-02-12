@@ -79,6 +79,9 @@ class CreateCommunityFragment : Fragment() {
         ApiRequest.getInstance(null).createCommunity(communityName, destination,"false", description, visibility, { response ->
             println("Response: $response")
 
+            //Update the frame HERE
+            parentFragmentManager.setFragmentResult("REQUEST_KEY", Bundle())
+
             //Toast Message
             Toast.makeText(
                 this.context,

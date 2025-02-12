@@ -33,8 +33,16 @@ class ViewCommunitiesFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_view_communities, container, false)
     }
 
+    override fun onResume() {
+        super.onResume()
+        fetchCommunities()
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        parentFragmentManager.setFragmentResultListener("REQUEST_KEY", this) { _, _ ->
+            fetchCommunities()
+        }
 
         linearLayout = view.findViewById(R.id.linearLayoutCommunities)
         searchBar = requireActivity().findViewById(R.id.searchBar)
