@@ -52,7 +52,8 @@ class ViewCommunitiesFragment : Fragment() {
                 val query = s.toString().lowercase()
 
                 if (query.isEmpty()) {
-                    displayCommunities(allCommunities)
+                    fetchCommunities()
+                    //displayCommunities(allCommunities)
                 } else {
                     ApiRequest.getInstance(requireContext()).searchCommunities(
                         searchQuery = query,
@@ -88,6 +89,9 @@ class ViewCommunitiesFragment : Fragment() {
             onResponse = { response ->
                 try {
                     val communities = parseCommunityResponse(response)
+
+                    parseCommunityIds(communities);
+                    
                     allCommunities.clear()
                     allCommunities.addAll(communities)
 
@@ -101,6 +105,19 @@ class ViewCommunitiesFragment : Fragment() {
                 Toast.makeText(requireContext(), "Error fetching communities: $error", Toast.LENGTH_SHORT).show()
             }
         )
+    }
+
+    fun parseCommunityIds(jsonString: List<HashMap<String, String>>): List<String> {
+        val jsonArray = JSONArray(jsonString)
+        val communityIds = mutableListOf<String>()
+
+        for (i in 0 until jsonArray.length()) {
+            val jsonObject = jsonArray.getJSONObject(i)
+            val communityId = jsonObject.getString("community_id")
+            joinedCommunityIds.add(communityId)
+            //communityIds.add(communityId)
+        }
+        return communityIds
     }
 
     private fun parseCommunityResponse(response: String): List<HashMap<String, String>> {
@@ -182,7 +199,6 @@ class ViewCommunitiesFragment : Fragment() {
                 val communityId = community["community_id"] ?: ""
                 val isJoined = joinedCommunityIds.contains(communityId)
 
-
                 if (isSearchResult) {
                     joinButton.visibility = if (!isJoined) View.VISIBLE else View.GONE
                 } else {
@@ -190,7 +206,7 @@ class ViewCommunitiesFragment : Fragment() {
                 }
 
                 communityView.setOnClickListener {
-                    if (!isJoined) {
+                    if (isJoined) {
                         val communityName = community["name"]
                         val destination = community["destination"]
 
@@ -217,9 +233,10 @@ class ViewCommunitiesFragment : Fragment() {
                             joinButton.isEnabled = false
                             Toast.makeText(
                                 requireContext(),
-                                "Successfully joined ${community["name"]}",
+                                "Successfully joined ${community["name"]} with the id : ${communityId}",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            //mmunities()
                         },
                         onError = { error ->
                             Toast.makeText(
@@ -296,8 +313,6 @@ class ViewCommunitiesFragment : Fragment() {
                 }
             }
 
-
-
             joinButton.setOnClickListener {
                 ApiRequest.getInstance(requireContext()).joinCommunity(
                     communityId = communityId,
@@ -310,6 +325,8 @@ class ViewCommunitiesFragment : Fragment() {
                             "Successfully joined ${community["name"]}",
                             Toast.LENGTH_SHORT
                         ).show()
+
+                        fetchCommunities()
                     },
                     onError = { error ->
                         Toast.makeText(
