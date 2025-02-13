@@ -161,9 +161,9 @@ class ViewRidesFragment : Fragment() {
                 buttonJoinRide.isClickable = false
                 buttonJoinRide.isEnabled = false
 
-                if (ride["seatsAvailable"] == "0") {
-                    textFull.visibility = View.VISIBLE
-                }
+            }
+            if (ride["seatsAvailable"] == "0") {
+                textFull.visibility = View.VISIBLE
             }
 
             buttonJoinRide.setOnClickListener {
